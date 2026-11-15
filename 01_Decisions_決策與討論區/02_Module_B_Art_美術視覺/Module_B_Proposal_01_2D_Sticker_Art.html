@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 B 提案 01】2D 手繪貼紙風 ✕ 溫暖手帳米紙 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --butter: #FDE68A;
+            --mint: #A8E6CF;
+            --sky: #A8D8F0;
+            --peach: #FFCBA4;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--butter);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 34px; font-weight: 900; margin-bottom: 20px; }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            background: var(--card-white);
+            border: var(--border-thin);
+            border-radius: 16px;
+            padding: 14px 20px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 28px;
+        }
+        .meta-label { font-size: 13px; font-weight: 700; color: var(--ink-muted); }
+        .meta-value { font-family: var(--font-display); font-size: 17px; font-weight: 700; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+        }
+        .palette { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .palette-chip {
+            border: 2px solid var(--ink);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-family: var(--font-display);
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #FFF;
+        }
+        .color-dot { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--ink); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <a href="../../Presentation_簡報/index.html#4" class="nav-link" style="background: var(--mint);">👀 查看簡報互動示範</a>
+        </nav>
+        <main class="sheet">
+            <span class="badge">🎨 模組 B 提案 01（已定調之基準方案）</span>
+            <h1 class="title">2D 手繪貼紙風 ✕ 溫暖手帳紙感 (Daisy Days & Notebook)</h1>
+
+            <div class="meta-grid">
+                <div><div class="meta-label">提案編號</div><div class="meta-value">Module_B_Proposal_01</div></div>
+                <div><div class="meta-label">提案人／狀態</div><div class="meta-value">全組共同定調（基準提案）</div></div>
+                <div><div class="meta-label">核心技術</div><div class="meta-value">純前端 SVG 向量 ✕ CSS 動畫</div></div>
+            </div>
+
+            <section class="card">
+                <div class="card-header">🖌️ 1. 視覺風格定位與關鍵字</div>
+                <p style="font-size: 16px; line-height: 1.8;">
+                    • <strong>視覺特徵</strong>：3.5px 粗黑炭黑輪廓線（<code>#2D2A26</code>）、硬邊幾何偏移陰影、溫暖米紙網格底。<br>
+                    • <strong>風格氛圍</strong>：如同翻開一本精緻的手帳繪本，所有角色、植物與太陽皆為童趣貼紙，具備自然的呼吸縮放（<code>breathe</code>）與微風搖曳（<code>sway</code>）動態。
+                </p>
+            </section>
+
+            <section class="card">
+                <div class="card-header">🌈 2. 色彩計劃與色票設定 (6 色馬卡龍系統)</div>
+                <div class="palette">
+                    <div class="palette-chip"><div class="color-dot" style="background: #FAF6EE;"></div>#FAF6EE 暖米手帳紙</div>
+                    <div class="palette-chip"><div class="color-dot" style="background: #2D2A26;"></div>#2D2A26 炭黑線條</div>
+                    <div class="palette-chip"><div class="color-dot" style="background: #FDE68A;"></div>#FDE68A 晨曦黃</div>
+                    <div class="palette-chip"><div class="color-dot" style="background: #A8E6CF;"></div>#A8E6CF 薄荷綠</div>
+                    <div class="palette-chip"><div class="color-dot" style="background: #A8D8F0;"></div>#A8D8F0 晴空藍</div>
+                    <div class="palette-chip"><div class="color-dot" style="background: #FFCBA4;"></div>#FFCBA4 蜜桃橘</div>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-header">⚙️ 3. 前端工程可執行性分析與防踩雷考量</div>
+                <p style="font-size: 15px; line-height: 1.7;">
+                    • <strong>可執行性極高</strong>：全場景由純 SVG Path 疊加，檔案體積小於 50KB，無需任何龐大外部紋理圖片，移動端與電腦皆能滿幀 60fps 順暢運行。<br>
+                    • <strong>無 AI 生成畫風撕裂問題</strong>：因角色與道具均由代碼繪製，造型嚴格一致，可輕鬆綁定滑鼠視角追蹤與點擊跳躍事件。<br>
+                    • <strong>降階與兼容性</strong>：若瀏覽器不支援高級特效，基礎向量幾何仍能完整顯示，穩定性 100%。
+                </p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

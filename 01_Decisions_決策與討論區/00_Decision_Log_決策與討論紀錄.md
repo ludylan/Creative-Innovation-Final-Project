@@ -29,9 +29,12 @@ type: "decision_log"
   3. **提煉劇情深度與核心立意**：為情節挖掘深刻的人文、哲學或情感價值，回答「為什麼需要這個故事？」。
   4. **收整為符合報告規格**：整理成符合大學課程報告高標準的完整提案文件。
 
-### 📂 提案工具檔案：
-* 📄 **彈性提案 HTML 模板**：[`proposal_template.html`](./proposal_template.html)（支援獨立提交故事、美術或兩兩連結，內建 AI 探路咒語）
-* 🌐 **協作中心主頁面**：[`index.html`](./index.html)（整合美術風格提案、專案檔案架構與決策現況）
+### 📂 提案工具與模組專區檔案：
+* 🤖 **AI 協作提示詞指南**：[`01_AI_Collaboration_Prompt_AI協作提示詞指南.md`](./01_AI_Collaboration_Prompt_AI協作提示詞指南.md)（完整說故事級 Prompt、雙向互動規範與四階查核）
+* 📖 **模組 A 故事劇情專區**：[`01_Module_A_Story_故事劇情/template_module_a.html`](./01_Module_A_Story_故事劇情/template_module_a.html)
+* 🎨 **模組 B 美術視覺專區**：[`02_Module_B_Art_美術視覺/template_module_b.html`](./02_Module_B_Art_美術視覺/template_module_b.html)（已收錄 [`Module_B_Proposal_01_2D_Sticker_Art.html`](./02_Module_B_Art_美術視覺/Module_B_Proposal_01_2D_Sticker_Art.html) 2D 貼紙風提案）
+* 🤝 **模組 C 兩兩連結專區**：[`03_Module_C_Harmony_兩兩連結/template_module_c.html`](./03_Module_C_Harmony_兩兩連結/template_module_c.html)
+* 🌐 **協作中心主頁面**：[`index.html`](./index.html)（整合模組導航、專案架構與決策現況）
 
 ---
 

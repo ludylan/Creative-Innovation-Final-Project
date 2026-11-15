@@ -315,6 +315,7 @@
         <nav class="top-bar">
             <a href="../Presentation_簡報/index.html" class="pill-btn">🎬 提案簡報 (8頁展示版)</a>
             <a href="https://github.com/ludylan/Creative-Innovation-Final-Project" target="_blank" class="pill-btn">📦 GitHub 遠端倉庫</a>
+            <a href="01_AI_Collaboration_Prompt_AI協作提示詞指南.md" class="pill-btn" style="background: var(--sky);">🤖 AI 協作提示詞指南</a>
             <a href="00_Decision_Log_決策與討論紀錄.md" class="pill-btn">📋 Markdown 決策文件</a>
         </nav>
 
@@ -448,47 +449,63 @@
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
                     <div>
                         <h2 style="font-family: var(--font-display); font-size: 26px; font-weight: 800;">
-                            💡 提案不綁死！彈性拆開三大提案軌道
+                            💡 提案不綁死！彈性拆開三大模組專區
                         </h2>
                         <p style="font-size: 16px; margin-top: 6px; color: var(--ink-muted); font-weight: 600;">
-                            大家不需一次填滿所有東西！你可以針對自己擅長或有靈感的面向單獨提案，也可以做故事與美術的兩兩連結探索：
+                            大家不需一次填滿所有面向！每個模組均有獨立子資料夾與獨立 HTML 模板，組員可根據靈感產出每週新提案：
                         </p>
                     </div>
-                    <a href="proposal_template.html" class="pill-btn" style="background: var(--butter);">📄 開啟彈性提案模板 (HTML)</a>
+                    <a href="01_AI_Collaboration_Prompt_AI協作提示詞指南.md" class="pill-btn" style="background: var(--sky);">🤖 閱讀完整 AI 協作提示詞 (.md)</a>
                 </div>
 
                 <div class="rule-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 22px;">
-                    <!-- 軌道 1 -->
-                    <div style="background: #E8F8F2; border: var(--border-thin); border-radius: 18px; padding: 20px 24px;">
-                        <span style="background: var(--mint); border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-family: var(--font-display); font-size: 13px; font-weight: 700;">軌道 1</span>
-                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 8px 0 6px;">📖 故事／劇情提案</h3>
-                        <p style="font-size: 14px; line-height: 1.6; font-weight: 500;">
-                            • 5～7 分鐘故事情節與主角設定<br>
-                            • <strong>為什麼需要這段劇情？（立意點是什麼）</strong><br>
-                            • 適合網頁即時互動的故事節點
-                        </p>
+                    <!-- 模組 A -->
+                    <div style="background: #E8F8F2; border: var(--border-thin); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span style="background: var(--mint); border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-family: var(--font-display); font-size: 13px; font-weight: 700;">模組 A 專區</span>
+                            <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 8px 0 6px;">📖 故事／劇情提案</h3>
+                            <p style="font-size: 14px; line-height: 1.6; font-weight: 500;">
+                                • 5～7 分鐘故事情節與主角設定<br>
+                                • <strong>為什麼需要這段劇情？（深層立意點）</strong><br>
+                                • 適合網頁即時互動的故事節點
+                            </p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <a href="01_Module_A_Story_故事劇情/template_module_a.html" class="pill-btn" style="background: #FFF; font-size: 13px; padding: 7px 14px; width: 100%; justify-content: center;">📄 開啟故事模板 (Module A)</a>
+                        </div>
                     </div>
 
-                    <!-- 軌道 2 -->
-                    <div style="background: #FFFBEA; border: var(--border-thin); border-radius: 18px; padding: 20px 24px;">
-                        <span style="background: var(--butter); border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-family: var(--font-display); font-size: 13px; font-weight: 700;">軌道 2</span>
-                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 8px 0 6px;">🎨 美術／視覺提案</h3>
-                        <p style="font-size: 14px; line-height: 1.6; font-weight: 500;">
-                            • 2D 向量手繪、GPU 即時渲染或生成式場景<br>
-                            • <strong>前端工程可執行性與技術門檻查核</strong><br>
-                            • 避免純 AI 生圖造成分裂的對策
-                        </p>
+                    <!-- 模組 B -->
+                    <div style="background: #FFFBEA; border: var(--border-thin); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span style="background: var(--butter); border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-family: var(--font-display); font-size: 13px; font-weight: 700;">模組 B 專區</span>
+                            <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 8px 0 6px;">🎨 美術／視覺提案</h3>
+                            <p style="font-size: 14px; line-height: 1.6; font-weight: 500;">
+                                • 2D 向量手繪、GPU 即時渲染或生成式場景<br>
+                                • <strong>前端工程可執行性與技術門檻查核</strong><br>
+                                • 避免純 AI 生圖造成分裂的對策
+                            </p>
+                        </div>
+                        <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px;">
+                            <a href="02_Module_B_Art_美術視覺/Module_B_Proposal_01_2D_Sticker_Art.html" class="pill-btn" style="background: var(--butter); font-size: 13px; padding: 7px 14px; justify-content: center;">🌟 提案 01：2D 手繪貼紙風 (已定調)</a>
+                            <a href="02_Module_B_Art_美術視覺/template_module_b.html" class="pill-btn" style="background: #FFF; font-size: 13px; padding: 7px 14px; justify-content: center;">📄 開啟新美術模板 (Module B)</a>
+                        </div>
                     </div>
 
-                    <!-- 軌道 3 -->
-                    <div style="background: #FEF0E7; border: var(--border-thin); border-radius: 18px; padding: 20px 24px;">
-                        <span style="background: var(--peach); border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-family: var(--font-display); font-size: 13px; font-weight: 700;">軌道 3</span>
-                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 8px 0 6px;">🤝 故事 ✕ 美術連結提案</h3>
-                        <p style="font-size: 14px; line-height: 1.6; font-weight: 500;">
-                            • 某段故事如果配上某套美術會產生什麼氛圍？<br>
-                            • 針對同一個故事，提出另一種畫風的可能性<br>
-                            • 探討不同風格詮釋對觀者情感的影響
-                        </p>
+                    <!-- 模組 C -->
+                    <div style="background: #FEF0E7; border: var(--border-thin); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <span style="background: var(--peach); border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-family: var(--font-display); font-size: 13px; font-weight: 700;">模組 C 專區</span>
+                            <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 8px 0 6px;">🤝 故事 ✕ 美術連結提案</h3>
+                            <p style="font-size: 14px; line-height: 1.6; font-weight: 500;">
+                                • 某段故事如果配上某套美術會產生什麼氛圍？<br>
+                                • 針對同一個故事，提出另一種畫風的可能性<br>
+                                • 探討不同風格詮釋對觀者情感的影響
+                            </p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <a href="03_Module_C_Harmony_兩兩連結/template_module_c.html" class="pill-btn" style="background: #FFF; font-size: 13px; padding: 7px 14px; width: 100%; justify-content: center;">📄 開啟連結模板 (Module C)</a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -580,17 +597,38 @@
                                 </div>
                             </li>
                             <li>
+                                <span class="file-badge">AI 指南</span>
+                                <div>
+                                    <strong>01_Decisions_決策與討論區/01_AI_Collaboration_Prompt_...md</strong><br>
+                                    <small style="color: var(--ink-muted);">說故事級 AI 協作提示詞指南（主動引導、工程查核、非綁死）</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="file-badge">模組 A</span>
+                                <div>
+                                    <strong>01_Decisions_.../01_Module_A_Story_故事劇情/</strong><br>
+                                    <small style="color: var(--ink-muted);">故事劇情專區（含 template_module_a.html 及每週獨立提案）</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="file-badge">模組 B</span>
+                                <div>
+                                    <strong>01_Decisions_.../02_Module_B_Art_美術視覺/</strong><br>
+                                    <small style="color: var(--ink-muted);">美術視覺專區（含 2D 貼紙風提案 01 及 template_module_b.html）</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="file-badge">模組 C</span>
+                                <div>
+                                    <strong>01_Decisions_.../03_Module_C_Harmony_兩兩連結/</strong><br>
+                                    <small style="color: var(--ink-muted);">故事 ✕ 美術連結專區（含 template_module_c.html）</small>
+                                </div>
+                            </li>
+                            <li>
                                 <span class="file-badge">Markdown</span>
                                 <div>
                                     <strong>01_Decisions_決策與討論區/00_Decision_Log...md</strong><br>
                                     <small style="color: var(--ink-muted);">Obsidian 決策歷程紀錄與待決策事項清單</small>
-                                </div>
-                            </li>
-                            <li>
-                                <span class="file-badge">範本</span>
-                                <div>
-                                    <strong>01_Decisions_決策與討論區/proposal_template.html</strong><br>
-                                    <small style="color: var(--ink-muted);">提案四大維度與互動展示之標準 HTML 模板</small>
                                 </div>
                             </li>
                         </ul>

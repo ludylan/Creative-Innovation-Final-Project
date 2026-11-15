@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 A 範本】故事／劇情提案 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --mint: #A8E6CF;
+            --butter: #FDE68A;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--mint);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 34px; font-weight: 900; margin-bottom: 20px; }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            background: var(--card-white);
+            border: var(--border-thin);
+            border-radius: 16px;
+            padding: 14px 20px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 28px;
+        }
+        .meta-label { font-size: 13px; font-weight: 700; color: var(--ink-muted); }
+        .meta-value { font-family: var(--font-display); font-size: 17px; font-weight: 700; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+        }
+        .editable {
+            background: #FCFDFE;
+            border: 2px dashed rgba(45,42,38,0.25);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            line-height: 1.7;
+            outline: none;
+            min-height: 70px;
+        }
+        .editable:focus { border-color: var(--ink); background: #FFF; }
+        .btn-save {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--butter);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 12px 24px;
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">📖 模組 A 專區（故事／劇情專用提案）</span>
+        </nav>
+        <main class="sheet">
+            <span class="badge">📖 模組 A 提案模板</span>
+            <h1 class="title" contenteditable="true">【故事提案名稱】請輸入你的故事題目</h1>
+
+            <div class="meta-grid">
+                <div><div class="meta-label">提案編號</div><div class="meta-value">Module_A_Proposal_01</div></div>
+                <div><div class="meta-label">提案人</div><div class="meta-value" contenteditable="true">全組共同／個人學號</div></div>
+                <div><div class="meta-label">預計片長</div><div class="meta-value">約 5～7 分鐘純正片</div></div>
+            </div>
+
+            <section class="card">
+                <div class="card-header">📌 1. 故事概述與情節脈絡（開場 ➔ 探索 ➔ 高潮轉折 ➔ 餘韻結尾）</div>
+                <div class="editable" contenteditable="true">
+                    在此撰寫 5～7 分鐘的故事概述。主角是誰？身處什麼環境？踏出探索遇到了什麼難題？最後如何化解？
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-header">💡 2. 為什麼需要這段劇情？深層立意點是什麼？</div>
+                <div class="editable" contenteditable="true">
+                    闡述這段劇情背後的人文情感或哲理寓意（例如：面對不確定時的釋懷、人與環境的溫暖共鳴、好奇心帶來的驚喜）。為什麼這段故事適合用網頁即時互動來呈現？
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-header">👆 3. 預設之網頁互動情境節點（1～3 處）</div>
+                <div class="editable" contenteditable="true">
+                    • 節點一：觀眾點擊場景中的物件，觸發主角反應或推進對話。<br>
+                    • 節點二：觀眾拖曳光影時間軸，改變場景氛圍化解危機。<br>
+                    • 節點三：收尾互動，點亮結局畫面。
+                </div>
+            </section>
+        </main>
+    </div>
+    <button class="btn-save" onclick="save()">💾 儲存為 HTML 提案檔</button>
+    <script>
+        function save() {
+            const blob = new Blob(['<!DOCTYPE html>\n' + document.documentElement.outerHTML], { type: 'text/html;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = location.pathname.split('/').pop() || 'Module_A_Proposal.html';
+            a.click();
+        }
+    </script>
+</body>
+</html>
