@@ -321,12 +321,97 @@
         <main class="hub-sheet">
             <!-- 標頭英雄區 -->
             <header class="hero">
-                <div class="hero-badge">📢 全組協作主架構</div>
+                <div class="hero-badge">📢 全組協作主架構 ✕ 探索性專案中心</div>
                 <h1 class="hero-title">期末專題提案與決策中心</h1>
                 <p class="hero-sub">
-                    本頁面為<strong>「程式製作動畫繪本」</strong>期末專案的決策主核心。本週為提案週，全體共同聚焦於<strong>「美術風格的可執行性」</strong>、<strong>「劇情與立意點」</strong>以及<strong>「劇情與美術的契合度」</strong>，建立具體可落地的互動繪本規範。
+                    本專案核心定調：<strong>以網頁前端技術製作約 5～7 分鐘的動畫繪本（非純 AI 生成影片）</strong>。
+                    本週任務是將<strong>「劇情內容」</strong>、<strong>「具體前端網頁技術」</strong>與<strong>「美術風格」</strong>定調。
+                    這是一個前沿探索性專案，歡迎大家<strong>大膽妄想</strong>，並透過 AI 實際調查技術邊界，把天馬行空的幻想化為扎實落地的網頁現實！
                 </p>
             </header>
+
+            <!-- 專案背景提要與決策邊界（過去已定案 vs 本週需定案） -->
+            <section class="block-card">
+                <h2 style="font-family: var(--font-display); font-size: 26px; font-weight: 800; display: flex; align-items: center; gap: 10px;">
+                    📌 專案背景提要與決策邊界
+                </h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px;">
+                    <!-- 過去已定案 -->
+                    <div style="background: #E8F8F2; border: var(--border-thin); border-radius: 18px; padding: 22px;">
+                        <span style="background: #2B8A3E; color: #FFF; font-family: var(--font-display); font-size: 13px; font-weight: 800; padding: 3px 12px; border-radius: 999px;">✅ 過去已確認決策</span>
+                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 10px 0 8px;">形式：前端程式驅動的動畫</h3>
+                        <ul style="font-size: 15px; line-height: 1.7; padding-left: 20px; font-weight: 500;">
+                            <li><strong>動畫形式</strong>：最終產出為約 5～7 分鐘的純動畫繪本正片。</li>
+                            <li><strong>核心技術</strong>：以<strong>網頁前端技術</strong>完成動畫與互動，而非外部剪輯工具。</li>
+                            <li><strong>⚠️ 重要聲明（非純 AI 生成）</strong>：<strong>本專案並非使用 AI 一鍵生圖或生成影片（如 Sora/Runway）！</strong>畫面圖層與動態是由前端代碼驅動；過程中 AI 僅作為協同工具（如輔助代碼撰寫、生成配樂或局部背景測試）。</li>
+                        </ul>
+                    </div>
+
+                    <!-- 本週需定案 -->
+                    <div style="background: #FFF3BF; border: var(--border-thin); border-radius: 18px; padding: 22px;">
+                        <span style="background: #E67700; color: #FFF; font-family: var(--font-display); font-size: 13px; font-weight: 800; padding: 3px 12px; border-radius: 999px;">⏳ 本週首要定案任務</span>
+                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 10px 0 8px;">尚未決策！等待大家踴躍提案</h3>
+                        <ul style="font-size: 15px; line-height: 1.7; padding-left: 20px; font-weight: 500;">
+                            <li><strong>劇情內容與立意點</strong>：全片要講什麼故事？主角是誰？想傳達什麼哲理寓意？</li>
+                            <li><strong>具體要使用的網頁技術</strong>：純 SVG+CSS、HTML5 Canvas、還是引入輕量動畫庫（如 GSAP/Anime.js）？</li>
+                            <li><strong>美術風格定稿</strong>：彙整大家提出的風格參考圖片，確認最終視覺色票與規範。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI 協作者角色定位：大膽妄想，小心求證，落地為真 -->
+            <section class="block-card" style="background: #F3F8FF; border-left: 10px solid var(--sky);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <span style="background: var(--sky); border: var(--border-thin); border-radius: 999px; padding: 4px 14px; font-family: var(--font-display); font-weight: 800; font-size: 14px;">🤖 AI 協作者角色與提案準則</span>
+                        <h2 style="font-family: var(--font-display); font-size: 26px; font-weight: 900; margin-top: 8px;">
+                            探索性專案：把使用者的幻想變成現實！
+                        </h2>
+                    </div>
+                </div>
+
+                <p style="font-size: 16px; line-height: 1.8; margin-top: 12px; font-weight: 500;">
+                    這是一部偏探索性的科技與藝術專題，<strong>請組員大膽妄想，不必自我設限！</strong><br>
+                    在此過程中，<strong>AI 扮演的角色是「引導者、技術探路先鋒與現實落地工程師」</strong>：
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 18px 0;">
+                    <div style="background: #FFFFFF; border: var(--border-thin); border-radius: 14px; padding: 16px; box-shadow: 2px 2px 0 var(--ink);">
+                        <strong style="color: #1E40AF; font-size: 16px;">🔍 1. 實際去查技術邊界</strong>
+                        <p style="font-size: 14px; color: var(--ink-muted); margin-top: 6px;">AI 必須實際檢索前端 API、SVG 特性與瀏覽器效能極限，<strong>嚴禁盲目捏造不存在的技術</strong>！</p>
+                    </div>
+                    <div style="background: #FFFFFF; border: var(--border-thin); border-radius: 14px; padding: 16px; box-shadow: 2px 2px 0 var(--ink);">
+                        <strong style="color: #2F9E44; font-size: 16px;">🎨 2. 提供美術風格圖片</strong>
+                        <p style="font-size: 14px; color: var(--ink-muted); margin-top: 6px;">提案必須具備具體的視覺參考圖片、色票或繪圖範例，確認風格在程式中可被實體化。</p>
+                    </div>
+                    <div style="background: #FFFFFF; border: var(--border-thin); border-radius: 14px; padding: 16px; box-shadow: 2px 2px 0 var(--ink);">
+                        <strong style="color: #D9480F; font-size: 16px;">🚀 3. 把幻想化為前端代碼</strong>
+                        <p style="font-size: 14px; color: var(--ink-muted); margin-top: 6px;">引導組員探索創意邊界，並將大膽的視覺腦洞轉譯成具體可執行的 HTML/CSS/SVG 分層結構。</p>
+                    </div>
+                    <div style="background: #FFFFFF; border: var(--border-thin); border-radius: 14px; padding: 16px; box-shadow: 2px 2px 0 var(--ink);">
+                        <strong style="color: #7950F2; font-size: 16px;">📋 4. 收整符合報告規格</strong>
+                        <p style="font-size: 14px; color: var(--ink-muted); margin-top: 6px;">將狂想收斂為符合期末報告與評分規則的專業結構，確保全組系統的完整性與說服力。</p>
+                    </div>
+                </div>
+
+                <!-- AI 生成提示詞指引 -->
+                <div style="background: #FFFFFF; border: 2px dashed var(--sky); border-radius: 14px; padding: 18px 22px;">
+                    <div style="font-family: var(--font-display); font-weight: 800; font-size: 15px; color: #1E40AF;">
+                        📋 隊友與 AI 對話之「探索咒語」（直接複製給 AI，要求它幫你探路與落地）：
+                    </div>
+                    <code style="display: block; background: #F8FAFC; border: 1px solid rgba(45,42,38,0.2); border-radius: 8px; padding: 12px 16px; margin-top: 10px; font-family: Consolas, monospace; font-size: 13px; color: #1E3A8A; white-space: pre-wrap; user-select: all;">我們正在進行大學期末專案《程式製作動畫繪本》（片長約 5～7 分鐘）。
+核心原則：以網頁前端技術（HTML/CSS/JS/SVG/Canvas）製作動畫，非純 AI 生成影片！
+
+我有以下大膽構想：[請在此填寫你的狂想、故事設定或視覺概念]
+
+請擔任我的「技術探路與落地引導工程師」：
+1. 【實際技術查核】：請不要盲目捏造。請實際分析這個點子在前端技術上（SVG、Canvas、CSS 還是特定庫）是否完全可行？有哪些技術門檻與邊界？
+2. 【美術風格與圖片參考】：建議對應的美術視覺定位、色彩色票，並具體說明圖層該如何手刻分層。
+3. 【劇情立意與哲理】：為這段劇情提煉深層立意點（為什麼需要這段劇情？）。
+4. 【收斂報告內容】：整理成符合提案規範的條列重點，幫我把幻想化為真實代碼方案！</code>
+                </div>
+            </section>
 
             <!-- 模組化彈性提案指引與 AI 協作 -->
             <section class="block-card">
