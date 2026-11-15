@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>創意與創新｜期末報告：程式製作動畫繪本</title>
+
+    <!-- Google Fonts: Fredoka (display) + Quicksand (body) + LXGW WenKai TC / Noto Sans TC (中文) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@500;700;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           THEME (Style A 手帳紙 + Style B 2D 貼紙)
+           修改顏色 / 字體：改這裡即可
+           =========================================== */
+        :root {
+            --stage-bg: #23201d;
+            --slide-bg: #2c2824;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.045);
+            --card-white: #FFFFFF;
+            --ink: #2D2A26;
+            --ink-muted: #655E56;
+
+            --mint: #A8E6CF;
+            --turquoise: #7ECDC0;
+            --sky: #A8D8F0;
+            --butter: #FDE68A;
+            --peach: #FFCBA4;
+            --lavender: #D4C5EC;
+            --pink: #F7C8D4;
+            --coral: #F8635F;
+
+            --font-display: 'Fredoka', 'Noto Sans TC', sans-serif;
+            --font-body: 'Quicksand', 'LXGW WenKai TC', 'Noto Sans TC', sans-serif;
+
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-md: 6px 6px 0 var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.6s;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===========================================
+           FIXED 16:9 STAGE: MANDATORY BASE STYLES
+           Slides are authored at 1920×1080 and scaled as a whole.
+           =========================================== */
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--stage-bg, #000);
+            font-family: var(--font-body);
+            color: var(--ink);
+        }
+
+        .deck-viewport {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            background: var(--stage-bg, #000);
+        }
+
+        .deck-stage {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            transform-origin: 0 0;
+            background: var(--slide-bg, #fff);
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            display: block;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            background: var(--slide-bg, #fff);
+        }
+
+        .slide.active,
+        .slide.visible {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 1;
+        }
+
+        img, video, canvas, svg {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .deck-controls {
+            position: fixed;
+            left: 50%;
+            bottom: 18px;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #FFFFFF;
+            border: 3px solid var(--ink);
+            box-shadow: 4px 4px 0 var(--ink);
+            border-radius: 999px;
+            padding: 6px 18px;
+            font-family: var(--font-display);
+            font-size: 16px;
+            color: var(--ink);
+        }
+
+        .ctrl-btn {
+            background: var(--butter);
+            border: 2px solid var(--ink);
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--ink);
+            transition: transform 0.15s ease;
+        }
+        .ctrl-btn:hover { transform: translateY(-2px); }
+
+        @media print {
+            html, body { width: 1920px; height: auto; overflow: visible; background: #fff; }
+            .deck-viewport { position: static; overflow: visible; background: #fff; }
+            .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
+            .slide {
+                position: relative;
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                width: 1920px;
+                height: 1080px;
+                break-after: page;
+                page-break-after: always;
+            }
+            .slide:last-child { break-after: auto; page-break-after: auto; }
+            .deck-controls, .edit-hotzone, .edit-toggle { display: none !important; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.2s !important;
+            }
+        }
+
+        /* ===========================================
+           NOTEBOOK SHEET + SECTION TABS (Style A)
+           =========================================== */
+        .notebook-frame {
+            position: absolute;
+            inset: 44px 72px 64px 72px;
+            display: flex;
+            align-items: stretch;
+        }
+
+        .paper-sheet {
+            flex: 1;
+            background-color: var(--paper-bg);
+            background-image:
+                linear-gradient(var(--paper-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--paper-grid) 1px, transparent 1px);
+            background-size: 36px 36px;
+            border: 4px solid var(--ink);
+            border-radius: 28px 12px 12px 28px;
+            box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.45);
+            padding: 58px 82px 46px 128px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .binder-strip {
+            position: absolute;
+            left: 38px;
+            top: 76px;
+            bottom: 76px;
+            width: 34px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .binder-hole {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--slide-bg);
+            border: 3px solid var(--ink);
+            box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.35);
+        }
+
+        .binder-line {
+            position: absolute;
+            left: 92px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(248, 99, 95, 0.28);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .tabs-rail {
+            width: 68px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 28px 0;
+            margin-left: -4px;
+            z-index: 4;
+        }
+
+        .tab-item {
+            flex: 1;
+            border: 3.5px solid var(--ink);
+            border-left: none;
+            border-radius: 0 18px 18px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            writing-mode: vertical-rl;
+            font-family: var(--font-display);
+            font-size: 21px;
+            font-weight: 700;
+            color: var(--ink);
+            cursor: pointer;
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.35);
+            transition: transform 0.2s ease;
+            user-select: none;
+            letter-spacing: 0.05em;
+        }
+        .tab-item:hover { transform: translateX(6px); }
+        .tab-item.active-tab {
+            transform: translateX(8px);
+            box-shadow: 6px 6px 0 var(--ink);
+        }
+
+        /* ===========================================
+           MOTION LIBRARY (輕量縮放 / 浮動動畫)
+           =========================================== */
+        .svg-anim { transform-box: fill-box; transform-origin: center; }
+        .deco-sticker { position: absolute; pointer-events: none; z-index: 1; }
+
+        .float-a { animation: floatA 5.5s ease-in-out infinite; }
+        .float-b { animation: floatB 6.5s 0.8s ease-in-out infinite; }
+        .float-c { animation: floatC 4.8s 1.5s ease-in-out infinite; }
+
+        @keyframes floatA { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-14px) rotate(4deg); } }
+        @keyframes floatB { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(12px) rotate(-5deg); } }
+        @keyframes floatC { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-8px,-10px) scale(1.05); } }
+
+        @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+        @keyframes twinkle { 0%,100% { transform: scale(0.55); opacity: 0.55; } 50% { transform: scale(1.15); opacity: 1; } }
+        @keyframes ringPulse { 0%,100% { transform: scale(0.9); opacity: 0.9; } 50% { transform: scale(1.07); opacity: 0.45; } }
+        @keyframes softPulse { 0%,100% { transform: scale(0.94); } 50% { transform: scale(1.06); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes sway { 0%,100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
+        @keyframes drift { 0% { transform: translateX(-60px); } 100% { transform: translateX(120px); } }
+        @keyframes firefly { 0%,100% { transform: translate(0,0); } 33% { transform: translate(16px,-18px); } 66% { transform: translate(-14px,-6px); } }
+        @keyframes burst {
+            0%   { transform: translate(0,0) scale(0.2) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(1.25) rotate(140deg); opacity: 0; }
+        }
+        @keyframes jump {
+            0%   { transform: translateY(0) scale(1.08, 0.9); }
+            35%  { transform: translateY(-70px) scale(0.94, 1.08); }
+            70%  { transform: translateY(0) scale(1.1, 0.9); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .breathe   { animation: breathe 4.4s ease-in-out infinite; }
+        .twinkle   { animation: twinkle 2.6s ease-in-out infinite; }
+        .ring      { animation: ringPulse 4.6s ease-in-out infinite; }
+        .soft-disc { animation: softPulse 5s ease-in-out infinite; }
+        .spin-slow { animation: spin 36s linear infinite; }
+
+        /* Entrance reveals */
+        .reveal, .pop {
+            opacity: 0;
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+        .reveal { transform: translateY(24px); }
+        .pop    { transform: scale(0.9) translateY(18px); }
+        .slide.visible .reveal,
+        .slide.visible .pop { opacity: 1; transform: none; }
+        .d1 { transition-delay: 0.08s; }
+        .d2 { transition-delay: 0.16s; }
+        .d3 { transition-delay: 0.24s; }
+        .d4 { transition-delay: 0.32s; }
+        .d5 { transition-delay: 0.40s; }
+        .d6 { transition-delay: 0.48s; }
+
+        .title-ul {
+            height: 9px;
+            width: 280px;
+            background: var(--butter);
+            border: 2.5px solid var(--ink);
+            border-radius: 999px;
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform 0.8s 0.3s var(--ease-out-expo);
+            margin-bottom: 22px;
+        }
+        .slide.visible .title-ul { transform: scaleX(1); }
+
+        /* ===========================================
+           SHARED TYPOGRAPHY & CARDS
+           =========================================== */
+        .slide-top { position: relative; z-index: 2; }
+
+        .pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--butter);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 24px;
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 18px;
+        }
+
+        .slide-title {
+            font-family: var(--font-display);
+            font-size: 60px;
+            font-weight: 900;
+            line-height: 1.18;
+            color: var(--ink);
+            margin-bottom: 12px;
+        }
+
+        .slide-lead {
+            font-size: 27px;
+            font-weight: 600;
+            line-height: 1.55;
+            color: var(--ink-muted);
+            margin-bottom: 18px;
+        }
+
+        .framed-card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 2;
+        }
+
+        .framed-card-header {
+            padding: 16px 26px;
+            border-bottom: var(--border-thick);
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .framed-card-body {
+            padding: 24px 28px;
+            font-size: 25px;
+            line-height: 1.65;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .step-badge {
+            min-width: 44px;
+            height: 44px;
+            padding: 0 6px;
+            border-radius: 999px;
+            border: var(--border-thin);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--card-white);
+            flex-shrink: 0;
+        }
+
+        .dot-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .dot-list li {
+            position: relative;
+            padding-left: 34px;
+            font-size: 25px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+        .dot-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--butter);
+            border: 2.5px solid var(--ink);
+        }
+
+        .slide-footer {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 2.5px dashed rgba(45, 42, 38, 0.2);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ink-muted);
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; position: relative; z-index: 2; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; position: relative; z-index: 2; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; position: relative; z-index: 2; }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            border: var(--border-thin);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-size: 21px;
+            font-weight: 700;
+            background: var(--butter);
+            box-shadow: 3px 3px 0 var(--ink);
+        }
+
+        /* ===========================================
+           SLIDE 1 — COVER
+           =========================================== */
+        .cover-layout {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 32px;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cover-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .cover-right {
+            position: relative;
+            height: 680px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cover-art {
+            width: 100%;
+            max-width: 720px;
+            height: auto;
+            z-index: 2;
+            overflow: visible;
+        }
+
+        .cover-float-badge {
+            position: absolute;
+            z-index: 3;
+            background: var(--card-white);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-sm);
+            border-radius: 18px;
+            padding: 10px 18px;
+            font-family: var(--font-display);
+            font-size: 21px;
+            font-weight: 700;
+            color: var(--ink);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .agenda-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 8px;
+            max-width: 680px;
+        }
+
+        .agenda-card {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 14px 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .agenda-card:hover {
+            transform: translateY(-3px) translateX(4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .agenda-num {
+            min-width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            border: var(--border-thin);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 900;
+            box-shadow: 3px 3px 0 var(--ink);
+            flex-shrink: 0;
+        }
+
+        .agenda-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .agenda-title {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.25;
+        }
+
+        .agenda-sub {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ink-muted);
+        }
+
+        /* ===========================================
+           SLIDE 2 — INFO ROWS (純文字頁)
+           =========================================== */
+        .info-stack { display: flex; flex-direction: column; gap: 18px; position: relative; z-index: 2; }
+        .info-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 28px;
+            align-items: center;
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 22px;
+            box-shadow: var(--shadow-sm);
+            padding: 20px 30px;
+        }
+        .info-label {
+            justify-self: start;
+            border: var(--border-thin);
+            border-radius: 999px;
+            padding: 6px 24px;
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .info-text { font-size: 27px; line-height: 1.6; font-weight: 600; }
+
+        /* ===========================================
+           SLIDE 3 — OUTLINE TIMELINE
+           =========================================== */
+        .tl-bar {
+            display: flex;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        .tl-seg {
+            border: var(--border-thin);
+            border-radius: 12px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 21px;
+            font-weight: 700;
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform 0.9s var(--ease-out-expo);
+        }
+        .slide.visible .tl-seg { transform: scaleX(1); }
+        .tl-seg:nth-child(1) { transition-delay: 0.45s; }
+        .tl-seg:nth-child(2) { transition-delay: 0.6s; }
+        .tl-seg:nth-child(3) { transition-delay: 0.75s; }
+        .tl-seg:nth-child(4) { transition-delay: 0.9s; }
+
+        /* ===========================================
+           SLIDE 4 — INTERACTIVE SCENE DEMO
+           =========================================== */
+        .scene-stage {
+            position: relative;
+            z-index: 2;
+            height: 500px;
+            border: var(--border-thick);
+            border-radius: 26px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            background: #9FD3EE;
+        }
+        #sceneSvg { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; display: block; cursor: crosshair; }
+        .px-layer { transition: transform 0.35s ease-out; }
+        .cloud-drift { animation: drift 16s ease-in-out infinite alternate; }
+        .tree-sway { animation: sway 5s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+        .firefly { animation: firefly 6s ease-in-out infinite; }
+        .jump { animation: jump 0.7s ease-out; }
+        .burst-p {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: burst 1.3s ease-out forwards;
+            pointer-events: none;
+        }
+
+        .scene-hint {
+            position: absolute;
+            left: 22px;
+            top: 18px;
+            z-index: 5;
+            background: rgba(255, 255, 255, 0.9);
+            border: var(--border-thin);
+            border-radius: 999px;
+            padding: 6px 20px;
+            font-size: 20px;
+            font-weight: 700;
+            pointer-events: none;
+        }
+
+        .scene-controls {
+            position: absolute;
+            left: 50%;
+            bottom: 18px;
+            transform: translateX(-50%);
+            z-index: 6;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #FFFFFF;
+            border: var(--border-thick);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 24px;
+            font-size: 24px;
+        }
+        #sceneToggle {
+            background: var(--butter);
+            border: var(--border-thin);
+            border-radius: 999px;
+            padding: 4px 18px;
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--ink);
+        }
+        #timeSlider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 380px;
+            height: 14px;
+            border-radius: 999px;
+            border: var(--border-thin);
+            background: linear-gradient(90deg, #A8D8F0, #FFD9A0, #4B5C91);
+            outline: none;
+            cursor: pointer;
+        }
+        #timeSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--butter);
+            border: 3px solid var(--ink);
+            box-shadow: 2px 2px 0 var(--ink);
+        }
+        #timeSlider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--butter);
+            border: 3px solid var(--ink);
+        }
+
+        /* ===========================================
+           SLIDE 6 — WEEK TABLE + TEAM
+           =========================================== */
+        .split { display: grid; grid-template-columns: 1.55fr 1fr; gap: 28px; position: relative; z-index: 2; }
+        .week-row {
+            display: grid;
+            grid-template-columns: 150px 120px 1fr;
+            gap: 14px;
+            align-items: center;
+            padding: 14px 4px;
+            border-bottom: 2.5px dashed rgba(45, 42, 38, 0.2);
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        .week-row:last-child { border-bottom: none; }
+        .week-row.head {
+            font-family: var(--font-display);
+            font-size: 21px;
+            color: var(--ink-muted);
+            padding-top: 0;
+            border-bottom: var(--border-thin);
+        }
+        .week-no { font-family: var(--font-display); font-weight: 700; font-size: 26px; }
+        .team-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 16px 4px;
+            border-bottom: 2.5px dashed rgba(45, 42, 38, 0.2);
+        }
+        .team-row:last-child { border-bottom: none; }
+        .team-id { font-family: var(--font-display); font-size: 28px; font-weight: 700; }
+
+        /* ===========================================
+           SLIDE 7 — END
+           =========================================== */
+        .end-center {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        .end-title {
+            font-family: var(--font-display);
+            font-size: 150px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin: 10px 0 6px;
+        }
+        .end-sub { font-size: 34px; font-weight: 700; color: var(--ink-muted); }
+
+        /* ===========================================
+           INLINE EDITING
+           =========================================== */
+        .edit-hotzone { position: fixed; top: 0; left: 0; width: 80px; height: 80px; z-index: 10000; cursor: pointer; }
+        .edit-toggle {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            background: var(--butter);
+            border: 3px solid var(--ink);
+            box-shadow: 4px 4px 0 var(--ink);
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-family: var(--font-display);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 10001;
+        }
+        .edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+        [contenteditable="true"] { outline: 2px dashed var(--coral); outline-offset: 4px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <div class="edit-hotzone" id="editHotzone"></div>
+    <button class="edit-toggle" id="editToggle" title="切換文字編輯模式 (快捷鍵 E，Ctrl+S 下載儲存)">✏️ 編輯文字 (E)</button>
+
+    <div class="deck-viewport">
+        <main class="deck-stage" id="deckStage">
+
+            <!-- ==========================================
+                 SLIDE 1：封面（不破題、左右均衡豐富）
+                 ========================================== -->
+            <section class="slide" data-tab="0">
+                <div class="notebook-frame">
+                    <div class="paper-sheet">
+                        <div class="binder-strip">
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                        </div>
+                        <div class="binder-line"></div>
+
+                        <!-- 頂部與角落浮動貼紙 -->
+                        <svg class="deco-sticker float-a" style="right: 42px; top: 22px; width: 118px;" viewBox="0 0 160 160">
+                            <circle cx="80" cy="80" r="44" fill="#FDE68A" stroke="#2D2A26" stroke-width="5"/>
+                            <g stroke="#2D2A26" stroke-width="5" stroke-linecap="round">
+                                <line x1="80" y1="14" x2="80" y2="26"/><line x1="80" y1="134" x2="80" y2="146"/>
+                                <line x1="14" y1="80" x2="26" y2="80"/><line x1="134" y1="80" x2="146" y2="80"/>
+                                <line x1="33" y1="33" x2="42" y2="42"/><line x1="118" y1="118" x2="127" y2="127"/>
+                                <line x1="127" y1="33" x2="118" y2="42"/><line x1="42" y1="118" x2="33" y2="127"/>
+                            </g>
+                        </svg>
+                        <svg class="deco-sticker float-b" style="left: 620px; top: 26px; width: 138px;" viewBox="0 0 200 110">
+                            <path d="M36 86 H162 C180 86 190 72 184 56 C178 42 162 40 152 46 C144 22 114 14 94 28 C78 18 52 28 48 48 C28 48 18 64 24 78 C27 83 31 86 36 86 Z" fill="#A8D8F0" stroke="#2D2A26" stroke-width="5"/>
+                        </svg>
+
+                        <div class="cover-layout">
+                            <!-- 左欄：主標題 + 放大版三章節導覽卡 -->
+                            <div class="cover-left">
+                                <div class="slide-top">
+                                    <div class="pill-badge reveal">💡 創意與創新｜期末報告</div>
+                                    <h1 class="slide-title reveal d1" style="font-size: 88px; margin-top: 6px; letter-spacing: 0.02em;">程式製作動畫繪本</h1>
+                                    <div class="title-ul"></div>
+                                </div>
+
+                                <div class="agenda-stack">
+                                    <div class="agenda-card pop d2" onclick="if(!isEditing) deck.showSlide(1)">
+                                        <span class="agenda-num" style="background: var(--mint);">01</span>
+                                        <div class="agenda-info">
+                                            <span class="agenda-title">影片主題</span>
+                                            <span class="agenda-sub">創作動機、探索目的與前端技術取向</span>
+                                        </div>
+                                    </div>
+                                    <div class="agenda-card pop d3" onclick="if(!isEditing) deck.showSlide(2)">
+                                        <span class="agenda-num" style="background: var(--butter);">02</span>
+                                        <div class="agenda-info">
+                                            <span class="agenda-title">大綱與腳本安排</span>
+                                            <span class="agenda-sub">5～7 分鐘結構草稿、互動細節與美術風格引導</span>
+                                        </div>
+                                    </div>
+                                    <div class="agenda-card pop d4" onclick="if(!isEditing) deck.showSlide(5)">
+                                        <span class="agenda-num" style="background: var(--sky);">03</span>
+                                        <div class="agenda-info">
+                                            <span class="agenda-title">拍攝計劃</span>
+                                            <span class="agenda-sub">拍攝地點、所需資源、週次安排與團隊分工</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 右欄：立體展開繪本 + 豐富漂浮動態徽章與畫筆動畫 -->
+                            <div class="cover-right">
+                                <div class="cover-float-badge float-a" style="left: 10px; top: 38px; background: var(--mint);">
+                                    <span>🎨</span><span>SVG 手繪貼紙風</span>
+                                </div>
+                                <div class="cover-float-badge float-b" style="right: 18px; top: 96px; background: var(--peach);">
+                                    <span>👆</span><span>網頁互動體驗</span>
+                                </div>
+                                <div class="cover-float-badge float-c" style="left: 34px; bottom: 48px; background: var(--butter);">
+                                    <span>🎬</span><span>5～7 分鐘動畫繪本</span>
+                                </div>
+                                <div class="cover-float-badge float-a" style="right: 24px; bottom: 64px; background: var(--lavender); animation-delay: 1.2s;">
+                                    <span>✨</span><span>&lt;HTML / SVG / JS&gt;</span>
+                                </div>
+
+                                <svg class="cover-art" viewBox="0 0 600 480" aria-hidden="true">
+                                    <!-- 外圈旋轉虛線環與柔和底光 -->
+                                    <g class="svg-anim ring"><circle cx="300" cy="245" r="218" fill="none" stroke="#2D2A26" stroke-width="3.5" stroke-dasharray="4 14" stroke-linecap="round"/></g>
+                                    <g class="svg-anim soft-disc"><circle cx="300" cy="245" r="175" fill="#FFF0B8" fill-opacity="0.68"/></g>
+
+                                    <!-- 彩虹虛線軌跡與漂浮紙飛機 -->
+                                    <path d="M75 115 Q300 20 515 110" fill="none" stroke="#F8635F" stroke-width="4" stroke-dasharray="10 10" stroke-linecap="round" opacity="0.65"/>
+                                    <g class="svg-anim float-c" transform="translate(275 48)">
+                                        <polygon points="0,18 46,0 24,36 18,22" fill="#A8D8F0" stroke="#2D2A26" stroke-width="3.5" stroke-linejoin="round"/>
+                                    </g>
+
+                                    <!-- 展開的立體繪本（呼吸縮放） -->
+                                    <g class="svg-anim breathe" transform="translate(20 20)">
+                                        <!-- 書本底陰影 -->
+                                        <path d="M44 150 L44 384 Q170 350 290 388 Q410 350 536 384 L536 150 Q410 116 290 154 Q170 116 44 150 Z" fill="#2D2A26" opacity="0.22"/>
+                                        <!-- 書封 -->
+                                        <path d="M34 138 L34 372 Q160 338 280 376 Q400 338 526 372 L526 138 Q400 104 280 142 Q160 104 34 138 Z" fill="#A8E6CF" stroke="#2D2A26" stroke-width="5" stroke-linejoin="round"/>
+                                        <!-- 左右書頁 -->
+                                        <path d="M56 120 Q168 88 280 128 L280 352 Q168 318 56 350 Z" fill="#FFFFFF" stroke="#2D2A26" stroke-width="5" stroke-linejoin="round"/>
+                                        <path d="M280 128 Q392 88 504 120 L504 350 Q392 318 280 352 Z" fill="#FFFBEA" stroke="#2D2A26" stroke-width="5" stroke-linejoin="round"/>
+                                        <line x1="280" y1="128" x2="280" y2="352" stroke="#2D2A26" stroke-width="4"/>
+
+                                        <!-- 左頁：旋轉小太陽 + 飄動雲朵 + 繪本段落線 -->
+                                        <circle cx="145" cy="195" r="32" fill="#FDE68A" stroke="#2D2A26" stroke-width="4"/>
+                                        <g class="svg-anim spin-slow" stroke="#2D2A26" stroke-width="4" stroke-linecap="round">
+                                            <line x1="187" y1="195" x2="200" y2="195"/><line x1="175" y1="225" x2="184" y2="234"/>
+                                            <line x1="145" y1="237" x2="145" y2="250"/><line x1="115" y1="225" x2="106" y2="234"/>
+                                            <line x1="103" y1="195" x2="90" y2="195"/><line x1="115" y1="165" x2="106" y2="156"/>
+                                            <line x1="145" y1="153" x2="145" y2="140"/><line x1="175" y1="165" x2="184" y2="156"/>
+                                        </g>
+                                        <g transform="translate(175 190) scale(0.42)">
+                                            <path d="M36 86 H162 C180 86 190 72 184 56 C178 42 162 40 152 46 C144 22 114 14 94 28 C78 18 52 28 48 48 C28 48 18 64 24 78 C27 83 31 86 36 86 Z" fill="#A8D8F0" stroke="#2D2A26" stroke-width="8"/>
+                                        </g>
+                                        <rect x="92" y="264" width="140" height="14" rx="7" fill="#A8E6CF" stroke="#2D2A26" stroke-width="3"/>
+                                        <path d="M94 298 Q126 290 158 298 T222 298" fill="none" stroke="#2D2A26" stroke-width="4" stroke-linecap="round" opacity="0.45"/>
+                                        <path d="M94 318 Q118 310 142 318 T190 318" fill="none" stroke="#2D2A26" stroke-width="4" stroke-linecap="round" opacity="0.45"/>
+
+                                        <!-- 右頁：立體山丘、搖曳樹木、跳躍主角 -->
+                                        <path d="M296 336 Q352 260 408 302 Q448 274 488 318 L488 338 Q392 312 296 340 Z" fill="#A8E6CF" stroke="#2D2A26" stroke-width="4" stroke-linejoin="round"/>
+                                        <g class="tree-sway">
+                                            <rect x="418" y="236" width="13" height="58" fill="#B98A63" stroke="#2D2A26" stroke-width="3.5"/>
+                                            <circle cx="424" cy="214" r="32" fill="#7ECDC0" stroke="#2D2A26" stroke-width="4"/>
+                                            <circle cx="402" cy="228" r="22" fill="#A8E6CF" stroke="#2D2A26" stroke-width="3.5"/>
+                                        </g>
+                                        <!-- 從書頁探出頭的可愛角色 -->
+                                        <g class="svg-anim float-a" style="animation-duration: 3.6s;">
+                                            <polygon points="354,234 363,252 345,252" fill="#FDE68A" stroke="#2D2A26" stroke-width="3.5" stroke-linejoin="round"/>
+                                            <rect x="326" y="250" width="56" height="48" rx="18" fill="#FFCBA4" stroke="#2D2A26" stroke-width="4"/>
+                                            <circle cx="344" cy="272" r="4.5" fill="#2D2A26"/>
+                                            <circle cx="364" cy="272" r="4.5" fill="#2D2A26"/>
+                                            <path d="M349 283 Q354 289 359 283" fill="none" stroke="#2D2A26" stroke-width="3.5" stroke-linecap="round"/>
+                                        </g>
+                                        <!-- 書籤緞帶 -->
+                                        <path d="M272 352 L262 412 L280 398 L296 414 L288 352 Z" fill="#F8635F" stroke="#2D2A26" stroke-width="4" stroke-linejoin="round"/>
+                                    </g>
+
+                                    <!-- 閃爍星芒 -->
+                                    <g transform="translate(76 92)"><path class="svg-anim twinkle" d="M0,-18 L4.5,-4.5 L18,0 L4.5,4.5 L0,18 L-4.5,4.5 L-18,0 L-4.5,-4.5Z" fill="#FDE68A" stroke="#2D2A26" stroke-width="3"/></g>
+                                    <g transform="translate(534 78)"><path class="svg-anim twinkle" style="animation-delay:0.7s" d="M0,-20 L5,-5 L20,0 L5,5 L0,20 L-5,5 L-20,0 L-5,-5Z" fill="#F7C8D4" stroke="#2D2A26" stroke-width="3"/></g>
+                                    <g transform="translate(524 418)"><path class="svg-anim twinkle" style="animation-delay:1.4s" d="M0,-15 L3.5,-3.5 L15,0 L3.5,3.5 L0,15 L-3.5,3.5 L-15,0 L-3.5,-3.5Z" fill="#A8D8F0" stroke="#2D2A26" stroke-width="3"/></g>
+                                    <g transform="translate(64 410)"><path class="svg-anim twinkle" style="animation-delay:2s" d="M0,-16 L4,-4 L16,0 L4,4 L0,16 L-4,4 L-16,0 L-4,-4Z" fill="#FFCBA4" stroke="#2D2A26" stroke-width="3"/></g>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="slide-footer reveal d6">
+                            <span>創意與創新課程期末報告</span>
+                            <span>鍵盤 ← → 或點擊章節卡片／右側標籤翻頁</span>
+                        </div>
+                    </div>
+                    <div class="tabs-rail"></div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 2：影片主題（純文字）
+                 ========================================== -->
+            <section class="slide" data-tab="1">
+                <div class="notebook-frame">
+                    <div class="paper-sheet">
+                        <div class="binder-strip">
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                        </div>
+                        <div class="binder-line"></div>
+
+                        <svg class="deco-sticker float-b" style="right: 48px; top: 30px; width: 104px;" viewBox="0 0 120 120">
+                            <polygon points="60,10 74,42 108,46 82,70 90,104 60,86 30,104 38,70 12,46 46,42" fill="#FDE68A" stroke="#2D2A26" stroke-width="5" stroke-linejoin="round"/>
+                        </svg>
+                        <svg class="deco-sticker float-a" style="right: 172px; top: 44px; width: 90px;" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="36" fill="#A8E6CF" stroke="#2D2A26" stroke-width="5"/>
+                            <path d="M35 52 L46 63 L68 39" fill="none" stroke="#2D2A26" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <div class="slide-top">
+                            <div class="pill-badge reveal" style="background: var(--mint);">01｜影片主題</div>
+                            <h2 class="slide-title reveal d1">影片主題：程式製作動畫繪本</h2>
+                            <div class="title-ul"></div>
+                        </div>
+
+                        <div class="info-stack">
+                            <div class="info-row pop d2">
+                                <span class="info-label" style="background: var(--butter);">動機</span>
+                                <span class="info-text">傳統繪本無法互動。近期前端技術發展快速，我們希望在 AI 時代結合現有的動畫技術，設計一本能在網頁上進行互動的繪本。</span>
+                            </div>
+                            <div class="info-row pop d3">
+                                <span class="info-label" style="background: var(--mint);">目的</span>
+                                <span class="info-text">探索當前前端科技在繪本生成上的可能性：透過各項指令，結合相關美術風格，看最終能完成到哪些程度。這是一部偏探索性的影片。</span>
+                            </div>
+                            <div class="info-row pop d4">
+                                <span class="info-label" style="background: var(--sky);">技術取向</span>
+                                <span class="info-text">以前端與 SVG 向量繪製為主，並非 AI 直接生成圖片；僅在部分背景等處，視需要嘗試 AI 輔助生成。</span>
+                            </div>
+                            <div class="info-row pop d5">
+                                <span class="info-label" style="background: var(--peach);">成品</span>
+                                <span class="info-text">約 5～7 分鐘的互動繪本動畫，時間完整留給繪本本身。</span>
+                            </div>
+                        </div>
+
+                        <div class="slide-footer reveal d6">
+                            <span>一、影片主題</span>
+                            <span>Slide 02 / 08</span>
+                        </div>
+                    </div>
+                    <div class="tabs-rail"></div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 3：大綱與腳本安排（一）影片四階段結構
+                 ========================================== -->
+            <section class="slide" data-tab="2">
+                <div class="notebook-frame">
+                    <div class="paper-sheet">
+                        <div class="binder-strip">
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                        </div>
+                        <div class="binder-line"></div>
+
+                        <svg class="deco-sticker float-a" style="right: 54px; top: 30px; width: 112px;" viewBox="0 0 120 120">
+                            <rect x="16" y="22" width="88" height="76" rx="14" fill="#FFCBA4" stroke="#2D2A26" stroke-width="5"/>
+                            <line x1="16" y1="46" x2="104" y2="46" stroke="#2D2A26" stroke-width="5"/>
+                            <circle cx="34" cy="34" r="5" fill="#2D2A26"/><circle cx="50" cy="34" r="5" fill="#2D2A26"/>
+                        </svg>
+
+                        <div class="slide-top">
+                            <div class="pill-badge reveal" style="background: var(--butter);">02｜大綱與腳本安排（一）</div>
+                            <h2 class="slide-title reveal d1">影片結構：純動畫正片（約 5～7 分鐘）</h2>
+                            <div class="title-ul"></div>
+                            <p class="slide-lead reveal d2">全片由故事開頭一路呈現至結尾（分段時間為暫定值）。各段落預留劇情與互動引導詞，供腳本隊友接續細化：</p>
+                        </div>
+
+                        <div class="grid-4">
+                            <div class="framed-card pop d3">
+                                <div class="framed-card-header" style="background: var(--mint);">
+                                    <span class="step-badge">01</span><span>開場</span>
+                                </div>
+                                <div class="framed-card-body">
+                                    <span class="chip" style="background: var(--card-white);">約 01:00–01:30</span>
+                                    <p style="margin-top: 14px; font-weight: 700;">世界觀與主角登場</p>
+                                    <p style="color: var(--ink-muted); font-size: 22px; margin-top: 6px;">引導詞：建立繪本初始場景、主角外型特徵與日常情境，帶出故事起因。</p>
+                                </div>
+                            </div>
+                            <div class="framed-card pop d4">
+                                <div class="framed-card-header" style="background: var(--butter);">
+                                    <span class="step-badge">02</span><span>發展</span>
+                                </div>
+                                <div class="framed-card-body">
+                                    <span class="chip" style="background: var(--card-white);">約 01:30–02:00</span>
+                                    <p style="margin-top: 14px; font-weight: 700;">展開探索與事件推進</p>
+                                    <p style="color: var(--ink-muted); font-size: 22px; margin-top: 6px;">引導詞：主角踏出探索並遇見第一個情境變化，引導觸發初次角色或物件互動。</p>
+                                    <p style="margin-top: 12px;"><span class="chip" style="background: var(--pink);">👆 互動環節一</span></p>
+                                </div>
+                            </div>
+                            <div class="framed-card pop d5">
+                                <div class="framed-card-header" style="background: var(--sky);">
+                                    <span class="step-badge">03</span><span>轉折</span>
+                                </div>
+                                <div class="framed-card-body">
+                                    <span class="chip" style="background: var(--card-white);">約 01:30–02:00</span>
+                                    <p style="margin-top: 14px; font-weight: 700;">氛圍轉換與核心高潮</p>
+                                    <p style="color: var(--ink-muted); font-size: 22px; margin-top: 6px;">引導詞：日夜光影或場景狀態轉變，透過第二次環境互動突破難題、推進高潮。</p>
+                                    <p style="margin-top: 12px;"><span class="chip" style="background: var(--pink);">👆 互動環節二</span></p>
+                                </div>
+                            </div>
+                            <div class="framed-card pop d6">
+                                <div class="framed-card-header" style="background: var(--peach);">
+                                    <span class="step-badge">04</span><span>結尾</span>
+                                </div>
+                                <div class="framed-card-body">
+                                    <span class="chip" style="background: var(--card-white);">約 01:00–01:30</span>
+                                    <p style="margin-top: 14px; font-weight: 700;">故事收束與寓意留白</p>
+                                    <p style="color: var(--ink-muted); font-size: 22px; margin-top: 6px;">引導詞：完成最後一次收尾互動，呼應開場設定並留下溫暖繪本餘韻。</p>
+                                    <p style="margin-top: 12px;"><span class="chip" style="background: var(--pink);">👆 互動環節三</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 時間比例條：總長約 5～7 分鐘 -->
+                        <div class="tl-bar">
+                            <div class="tl-seg" style="flex: 1.2; background: var(--mint);">開場 1～1.5m</div>
+                            <div class="tl-seg" style="flex: 1.8; background: var(--butter);">發展 1.5～2m</div>
+                            <div class="tl-seg" style="flex: 1.8; background: var(--sky);">轉折 1.5～2m</div>
+                            <div class="tl-seg" style="flex: 1.2; background: var(--peach);">結尾 1～1.5m</div>
+                        </div>
+
+                        <div class="slide-footer reveal d6">
+                            <span>二、大綱與腳本安排（一）：影片結構與時間配置</span>
+                            <span>Slide 03 / 08</span>
+                        </div>
+                    </div>
+                    <div class="tabs-rail"></div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 4：大綱與腳本安排（二）互動細節與美術風格引導（隊友編排頁）
+                 ========================================== -->
+            <section class="slide" data-tab="2">
+                <div class="notebook-frame">
+                    <div class="paper-sheet">
+                        <div class="binder-strip">
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                        </div>
+                        <div class="binder-line"></div>
+
+                        <svg class="deco-sticker float-b" style="right: 52px; top: 28px; width: 108px;" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="44" fill="#F7C8D4" stroke="#2D2A26" stroke-width="5"/>
+                            <circle cx="44" cy="48" r="7" fill="#FDE68A" stroke="#2D2A26" stroke-width="3.5"/>
+                            <circle cx="66" cy="42" r="7" fill="#A8E6CF" stroke="#2D2A26" stroke-width="3.5"/>
+                            <circle cx="78" cy="60" r="7" fill="#A8D8F0" stroke="#2D2A26" stroke-width="3.5"/>
+                            <circle cx="52" cy="74" r="9" fill="#FFFFFF" stroke="#2D2A26" stroke-width="3.5"/>
+                        </svg>
+
+                        <div class="slide-top">
+                            <div class="pill-badge reveal" style="background: var(--butter);">02｜大綱與腳本安排（二）</div>
+                            <h2 class="slide-title reveal d1">腳本細化：互動細節與美術風格引導</h2>
+                            <div class="title-ul"></div>
+                            <p class="slide-lead reveal d2">本頁提供給腳本、美術與程式隊友作為後續定稿之引導框架（不留白，隊友可直接依此結構編排或替換細節）：</p>
+                        </div>
+
+                        <div class="grid-3">
+                            <div class="framed-card pop d3">
+                                <div class="framed-card-header" style="background: var(--pink);">
+                                    <span class="step-badge">👆</span><span>互動環節細節引導</span>
+                                </div>
+                                <div class="framed-card-body">
+                                    <ul class="dot-list">
+                                        <li><strong>環節一（物件點選）</strong>：點擊主角或場景道具觸發即時回饋（跳躍、落葉、冒出對話或粒子特效）</li>
+                                        <li><strong>環節二（光影與狀態）</strong>：拖曳時間軸或點擊開關，切換晨晝／黃昏／星空與環境氛圍</li>
+                                        <li><strong>環節三（視差與收尾）</strong>：滑鼠游標帶動遠中近景深與角色視線追蹤，點亮場景完成結局</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="framed-card pop d4">
+                                <div class="framed-card-header" style="background: var(--mint);">
+                                    <span class="step-badge">🎨</span><span>美術風格定稿引導</span>
+                                </div>
+                                <div class="framed-card-body">
+                                    <ul class="dot-list">
+                                        <li><strong>筆觸與邊框</strong>：2D 粗黑邊框手繪貼紙風，搭配圓潤可愛的幾何造型與偏移陰影</li>
+                                        <li><strong>色彩基調</strong>：溫暖奶油色紙張底，搭配薄荷綠、奶油黃、天空藍、蜜桃橘等柔和色系</li>
+                                        <li><strong>圖層規範</strong>：前景角色與互動元件採 SVG 向量繪製；局部背景視需要評估 AI 輔助生成</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="framed-card pop d5">
+                                <div class="framed-card-header" style="background: var(--sky);">
+                                    <span class="step-badge">📝</span><span>腳本與分鏡編排引導</span>
+                                </div>
+                                <div class="framed-card-body">
+                                    <ul class="dot-list">
+                                        <li><strong>故事主題定調</strong>：可朝日常奇幻、成長探索或溫暖哲理小品方向展開</li>
+                                        <li><strong>旁白與留白節奏</strong>：每幕搭配簡短繪本旁白，並於互動節點預留 3～5 秒操作展示時間</li>
+                                        <li><strong>分鏡對照欄位</strong>：後續依「段落 ➔ 畫面構圖 ➔ 旁白台詞 ➔ 互動動作」逐幕細化</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-footer reveal d6">
+                            <span>二、大綱與腳本安排（二）：隊友協作與定稿引導</span>
+                            <span>Slide 04 / 08</span>
+                        </div>
+                    </div>
+                    <div class="tabs-rail"></div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 5：互動示範（有景深的晝夜繪本場景）
+                 ========================================== -->
+            <section class="slide" id="demoSlide" data-tab="2">
+                <div class="notebook-frame">
+                    <div class="paper-sheet">
+                        <div class="binder-strip">
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                        </div>
+                        <div class="binder-line"></div>
+
+                        <div class="slide-top">
+                            <div class="pill-badge reveal" style="background: var(--butter);">02｜大綱與腳本安排：互動示範</div>
+                            <h2 class="slide-title reveal d1">互動繪本體驗（概念示意）</h2>
+                            <div class="title-ul"></div>
+                        </div>
+
+                        <div class="scene-stage pop d2" id="sceneStage">
+                            <svg id="sceneSvg" viewBox="0 0 1494 500" preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop id="skyTop" offset="0" stop-color="#9FD3EE"/>
+                                        <stop id="skyBottom" offset="1" stop-color="#FFF3CF"/>
+                                    </linearGradient>
+                                </defs>
+
+                                <rect width="1494" height="500" fill="url(#skyGrad)"/>
+
+                                <!-- 星星（夜晚浮現，由 JS 產生） -->
+                                <g id="starsG" style="opacity: 0"></g>
+
+                                <!-- 遠景：太陽 / 月亮 -->
+                                <g class="px-layer" data-depth="8">
+                                    <g id="sunG">
+                                        <circle r="54" fill="#FDE68A" stroke="#2D2A26" stroke-width="5" id="sunDisc"/>
+                                        <g class="svg-anim spin-slow" stroke="#2D2A26" stroke-width="5" stroke-linecap="round">
+                                            <line x1="72" y1="0" x2="92" y2="0"/><line x1="51" y1="51" x2="65" y2="65"/>
+                                            <line x1="0" y1="72" x2="0" y2="92"/><line x1="-51" y1="51" x2="-65" y2="65"/>
+                                            <line x1="-72" y1="0" x2="-92" y2="0"/><line x1="-51" y1="-51" x2="-65" y2="-65"/>
+                                            <line x1="0" y1="-72" x2="0" y2="-92"/><line x1="51" y1="-51" x2="65" y2="-65"/>
+                                        </g>
+                                    </g>
+                                    <g id="moonG">
+                                        <circle r="46" fill="#FFF5CF" stroke="#2D2A26" stroke-width="5"/>
+                                        <circle cx="-14" cy="-10" r="9" fill="#EBDDA6" stroke="#2D2A26" stroke-width="3"/>
+                                        <circle cx="16" cy="14" r="6" fill="#EBDDA6" stroke="#2D2A26" stroke-width="3"/>
+                                    </g>
+                                </g>
+
+                                <!-- 雲層 -->
+                                <g class="px-layer" data-depth="16">
+                                    <g transform="translate(180 70) scale(1.1)"><g class="cloud-drift"><path style="fill: var(--cloud, #fff)" stroke="#2D2A26" stroke-width="5" d="M36 86 H162 C180 86 190 72 184 56 C178 42 162 40 152 46 C144 22 114 14 94 28 C78 18 52 28 48 48 C28 48 18 64 24 78 C27 83 31 86 36 86 Z"/></g></g>
+                                    <g transform="translate(700 30) scale(0.85)"><g class="cloud-drift" style="animation-duration: 21s; animation-delay: -6s"><path style="fill: var(--cloud, #fff)" stroke="#2D2A26" stroke-width="5" d="M36 86 H162 C180 86 190 72 184 56 C178 42 162 40 152 46 C144 22 114 14 94 28 C78 18 52 28 48 48 C28 48 18 64 24 78 C27 83 31 86 36 86 Z"/></g></g>
+                                    <g transform="translate(1180 90) scale(1)"><g class="cloud-drift" style="animation-duration: 18s; animation-delay: -11s"><path style="fill: var(--cloud, #fff)" stroke="#2D2A26" stroke-width="5" d="M36 86 H162 C180 86 190 72 184 56 C178 42 162 40 152 46 C144 22 114 14 94 28 C78 18 52 28 48 48 C28 48 18 64 24 78 C27 83 31 86 36 86 Z"/></g></g>
+                                </g>
+
+                                <!-- 後山 -->
+                                <g class="px-layer" data-depth="24">
+                                    <path style="fill: var(--hill1)" stroke="#2D2A26" stroke-width="5" d="M-80 380 Q 200 250 480 340 T 1000 310 T 1580 330 L1580 560 L-80 560 Z"/>
+                                </g>
+
+                                <!-- 樹 + 中山 -->
+                                <g class="px-layer" data-depth="40">
+                                    <g id="treeG" transform="translate(1150 420)" style="cursor: pointer">
+                                        <g class="tree-sway">
+                                            <rect x="-12" y="-120" width="24" height="150" fill="#B98A63" stroke="#2D2A26" stroke-width="4"/>
+                                            <circle cx="0" cy="-165" r="66" style="fill: var(--leaf)" stroke="#2D2A26" stroke-width="4"/>
+                                            <circle cx="-50" cy="-128" r="46" style="fill: var(--leaf)" stroke="#2D2A26" stroke-width="4"/>
+                                            <circle cx="50" cy="-128" r="46" style="fill: var(--leaf)" stroke="#2D2A26" stroke-width="4"/>
+                                            <circle cx="0" cy="-165" r="66" style="fill: var(--leaf)"/>
+                                        </g>
+                                    </g>
+                                    <path style="fill: var(--hill2)" stroke="#2D2A26" stroke-width="5" d="M-80 430 Q 300 330 640 410 T 1260 390 T 1580 410 L1580 560 L-80 560 Z"/>
+                                </g>
+
+                                <!-- 螢火蟲（夜晚浮現） -->
+                                <g id="fireflyG" class="px-layer" data-depth="48" style="opacity: 0">
+                                    <g transform="translate(300 360)"><g class="firefly"><circle r="14" fill="#FFF3A0" opacity="0.3"/><circle r="5" fill="#FFF3A0"/></g></g>
+                                    <g transform="translate(480 330)"><g class="firefly" style="animation-delay:-2s"><circle r="14" fill="#FFF3A0" opacity="0.3"/><circle r="5" fill="#FFF3A0"/></g></g>
+                                    <g transform="translate(700 380)"><g class="firefly" style="animation-delay:-4s"><circle r="14" fill="#FFF3A0" opacity="0.3"/><circle r="5" fill="#FFF3A0"/></g></g>
+                                    <g transform="translate(900 340)"><g class="firefly" style="animation-delay:-1s"><circle r="14" fill="#FFF3A0" opacity="0.3"/><circle r="5" fill="#FFF3A0"/></g></g>
+                                    <g transform="translate(1040 390)"><g class="firefly" style="animation-delay:-3s"><circle r="14" fill="#FFF3A0" opacity="0.3"/><circle r="5" fill="#FFF3A0"/></g></g>
+                                    <g transform="translate(1300 350)"><g class="firefly" style="animation-delay:-5s"><circle r="14" fill="#FFF3A0" opacity="0.3"/><circle r="5" fill="#FFF3A0"/></g></g>
+                                </g>
+
+                                <!-- 前山 + 小花 + 角色 -->
+                                <g class="px-layer" data-depth="58">
+                                    <path style="fill: var(--hill3)" stroke="#2D2A26" stroke-width="5" d="M-80 490 Q 400 420 800 480 T 1580 460 L1580 580 L-80 580 Z"/>
+                                    <!-- 小花 -->
+                                    <g transform="translate(160 462)"><g class="svg-anim tree-sway"><line x1="0" y1="0" x2="0" y2="-34" stroke="#2D2A26" stroke-width="4"/><circle cy="-44" r="13" fill="#F7C8D4" stroke="#2D2A26" stroke-width="3.5"/><circle cy="-44" r="5" fill="#FDE68A"/></g></g>
+                                    <g transform="translate(260 470)"><g class="svg-anim tree-sway" style="animation-delay:-1.5s"><line x1="0" y1="0" x2="0" y2="-28" stroke="#2D2A26" stroke-width="4"/><circle cy="-37" r="11" fill="#D4C5EC" stroke="#2D2A26" stroke-width="3.5"/><circle cy="-37" r="4" fill="#FDE68A"/></g></g>
+                                    <g transform="translate(900 478)"><g class="svg-anim tree-sway" style="animation-delay:-2.5s"><line x1="0" y1="0" x2="0" y2="-34" stroke="#2D2A26" stroke-width="4"/><circle cy="-44" r="13" fill="#FFCBA4" stroke="#2D2A26" stroke-width="3.5"/><circle cy="-44" r="5" fill="#FDE68A"/></g></g>
+                                    <g transform="translate(1340 466)"><g class="svg-anim tree-sway" style="animation-delay:-0.8s"><line x1="0" y1="0" x2="0" y2="-30" stroke="#2D2A26" stroke-width="4"/><circle cy="-40" r="12" fill="#F7C8D4" stroke="#2D2A26" stroke-width="3.5"/><circle cy="-40" r="4.5" fill="#FDE68A"/></g></g>
+
+                                    <!-- 小綠：眼睛會跟著滑鼠，點擊會跳 -->
+                                    <g transform="translate(560 466)">
+                                        <g id="charJump" style="cursor: pointer; transform-box: fill-box; transform-origin: 50% 100%;">
+                                            <g class="svg-anim breathe" style="transform-origin: 50% 100%;">
+                                                <polygon points="0,-112 14,-86 -14,-86" fill="#FDE68A" stroke="#2D2A26" stroke-width="4" stroke-linejoin="round"/>
+                                                <rect x="-52" y="-92" width="104" height="92" rx="34" fill="#A8E6CF" stroke="#2D2A26" stroke-width="5"/>
+                                                <circle cx="-20" cy="-52" r="14" fill="#fff" stroke="#2D2A26" stroke-width="3.5"/>
+                                                <circle cx="20" cy="-52" r="14" fill="#fff" stroke="#2D2A26" stroke-width="3.5"/>
+                                                <circle class="pupil" cx="-20" cy="-52" r="6.5" fill="#2D2A26"/>
+                                                <circle class="pupil" cx="20" cy="-52" r="6.5" fill="#2D2A26"/>
+                                                <circle cx="-36" cy="-30" r="7" fill="#F7C8D4" opacity="0.9"/>
+                                                <circle cx="36" cy="-30" r="7" fill="#F7C8D4" opacity="0.9"/>
+                                                <path d="M-10 -26 Q0 -16 10 -26" fill="none" stroke="#2D2A26" stroke-width="4" stroke-linecap="round"/>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+
+                                <!-- 點擊特效層 -->
+                                <g id="fxLayer"></g>
+                            </svg>
+
+                            <div class="scene-hint">🖱️ 移動滑鼠看景深　👆 點畫面、小樹、小綠試試看</div>
+
+                            <div class="scene-controls" id="sceneControls">
+                                <button id="sceneToggle" type="button">⏸ 暫停</button>
+                                <span>☀️</span>
+                                <input type="range" id="timeSlider" min="0" max="1000" value="0" aria-label="時間：白天到夜晚">
+                                <span>🌙</span>
+                            </div>
+                        </div>
+
+                        <div class="slide-footer reveal d3">
+                            <span>二、大綱與腳本安排：互動繪本風格示意</span>
+                            <span>Slide 05 / 08</span>
+                        </div>
+                    </div>
+                    <div class="tabs-rail"></div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 6：拍攝計劃（地點與資源）
+                 ========================================== -->
+            <section class="slide" data-tab="3">
+                <div class="notebook-frame">
+                    <div class="paper-sheet">
+                        <div class="binder-strip">
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                        </div>
+                        <div class="binder-line"></div>
+
+                        <svg class="deco-sticker float-b" style="right: 52px; top: 30px; width: 104px;" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="44" fill="#A8D8F0" stroke="#2D2A26" stroke-width="5"/>
+                            <path d="M60 30 C44 30 34 42 34 56 C34 74 60 96 60 96 C60 96 86 74 86 56 C86 42 76 30 60 30 Z" fill="#F7C8D4" stroke="#2D2A26" stroke-width="4"/>
+                            <circle cx="60" cy="54" r="9" fill="#fff" stroke="#2D2A26" stroke-width="3"/>
+                        </svg>
+
+                        <div class="slide-top">
+                            <div class="pill-badge reveal" style="background: var(--sky);">03｜拍攝計劃</div>
+                            <h2 class="slide-title reveal d1">拍攝計劃：地點與資源</h2>
+                            <div class="title-ul"></div>
+                        </div>
+
+                        <div class="grid-2" style="grid-template-columns: 1fr 1.35fr;">
+                            <div class="framed-card pop d2">
+                                <div class="framed-card-header" style="background: var(--mint);">
+                                    <span class="step-badge">📍</span><span>地點</span>
+                                </div>
+                                <div class="framed-card-body">
+                                    <p style="font-family: var(--font-display); font-size: 40px; font-weight: 700; margin-bottom: 16px;">不限地點</p>
+                                    <ul class="dot-list">
+                                        <li>前端開發可以隨時自由進行</li>
+                                        <li>音軌錄製可以隨時自由進行</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="framed-card pop d3">
+                                <div class="framed-card-header" style="background: var(--butter);">
+                                    <span class="step-badge">🛠️</span><span>所需資源</span>
+                                </div>
+                                <div class="framed-card-body">
+                                    <ul class="dot-list">
+                                        <li><strong>前端開發環境</strong>：HTML／CSS／SVG／JavaScript</li>
+                                        <li><strong>AI 輔助模型</strong>：協助程式撰寫、生成背景配樂</li>
+                                        <li><strong>旁白</strong>：自行錄製，後期亦可由模型生成</li>
+                                        <li><strong>影片呈現</strong>：由程式直接呈現，必要時簡單剪輯</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-footer reveal d4">
+                            <span>三、拍攝計劃：地點與所需資源</span>
+                            <span>Slide 06 / 08</span>
+                        </div>
+                    </div>
+                    <div class="tabs-rail"></div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 7：拍攝計劃（週次表 + 團隊分工）
+                 ========================================== -->
+            <section class="slide" data-tab="3">
+                <div class="notebook-frame">
+                    <div class="paper-sheet">
+                        <div class="binder-strip">
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                        </div>
+                        <div class="binder-line"></div>
+
+                        <svg class="deco-sticker float-a" style="right: 54px; top: 30px; width: 104px;" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="44" fill="#A8D8F0" stroke="#2D2A26" stroke-width="5"/>
+                            <polyline points="60,32 60,62 82,74" fill="none" stroke="#2D2A26" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <div class="slide-top">
+                            <div class="pill-badge reveal" style="background: var(--sky);">03｜拍攝計劃</div>
+                            <h2 class="slide-title reveal d1">時間安排與團隊分工</h2>
+                            <div class="title-ul"></div>
+                        </div>
+
+                        <div class="split">
+                            <div class="framed-card pop d2">
+                                <div class="framed-card-header" style="background: var(--butter);">
+                                    <span class="step-badge">🗓️</span><span>週次表（暫定）</span>
+                                </div>
+                                <div class="framed-card-body" style="padding-top: 16px; padding-bottom: 12px;">
+                                    <div class="week-row head"><span>週次</span><span>階段</span><span>內容</span></div>
+                                    <div class="week-row"><span class="week-no">W10</span><span><span class="chip" style="background: var(--mint);">提案</span></span><span>企劃簡報與報告</span></div>
+                                    <div class="week-row"><span class="week-no">W11–W12</span><span><span class="chip" style="background: var(--sky);">前期</span></span><span>腳本細化、美術風格定調</span></div>
+                                    <div class="week-row"><span class="week-no">W13–W14</span><span><span class="chip" style="background: var(--peach);">中期</span></span><span>前端動畫與互動開發</span></div>
+                                    <div class="week-row"><span class="week-no">W15</span><span><span class="chip" style="background: var(--lavender);">後期</span></span><span>旁白（錄製或模型生成）、配樂、整合</span></div>
+                                    <div class="week-row"><span class="week-no">W16</span><span><span class="chip" style="background: var(--pink);">完成</span></span><span>期末報告</span></div>
+                                </div>
+                            </div>
+
+                            <div class="framed-card pop d3">
+                                <div class="framed-card-header" style="background: var(--mint);">
+                                    <span class="step-badge">👥</span><span>團隊分工</span>
+                                </div>
+                                <div class="framed-card-body" style="padding-top: 12px; padding-bottom: 12px;">
+                                    <div class="team-row"><span class="chip" style="background: var(--butter);">製作簡報</span><span class="team-id">c113154206</span></div>
+                                    <div class="team-row"><span class="chip" style="background: var(--pink);">美術</span><span class="team-id">C111112111</span></div>
+                                    <div class="team-row"><span class="chip" style="background: var(--sky);">腳本</span><span class="team-id">C114141163</span></div>
+                                    <div class="team-row"><span class="chip" style="background: var(--peach);">程式</span><span class="team-id">C112181181</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-footer reveal d4">
+                            <span>三、拍攝計劃：時間安排與團隊分工</span>
+                            <span>Slide 07 / 08</span>
+                        </div>
+                    </div>
+                    <div class="tabs-rail"></div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SLIDE 8：結束
+                 ========================================== -->
+            <section class="slide" data-tab="4">
+                <div class="notebook-frame">
+                    <div class="paper-sheet">
+                        <div class="binder-strip">
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                            <div class="binder-hole"></div><div class="binder-hole"></div><div class="binder-hole"></div>
+                        </div>
+                        <div class="binder-line"></div>
+
+                        <!-- 縮放脈動光環 + 貼紙 -->
+                        <svg class="deco-sticker" style="left: 50%; top: 50%; width: 900px; transform: translate(-50%, -50%);" viewBox="0 0 900 900" aria-hidden="true">
+                            <g class="svg-anim ring"><circle cx="450" cy="450" r="400" fill="none" stroke="#2D2A26" stroke-width="3" stroke-dasharray="3 16" stroke-linecap="round"/></g>
+                            <g class="svg-anim soft-disc"><circle cx="450" cy="450" r="300" fill="#FFF0B8" fill-opacity="0.55"/></g>
+                        </svg>
+                        <svg class="deco-sticker float-a" style="left: 190px; top: 150px; width: 120px;" viewBox="0 0 160 160">
+                            <circle cx="80" cy="80" r="44" fill="#FDE68A" stroke="#2D2A26" stroke-width="5"/>
+                            <g stroke="#2D2A26" stroke-width="5" stroke-linecap="round">
+                                <line x1="80" y1="14" x2="80" y2="26"/><line x1="80" y1="134" x2="80" y2="146"/>
+                                <line x1="14" y1="80" x2="26" y2="80"/><line x1="134" y1="80" x2="146" y2="80"/>
+                            </g>
+                        </svg>
+                        <svg class="deco-sticker float-b" style="right: 200px; top: 190px; width: 170px;" viewBox="0 0 200 110">
+                            <path d="M36 86 H162 C180 86 190 72 184 56 C178 42 162 40 152 46 C144 22 114 14 94 28 C78 18 52 28 48 48 C28 48 18 64 24 78 C27 83 31 86 36 86 Z" fill="#A8D8F0" stroke="#2D2A26" stroke-width="5"/>
+                        </svg>
+                        <svg class="deco-sticker float-c" style="left: 260px; bottom: 150px; width: 100px;" viewBox="0 0 120 120">
+                            <polygon points="60,10 74,42 108,46 82,70 90,104 60,86 30,104 38,70 12,46 46,42" fill="#A8E6CF" stroke="#2D2A26" stroke-width="5" stroke-linejoin="round"/>
+                        </svg>
+                        <svg class="deco-sticker float-a" style="right: 280px; bottom: 140px; width: 90px;" viewBox="0 0 120 120">
+                            <polygon points="60,10 74,42 108,46 82,70 90,104 60,86 30,104 38,70 12,46 46,42" fill="#F7C8D4" stroke="#2D2A26" stroke-width="5" stroke-linejoin="round"/>
+                        </svg>
+
+                        <div class="end-center">
+                            <div class="pill-badge reveal">💡 創意與創新｜期末報告</div>
+                            <h2 class="end-title reveal d1">結束</h2>
+                            <p class="end-sub reveal d2">謝謝聆聽</p>
+                        </div>
+
+                        <div class="slide-footer reveal d3">
+                            <span>程式製作動畫繪本</span>
+                            <span>Slide 08 / 08</span>
+                        </div>
+                    </div>
+                    <div class="tabs-rail"></div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <nav class="deck-controls" aria-label="Slide Navigation">
+        <button class="ctrl-btn" id="prevBtn" type="button">← 上一頁</button>
+        <span id="slideCounter">1 / 8</span>
+        <button class="ctrl-btn" id="nextBtn" type="button">下一頁 →</button>
+    </nav>
+
+    <script>
+        /* ===========================================
+           1. 右側索引標籤設定（targetSlide = 該章節第一頁）
+           =========================================== */
+        const tabDefs = [
+            { label: '封面', color: '#FDE68A', targetSlide: 0 },
+            { label: '01 影片主題', color: '#A8E6CF', targetSlide: 1 },
+            { label: '02 大綱腳本', color: '#FFCBA4', targetSlide: 2 },
+            { label: '03 拍攝計劃', color: '#A8D8F0', targetSlide: 5 },
+            { label: '結束', color: '#D4C5EC', targetSlide: 7 }
+        ];
+
+        /* ===========================================
+           2. SLIDE PRESENTATION CONTROLLER
+           =========================================== */
+        class SlidePresentation {
+            constructor() {
+                this.slides = Array.from(document.querySelectorAll('.slide'));
+                this.currentSlide = 0;
+                this.stage = document.getElementById('deckStage');
+                this.counterEl = document.getElementById('slideCounter');
+                this.buildTabs();
+                this.setupStageScale();
+                this.setupNavigation();
+                // 支援網址 #3 直接開啟第 3 頁；延遲一幀讓進場動畫可以播放
+                const fromHash = parseInt(location.hash.slice(1), 10);
+                const start = Number.isFinite(fromHash) ? fromHash - 1 : 0;
+                requestAnimationFrame(() => requestAnimationFrame(() => this.showSlide(start)));
+            }
+
+            buildTabs() {
+                this.slides.forEach((slide) => {
+                    const rail = slide.querySelector('.tabs-rail');
+                    const activeGroup = parseInt(slide.getAttribute('data-tab') || '0', 10);
+                    tabDefs.forEach((t, idx) => {
+                        const btn = document.createElement('div');
+                        btn.className = 'tab-item' + (idx === activeGroup ? ' active-tab' : '');
+                        btn.style.background = t.color;
+                        btn.textContent = t.label;
+                        btn.addEventListener('click', () => this.showSlide(t.targetSlide));
+                        rail.appendChild(btn);
+                    });
+                });
+            }
+
+            setupStageScale() {
+                const scale = () => {
+                    const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+                    const x = (window.innerWidth - 1920 * factor) / 2;
+                    const y = (window.innerHeight - 1080 * factor) / 2;
+                    this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+                };
+                scale();
+                window.addEventListener('resize', scale);
+            }
+
+            setupNavigation() {
+                document.getElementById('prevBtn').addEventListener('click', () => this.showSlide(this.currentSlide - 1));
+                document.getElementById('nextBtn').addEventListener('click', () => this.showSlide(this.currentSlide + 1));
+
+                // 按鈕點完立刻取消焦點，避免空白鍵 / 方向鍵被按鈕吃掉
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('button')) e.target.closest('button').blur();
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    const tag = e.target.tagName;
+                    if (e.target.getAttribute('contenteditable') === 'true' || tag === 'INPUT') return;
+                    if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)) {
+                        e.preventDefault();
+                        this.showSlide(this.currentSlide + 1);
+                    } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
+                        e.preventDefault();
+                        this.showSlide(this.currentSlide - 1);
+                    } else if (e.key === 'Home') {
+                        this.showSlide(0);
+                    } else if (e.key === 'End') {
+                        this.showSlide(this.slides.length - 1);
+                    }
+                });
+            }
+
+            showSlide(index) {
+                this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+                this.slides.forEach((slide, i) => {
+                    const isCurrent = i === this.currentSlide;
+                    slide.classList.toggle('active', isCurrent);
+                    slide.classList.toggle('visible', isCurrent);
+                });
+                this.counterEl.textContent = `${this.currentSlide + 1} / ${this.slides.length}`;
+
+                // 互動示範頁：進入時自動開始晝夜循環，離開時停止
+                const onDemo = this.slides[this.currentSlide].id === 'demoSlide';
+                if (typeof scene !== 'undefined') onDemo ? scene.enter() : scene.leave();
+            }
+        }
+
+        /* ===========================================
+           3. 互動繪本場景（晝夜 / 景深 / 點擊特效）
+           =========================================== */
+        class StoryScene {
+            constructor() {
+                this.svg = document.getElementById('sceneSvg');
+                this.stage = document.getElementById('sceneStage');
+                this.slider = document.getElementById('timeSlider');
+                this.toggle = document.getElementById('sceneToggle');
+                this.fx = document.getElementById('fxLayer');
+                this.t = 0;          // 0 = 白天, 1 = 夜晚
+                this.dir = 1;
+                this.auto = true;
+                this.running = false;
+                this.last = 0;
+
+                // 三個時間點的配色（白天 / 黃昏 / 夜晚）
+                this.keys = [
+                    { t: 0,   top: '#9FD3EE', bottom: '#FFF3CF', hill1: '#B7EBD3', hill2: '#8FD9C7', hill3: '#6CC4AF', leaf: '#A8E6CF', cloud: '#FFFFFF' },
+                    { t: 0.5, top: '#F5A98F', bottom: '#FFE3A6', hill1: '#C9D8A0', hill2: '#A9CB95', hill3: '#86B88A', leaf: '#C5D98F', cloud: '#FFD9C2' },
+                    { t: 1,   top: '#222E58', bottom: '#4B5C91', hill1: '#3C5C78', hill2: '#2F4D68', hill3: '#25405A', leaf: '#3F7A74', cloud: '#7F8BB8' }
+                ];
+
+                this.buildStars();
+                this.bindEvents();
+                this.render();
+            }
+
+            /* --- 工具 --- */
+            clamp(v, a = 0, b = 1) { return Math.max(a, Math.min(b, v)); }
+            hex(c) { return [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16)); }
+            mix(a, b, p) {
+                const A = this.hex(a), B = this.hex(b);
+                return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * p).toString(16).padStart(2, '0')).join('');
+            }
+            palette(t) {
+                const [k0, k1, k2] = this.keys;
+                const [a, b, p] = t <= 0.5 ? [k0, k1, t / 0.5] : [k1, k2, (t - 0.5) / 0.5];
+                const out = {};
+                ['top', 'bottom', 'hill1', 'hill2', 'hill3', 'leaf', 'cloud'].forEach(k => out[k] = this.mix(a[k], b[k], p));
+                return out;
+            }
+
+            /* --- 星星（固定座標，避免每次重新整理都不同） --- */
+            buildStars() {
+                const g = document.getElementById('starsG');
+                const pts = [[90,60],[210,150],[330,50],[470,120],[610,40],[760,110],[880,60],[1010,150],[1120,50],[1260,120],[1390,70],[150,230],[560,210],[980,230],[1330,220],[420,260],[1200,260],[700,190]];
+                pts.forEach(([x, y], i) => {
+                    const wrap = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    wrap.setAttribute('transform', `translate(${x} ${y})`);
+                    const s = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    s.setAttribute('d', 'M0,-9 L2.5,-2.5 L9,0 L2.5,2.5 L0,9 L-2.5,2.5 L-9,0 L-2.5,-2.5Z');
+                    s.setAttribute('fill', '#FFF3B0');
+                    s.setAttribute('class', 'svg-anim twinkle');
+                    s.style.animationDelay = `${(i % 6) * 0.45}s`;
+                    wrap.appendChild(s);
+                    g.appendChild(wrap);
+                });
+            }
+
+            /* --- 依時間 t 重新繪製整個場景 --- */
+            render() {
+                const t = this.t, c = this.palette(t);
+                document.getElementById('skyTop').setAttribute('stop-color', c.top);
+                document.getElementById('skyBottom').setAttribute('stop-color', c.bottom);
+                ['hill1', 'hill2', 'hill3', 'leaf', 'cloud'].forEach(k => this.svg.style.setProperty('--' + k, c[k]));
+
+                // 太陽：由左上緩緩落到山後，顏色轉橘
+                const u = this.clamp(t / 0.72);
+                document.getElementById('sunG').setAttribute('transform', `translate(${260 + u * 980} ${120 + 380 * u * u})`);
+                document.getElementById('sunDisc').setAttribute('fill', this.mix('#FDE68A', '#FFB48A', this.clamp(u * 1.2)));
+
+                // 月亮：由右下升起
+                const v = this.clamp((t - 0.45) / 0.55);
+                const ease = 1 - (1 - v) * (1 - v);
+                document.getElementById('moonG').setAttribute('transform', `translate(${1230 - v * 820} ${500 - 390 * ease})`);
+
+                document.getElementById('starsG').style.opacity = this.clamp((t - 0.55) / 0.3);
+                document.getElementById('fireflyG').style.opacity = this.clamp((t - 0.65) / 0.25);
+                this.slider.value = Math.round(t * 1000);
+            }
+
+            /* --- 自動晝夜循環（約 20 秒一趟） --- */
+            tick = (now) => {
+                if (!this.running) return;
+                const dt = this.last ? now - this.last : 0;
+                this.last = now;
+                if (this.auto) {
+                    this.t += this.dir * dt / 20000;
+                    if (this.t >= 1) { this.t = 1; this.dir = -1; }
+                    if (this.t <= 0) { this.t = 0; this.dir = 1; }
+                    this.render();
+                }
+                requestAnimationFrame(this.tick);
+            };
+
+            enter() {
+                if (this.running) return;
+                this.running = true;
+                this.last = 0;
+                requestAnimationFrame(this.tick);
+            }
+            leave() { this.running = false; }
+
+            setAuto(on) {
+                this.auto = on;
+                this.toggle.textContent = on ? '⏸ 暫停' : '▶ 自動播放';
+                this.last = 0;
+            }
+
+            /* --- 事件 --- */
+            toSvg(evt) {
+                const pt = this.svg.createSVGPoint();
+                pt.x = evt.clientX; pt.y = evt.clientY;
+                return pt.matrixTransform(this.svg.getScreenCTM().inverse());
+            }
+
+            bindEvents() {
+                // 時間軸：拖曳時暫停自動播放
+                this.slider.addEventListener('input', () => {
+                    this.setAuto(false);
+                    this.t = this.slider.value / 1000;
+                    this.render();
+                });
+                this.slider.addEventListener('change', () => this.slider.blur());
+                this.toggle.addEventListener('click', () => this.setAuto(!this.auto));
+
+                // 景深 + 小綠眼睛追蹤滑鼠
+                const layers = Array.from(this.svg.querySelectorAll('.px-layer'));
+                const pupils = Array.from(this.svg.querySelectorAll('.pupil'));
+                this.stage.addEventListener('mousemove', (e) => {
+                    const r = this.stage.getBoundingClientRect();
+                    const nx = ((e.clientX - r.left) / r.width) * 2 - 1;
+                    const ny = ((e.clientY - r.top) / r.height) * 2 - 1;
+                    layers.forEach(l => {
+                        const d = parseFloat(l.dataset.depth || 0);
+                        l.style.transform = `translate(${(-nx * d).toFixed(1)}px, ${(-ny * d * 0.45).toFixed(1)}px)`;
+                    });
+                    pupils.forEach(p => {
+                        p.style.transform = `translate(${(nx * 5).toFixed(1)}px, ${(ny * 4).toFixed(1)}px)`;
+                    });
+                });
+                this.stage.addEventListener('mouseleave', () => {
+                    layers.forEach(l => l.style.transform = 'translate(0, 0)');
+                    pupils.forEach(p => p.style.transform = 'translate(0, 0)');
+                });
+
+                // 點擊：畫面灑星星 / 小樹落葉 / 小綠跳起來冒愛心
+                this.svg.addEventListener('click', (e) => {
+                    const p = this.toSvg(e);
+                    if (e.target.closest('#charJump')) {
+                        const ch = document.getElementById('charJump');
+                        ch.classList.remove('jump'); void ch.getBoundingClientRect(); ch.classList.add('jump');
+                        this.spawn(p.x, p.y - 60, 'heart', 6);
+                    } else if (e.target.closest('#treeG')) {
+                        this.spawn(p.x, p.y, 'leaf', 8);
+                    } else {
+                        this.spawn(p.x, p.y, 'star', 7);
+                    }
+                });
+            }
+
+            spawn(x, y, kind, n) {
+                const defs = {
+                    star:  { d: 'M0,-14 L4,-4 L14,0 L4,4 L0,14 L-4,4 L-14,0 L-4,-4Z', colors: ['#FDE68A', '#F7C8D4', '#A8D8F0', '#FFCBA4', '#A8E6CF'] },
+                    heart: { d: 'M0,10 C-18,-4 -12,-18 0,-8 C12,-18 18,-4 0,10 Z', colors: ['#F7C8D4', '#F8635F', '#FFCBA4'] },
+                    leaf:  { d: 'M0,-12 C14,-6 14,8 0,14 C-14,8 -14,-6 0,-12 Z', colors: ['#A8E6CF', '#7ECDC0', '#C5D98F'] }
+                }[kind];
+                for (let i = 0; i < n; i++) {
+                    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    g.setAttribute('transform', `translate(${x} ${y})`);
+                    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    p.setAttribute('d', defs.d);
+                    p.setAttribute('fill', defs.colors[i % defs.colors.length]);
+                    p.setAttribute('stroke', '#2D2A26');
+                    p.setAttribute('stroke-width', '3');
+                    p.setAttribute('class', 'burst-p');
+                    p.style.setProperty('--dx', `${Math.round((Math.random() - 0.5) * 220)}px`);
+                    p.style.setProperty('--dy', `${Math.round(-60 - Math.random() * 120)}px`);
+                    g.appendChild(p);
+                    this.fx.appendChild(g);
+                    setTimeout(() => g.remove(), 1400);
+                }
+            }
+        }
+
+        const deck = new SlidePresentation();
+        const scene = new StoryScene();
+
+        /* ===========================================
+           4. INLINE EDITING (滑鼠移到左上角或按 E；Ctrl+S 下載儲存)
+           =========================================== */
+        const hotzone = document.getElementById('editHotzone');
+        const editToggle = document.getElementById('editToggle');
+        let isEditing = false;
+        let hideTimeout = null;
+
+        function toggleEditMode() {
+            isEditing = !isEditing;
+            editToggle.classList.toggle('active', isEditing);
+            editToggle.textContent = isEditing ? '💾 結束編輯 (Ctrl+S 下載)' : '✏️ 編輯文字 (E)';
+            const editable = 'h1, h2, p, li, .info-text, .framed-card-header span:not(.step-badge), .week-row span, .team-row span, .end-sub, .agenda-title, .agenda-sub';
+            document.querySelectorAll(editable).forEach((el) => {
+                if (isEditing) el.setAttribute('contenteditable', 'true');
+                else el.removeAttribute('contenteditable');
+            });
+        }
+
+        editToggle.addEventListener('click', toggleEditMode);
+        hotzone.addEventListener('click', toggleEditMode);
+        hotzone.addEventListener('mouseenter', () => { clearTimeout(hideTimeout); editToggle.classList.add('show'); });
+        hotzone.addEventListener('mouseleave', () => {
+            hideTimeout = setTimeout(() => { if (!isEditing) editToggle.classList.remove('show'); }, 400);
+        });
+        editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+        editToggle.addEventListener('mouseleave', () => {
+            hideTimeout = setTimeout(() => { if (!isEditing) editToggle.classList.remove('show'); }, 400);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === 'e' || e.key === 'E') && e.target.getAttribute('contenteditable') !== 'true' && e.target.tagName !== 'INPUT') {
+                toggleEditMode();
+            }
+            if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) {
+                e.preventDefault();
+                const blob = new Blob(['<!DOCTYPE html>\n' + document.documentElement.outerHTML], { type: 'text/html;charset=utf-8' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'index.html';
+                a.click();
+            }
+        });
+    </script>
+</body>
+</html>
