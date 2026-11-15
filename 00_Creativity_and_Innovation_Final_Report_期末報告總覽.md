@@ -12,6 +12,7 @@ tags:
 > **課程導航**：[[00_Creativity_and_Innovation_Course_MOC_創意與創新課程主地圖|回創意與創新課程主地圖]]
 > **GitHub 遠端倉庫**：[https://github.com/ludylan/Creative-Innovation-Final-Project](https://github.com/ludylan/Creative-Innovation-Final-Project)
 > **提案簡報（GitHub Pages 連結）**：[https://ludylan.github.io/Creative-Innovation-Final-Project/Presentation_簡報/](https://ludylan.github.io/Creative-Innovation-Final-Project/Presentation_簡報/)
+> **提案週專區 (Proposal Hub 網頁版)**：[https://ludylan.github.io/Creative-Innovation-Final-Project/01_Decisions_決策與討論區/](https://ludylan.github.io/Creative-Innovation-Final-Project/01_Decisions_決策與討論區/) （本機：[`01_Decisions_決策與討論區/index.html`](./01_Decisions_決策與討論區/index.html)）
 
 ---
 

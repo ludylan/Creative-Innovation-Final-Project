@@ -8,6 +8,26 @@ type: "decision_log"
 
 > **所屬專案**：[[00_Creativity_and_Innovation_Final_Report_期末報告總覽|回期末報告總覽]]
 > **GitHub 倉庫**：[ludylan/Creative-Innovation-Final-Project](https://github.com/ludylan/Creative-Innovation-Final-Project)
+> **網頁版提案週專區 (Proposal Hub)**：[`index.html`](./index.html)（含互動式模板與個人展示空間）
+
+---
+
+## 📢 當前階段：提案週 (Proposal Week) 任務與規範
+
+本週為提案週，每位組員皆須透過專屬 HTML 模板提出構想，並嚴格遵循**「拒絕未經整理的長篇 AI 聊天紀錄全文貼上，聚焦於可執行性與具體落地」**原則。
+
+### 📌 提案四大必填核心維度：
+1. **美術風格 (Art Style)**：視覺關鍵字、筆觸、色調色票與幾何造型定位。
+2. **美術風格可執行性 (Art Feasibility)**：如何用前端 SVG / CSS 穩定手刻落實？難度與工時評估。
+3. **劇情與立意點 (Storyline & Rationale)**：5～7 分鐘故事情節簡述、**為什麼需要這段劇情？**傳達什麼哲理與立意？
+4. **劇情與美術的搭配 (Story & Art Harmony)**：視覺風格如何烘托情節與心境？高潮光影與互動如何相輔相成？
+
+### 👥 成員提案檔案列表 (HTML Workspaces)：
+* 📄 **官方標準範本**：[`proposal_template.html`](./proposal_template.html)
+* 💡 **製作簡報 (`c113154206`)**：[`proposal_c113154206.html`](./proposal_c113154206.html)
+* 🎨 **美術設計 (`C111112111`)**：[`proposal_C111112111.html`](./proposal_C111112111.html)
+* 📝 **腳本分鏡 (`C114141163`)**：[`proposal_C114141163.html`](./proposal_C114141163.html)
+* 💻 **前端程式 (`C112181181`)**：[`proposal_C112181181.html`](./proposal_C112181181.html)
 
 ---
 
@@ -18,6 +38,7 @@ type: "decision_log"
 | 2026-11 (W10) | **影片主題與形式** | 以「**程式製作動畫繪本**」為題，打造約 **5～7 分鐘**的純動畫繪本正片（不包含中間製作過程）。 | 全組 |
 | 2026-11 (W10) | **技術與視覺取向** | 以前端（HTML / CSS / SVG / JS）手刻 2D 粗黑邊框貼紙風與向量動畫為主；僅在局部背景視需要評估 AI 輔助生成。 | 程式 `C112181181`、美術 `C111112111` |
 | 2026-11 (W10) | **提案簡報形式** | 採用單一網頁互動簡報（[`Presentation_簡報/index.html`](../Presentation_簡報/index.html)），並透過 GitHub 連結分享與展示。 | 製作簡報 `c113154206` |
+| 2026-11 (W10) | **提案週模板化制度** | 建立統一 HTML 提案模板，每人皆具備獨立 HTML 展示區，強調可行性與自評檢核，防堵純 AI 廢話洗版。 | 全組 |
 
 ---
 
