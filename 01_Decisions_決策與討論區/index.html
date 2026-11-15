@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【提案週首頁】期末專題提案與決策專區 — 創意與創新</title>
+    <title>【專案主架構】期末專題提案與決策中心 — 創意與創新</title>
     <style>
         :root {
             --ink: #2D2A26;
@@ -41,11 +41,11 @@
         }
 
         .container {
-            max-width: 1140px;
+            max-width: 1180px;
             margin: 0 auto;
         }
 
-        /* 頂部快速捷徑列 */
+        /* 頂部快捷列 */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -87,7 +87,7 @@
             overflow: hidden;
         }
 
-        /* 標題橫幅 */
+        /* 標題英雄區 */
         .hero {
             margin-bottom: 40px;
             padding-bottom: 30px;
@@ -123,62 +123,17 @@
             font-size: 20px;
             font-weight: 600;
             color: var(--ink-muted);
-            max-width: 900px;
+            max-width: 960px;
         }
 
-        /* 為什麼需要模板化提案 Banner */
-        .rationale-card {
-            background: #FFF8E7;
-            border: var(--border-thick);
-            border-radius: 24px;
-            box-shadow: var(--shadow-sm);
-            padding: 26px 32px;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .rationale-card h2 {
-            font-family: var(--font-display);
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .rationale-card p {
-            font-size: 16px;
-            line-height: 1.8;
-            font-weight: 500;
-        }
-
-        .contrast-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            margin-top: 18px;
-        }
-        @media (max-width: 768px) {
-            .contrast-grid { grid-template-columns: 1fr; }
-        }
-
-        .contrast-box {
-            border: var(--border-thin);
-            border-radius: 16px;
-            padding: 16px 20px;
-            font-size: 15px;
-            font-weight: 600;
-        }
-        .bad-box { background: #FDE8E8; border-color: var(--coral); }
-        .good-box { background: #E8F8F2; border-color: #2F9E44; }
-
-        /* 四大提案維度區 */
-        .section-title-wrap {
+        /* 區塊標題 */
+        .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 22px;
+            margin: 40px 0 20px;
+            flex-wrap: wrap;
+            gap: 12px;
         }
         .section-title {
             font-family: var(--font-display);
@@ -189,347 +144,406 @@
             gap: 10px;
         }
 
-        .dimension-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 44px;
-        }
-
-        .dimension-card {
-            background: var(--card-white);
-            border: var(--border-thick);
-            border-radius: 20px;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .dimension-header {
-            padding: 14px 18px;
-            border-bottom: var(--border-thin);
-            font-family: var(--font-display);
-            font-size: 18px;
-            font-weight: 800;
-        }
-
-        .dimension-body {
-            padding: 18px 20px;
-            font-size: 15px;
-            line-height: 1.65;
-            font-weight: 600;
-            color: var(--ink);
-            flex: 1;
-        }
-        .dimension-body ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .dimension-body li::before {
-            content: '• ';
-            color: var(--coral);
-            font-weight: 900;
-        }
-
-        /* 成員提案檔案列表 */
-        .roster-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 22px;
-            margin-bottom: 44px;
-        }
-
-        .roster-card {
-            background: var(--card-white);
-            border: var(--border-thick);
-            border-radius: 22px;
-            box-shadow: var(--shadow-sm);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
-        }
-        .roster-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .roster-role-badge {
-            align-self: flex-start;
-            border: var(--border-thin);
-            border-radius: 999px;
-            padding: 4px 14px;
-            font-family: var(--font-display);
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .roster-id {
-            font-family: var(--font-display);
-            font-size: 26px;
-            font-weight: 900;
-            margin-bottom: 6px;
-        }
-
-        .roster-desc {
-            font-size: 14px;
-            color: var(--ink-muted);
-            margin-bottom: 18px;
-            line-height: 1.5;
-            font-weight: 500;
-        }
-
-        .roster-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            background: var(--butter);
-            border: var(--border-thin);
-            border-radius: 14px;
-            padding: 10px 16px;
-            font-family: var(--font-display);
-            font-size: 15px;
-            font-weight: 700;
-            text-decoration: none;
-            color: var(--ink);
-            box-shadow: 2px 2px 0 var(--ink);
-            transition: background 0.15s ease;
-        }
-        .roster-btn:hover { background: #FCD34D; }
-
-        /* 流程說明區 */
-        .step-strip {
+        /* 大模組卡片 */
+        .block-card {
             background: var(--card-white);
             border: var(--border-thick);
             border-radius: 24px;
             box-shadow: var(--shadow-sm);
-            padding: 28px 32px;
+            padding: 32px;
+            margin-bottom: 32px;
         }
-        .step-strip h3 {
+
+        /* 提案週防踩雷指南 */
+        .rule-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 18px;
+        }
+        @media (max-width: 768px) {
+            .rule-grid { grid-template-columns: 1fr; }
+        }
+        .rule-box {
+            border: var(--border-thin);
+            border-radius: 18px;
+            padding: 20px 24px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        .rule-box.bad { background: #FDE8E8; border-color: var(--coral); }
+        .rule-box.good { background: #E8F8F2; border-color: #2F9E44; }
+
+        /* 今日美術風格提案包裝區 */
+        .art-showcase {
+            background: #FFFBEA;
+            border: var(--border-thick);
+            border-radius: 24px;
+            box-shadow: var(--shadow-sm);
+            padding: 32px;
+            margin-bottom: 36px;
+        }
+        .art-tag-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 14px 0 22px;
+        }
+        .art-tag {
+            background: var(--card-white);
+            border: var(--border-thin);
+            border-radius: 999px;
+            padding: 6px 16px;
             font-family: var(--font-display);
-            font-size: 22px;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 2px 2px 0 var(--ink);
+        }
+
+        .palette-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+        .palette-card {
+            background: var(--card-white);
+            border: var(--border-thin);
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 2px 2px 0 var(--ink);
+        }
+        .color-block {
+            height: 48px;
+            border-radius: 10px;
+            border: var(--border-thin);
+            margin-bottom: 8px;
+        }
+        .palette-name {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .palette-code {
+            font-size: 12px;
+            color: var(--ink-muted);
+            font-weight: 600;
+        }
+
+        /* 檔案架構樹狀展示 */
+        .tree-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 860px) {
+            .tree-grid { grid-template-columns: 1fr; }
+        }
+
+        .tree-box {
+            background: #FAFAFA;
+            border: var(--border-thin);
+            border-radius: 18px;
+            padding: 24px;
+            font-family: var(--font-body);
+        }
+        .tree-box h3 {
+            font-family: var(--font-display);
+            font-size: 18px;
             font-weight: 800;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .step-list {
+        .file-list {
+            list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            font-size: 16px;
+            gap: 10px;
+            font-size: 15px;
             font-weight: 600;
         }
-        .step-item {
+        .file-list li {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
+            gap: 10px;
+            padding: 8px 12px;
+            background: var(--card-white);
+            border: 1.5px solid var(--ink);
+            border-radius: 10px;
         }
-        .step-num {
-            min-width: 32px;
-            height: 32px;
-            background: var(--mint);
-            border: var(--border-thin);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+        .file-badge {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: var(--butter);
+            border: 1px solid var(--ink);
             flex-shrink: 0;
+        }
+
+        /* 決策事項表格 */
+        .decision-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 15px;
+        }
+        .decision-table th, .decision-table td {
+            border: var(--border-thin);
+            padding: 12px 16px;
+            text-align: left;
+        }
+        .decision-table th {
+            background: var(--mint);
+            font-family: var(--font-display);
+            font-weight: 800;
+        }
+        .decision-table td {
+            background: var(--card-white);
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- 頂部導航列 -->
+        <!-- 頂部導航 -->
         <nav class="top-bar">
-            <a href="../Presentation_簡報/index.html" class="pill-btn">🎬 查看提案簡報 (8頁展示版)</a>
-            <a href="https://github.com/ludylan/Creative-Innovation-Final-Project" target="_blank" class="pill-btn">📦 GitHub 專案倉庫</a>
-            <a href="00_Decision_Log_決策與討論紀錄.md" class="pill-btn">📋 Markdown 決策總覽</a>
+            <a href="../Presentation_簡報/index.html" class="pill-btn">🎬 提案簡報 (8頁展示版)</a>
+            <a href="https://github.com/ludylan/Creative-Innovation-Final-Project" target="_blank" class="pill-btn">📦 GitHub 遠端倉庫</a>
+            <a href="00_Decision_Log_決策與討論紀錄.md" class="pill-btn">📋 Markdown 決策文件</a>
         </nav>
 
         <main class="hub-sheet">
             <!-- 標頭英雄區 -->
             <header class="hero">
-                <div class="hero-badge">📢 W10–W11 當前重要階段</div>
-                <h1 class="hero-title">期末專題提案週 (Proposal Week)</h1>
+                <div class="hero-badge">📢 全組協作主架構</div>
+                <h1 class="hero-title">期末專題提案與決策中心</h1>
                 <p class="hero-sub">
-                    除了團隊協作之外，本週首要任務是<strong>收集每位組員的提案檔案</strong>。我們將每位成員的提案「模板化」，提供自由展示美術與可執行的互動空間，凝聚最終成品共識！
+                    本頁面為<strong>「程式製作動畫繪本」</strong>期末專案的決策主核心。本週為提案週，全體共同聚焦於<strong>「美術風格的可執行性」</strong>、<strong>「劇情與立意點」</strong>以及<strong>「劇情與美術的契合度」</strong>，建立具體可落地的互動繪本規範。
                 </p>
             </header>
 
-            <!-- 為什麼要模板化提案？ -->
-            <section class="rationale-card">
-                <h2>💡 為什麼我們需要「模板化提案」？</h2>
-                <p>
-                    過去常發生組員直接把「與 AI 討論的落落長原始紀錄」全部丟上來，造成兩大痛點：<strong>資訊過多無從抓重點</strong>，以及<strong>天馬行空的內容在前端根本無法執行</strong>。<br>
-                    因此，本次提案週要求每位組員使用統一樣板，將點子收斂為<strong>具體、可落地的 HTML 提案頁</strong>，讓每個人都能放上自己的視覺／程式展示。
+            <!-- 提案週核心原則：拒絕未經整理的 AI 洗版 -->
+            <section class="block-card">
+                <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 800;">
+                    💡 提案週工作準則：為什麼要模板化？
+                </h2>
+                <p style="font-size: 16px; margin-top: 8px; color: var(--ink-muted); font-weight: 600;">
+                    以往常有成員直接將與 AI 討論的冗長原始紀錄全盤丟上，既缺乏執行可行性，又難以凝聚共識。本次提案週採取<strong>共同架構規範</strong>：
                 </p>
 
-                <div class="contrast-grid">
-                    <div class="contrast-box bad-box">
-                        ❌ <strong>請避免的提案方式</strong>
-                        <ul style="margin-top: 6px; padding-left: 18px; font-weight: 500;">
-                            <li>直接複製貼上整串未經整理的 AI 聊天紀錄</li>
-                            <li>只提抽象宏大的概念，卻不知如何在前端刻出</li>
-                            <li>劇情與美術完全脫節，缺乏視覺與程式評估</li>
+                <div class="rule-grid">
+                    <div class="rule-box bad">
+                        <strong>❌ 避免的提案方式</strong>
+                        <ul style="margin-top: 8px; padding-left: 18px;">
+                            <li>直接複製貼上整串未經沉澱的 AI 聊天記錄</li>
+                            <li>提出過於天馬行空但前端無法編寫的抽象特效</li>
+                            <li>純依賴 AI 生圖，面臨畫風割裂與無法手刻互動的風險</li>
                         </ul>
                     </div>
-                    <div class="contrast-box good-box">
-                        ✅ <strong>我們期待的模板化提案</strong>
-                        <ul style="margin-top: 6px; padding-left: 18px; font-weight: 500;">
-                            <li>清楚指出<strong>為什麼需要這個劇情</strong>與其核心立意</li>
-                            <li>評估<strong>美術風格如何用前端 SVG/CSS 穩定落實</strong></li>
-                            <li>在專屬 HTML 頁面內放上一張概念圖或簡易互動展示</li>
+                    <div class="rule-box good">
+                        <strong>✅ 我們採用的落地提案標準</strong>
+                        <ul style="margin-top: 8px; padding-left: 18px;">
+                            <li>明確指出<strong>為什麼需要這個劇情（立意點）</strong></li>
+                            <li>評估<strong>美術風格如何用前端 SVG/CSS 穩定實現</strong></li>
+                            <li>在 HTML 展示區中提供具體的視覺圖或互動原型</li>
                         </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- 四大提案核心維度 -->
-            <section>
-                <div class="section-title-wrap">
-                    <h2 class="section-title">📌 提案四大必填核心維度</h2>
-                    <span style="font-size: 15px; font-weight: 700; color: var(--ink-muted);">請在您的個人 HTML 檔案中完整闡述：</span>
+            <!-- 今日美術風格提案完整包裝 -->
+            <section class="art-showcase">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <span style="background: var(--butter); border: var(--border-thin); border-radius: 999px; padding: 4px 14px; font-family: var(--font-display); font-weight: 700; font-size: 14px;">🎨 今日定調封裝</span>
+                        <h2 style="font-family: var(--font-display); font-size: 28px; font-weight: 900; margin-top: 8px;">
+                            美術風格提案：2D 手繪貼紙風 ✕ 溫暖手帳紙感
+                        </h2>
+                    </div>
+                    <a href="../Presentation_簡報/index.html#4" class="pill-btn" style="background: var(--mint);">👀 查看動態互動示範</a>
                 </div>
 
-                <div class="dimension-grid">
-                    <div class="dimension-card">
-                        <div class="dimension-header" style="background: var(--butter);">
-                            🎨 1. 美術風格設定
-                        </div>
-                        <div class="dimension-body">
-                            視覺風格明確定位：
-                            <ul>
-                                <li>線條、筆觸、色調與圖層規範</li>
-                                <li>建議之主色調色票清單</li>
-                                <li>角色幾何造形與視覺感受</li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="art-tag-row">
+                    <span class="art-tag">🏷️ 筆記本手帳排版 (Notebook Tabs)</span>
+                    <span class="art-tag">🏷️ 3.5px 粗黑炭黑輪廓線 (#2D2A26)</span>
+                    <span class="art-tag">🏷️ 硬邊幾何偏移陰影</span>
+                    <span class="art-tag">🏷️ 純前端 SVG 向量圖層手刻</span>
+                    <span class="art-tag">🏷️ 呼吸縮放 (Breathe) & 游標視差</span>
+                </div>
 
-                    <div class="dimension-card">
-                        <div class="dimension-header" style="background: var(--sky);">
-                            ⚙️ 2. 美術風格可執行性
-                        </div>
-                        <div class="dimension-body">
-                            落地工程評估（拒絕不可控）：
-                            <ul>
-                                <li>如何用前端 SVG / CSS 手刻出來</li>
-                                <li>避免純生圖造成畫風分裂的對策</li>
-                                <li>團隊工時與技術門檻評估</li>
-                            </ul>
-                        </div>
-                    </div>
+                <p style="font-size: 16px; line-height: 1.8; font-weight: 500;">
+                    • <strong>視覺定位</strong>：融合「溫暖手帳質感」與「Daisy Days 粗黑邊框手繪貼紙風」。整體不走寫實或 AI 感強烈的渲染風，而是以乾淨、童趣、飽滿的幾何色塊呈現。<br>
+                    • <strong>工程可執行性</strong>：前景主角、配角、草木道具均為<strong>純 SVG 向量代碼</strong>，直接由前端 CSS / JS 控制眼睛追蹤滑鼠、點擊跳躍、日夜光影無縫漸變，免除外部龐大圖片載入失敗與生成風格不穩的痛點。<br>
+                    • <strong>AI 輔助邊界</strong>：全片以前端代碼自主手刻為主，僅在極少數大面積複雜背景視需要評估 AI 輔助，確保成品具備高度技術原創性與穩定性。
+                </p>
 
-                    <div class="dimension-card">
-                        <div class="dimension-header" style="background: var(--mint);">
-                            📖 3. 劇情與立意點
-                        </div>
-                        <div class="dimension-body">
-                            故事核心價值（為什麼需要）：
-                            <ul>
-                                <li>5～7 分鐘故事情節簡述</li>
-                                <li>為什麼需要這段劇情？立意是什麼？</li>
-                                <li>為何適合以網頁互動繪本呈現？</li>
-                            </ul>
-                        </div>
+                <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 800; margin-top: 22px;">🌈 定調主色調系統 (Color Palette)</h3>
+                <div class="palette-row">
+                    <div class="palette-card">
+                        <div class="color-block" style="background: #FAF6EE;"></div>
+                        <div class="palette-name">暖米手帳紙</div>
+                        <div class="palette-code">#FAF6EE (背景底色)</div>
                     </div>
-
-                    <div class="dimension-card">
-                        <div class="dimension-header" style="background: var(--peach);">
-                            🤝 4. 劇情與美術搭配
-                        </div>
-                        <div class="dimension-body">
-                            視覺與文本的共鳴契合：
-                            <ul>
-                                <li>畫風如何襯托劇情的哲理或氛圍</li>
-                                <li>日夜／光影轉變與情節高潮的連動</li>
-                                <li>互動節點對故事體驗的加分效果</li>
-                            </ul>
-                        </div>
+                    <div class="palette-card">
+                        <div class="color-block" style="background: #2D2A26;"></div>
+                        <div class="palette-name">炭黑輪廓線</div>
+                        <div class="palette-code">#2D2A26 (3.5px 邊框)</div>
+                    </div>
+                    <div class="palette-card">
+                        <div class="color-block" style="background: #FDE68A;"></div>
+                        <div class="palette-name">晨曦奶油黃</div>
+                        <div class="palette-code">#FDE68A (暖陽與能量)</div>
+                    </div>
+                    <div class="palette-card">
+                        <div class="color-block" style="background: #A8E6CF;"></div>
+                        <div class="palette-name">薄荷清新綠</div>
+                        <div class="palette-code">#A8E6CF (生機與自然)</div>
+                    </div>
+                    <div class="palette-card">
+                        <div class="color-block" style="background: #A8D8F0;"></div>
+                        <div class="palette-name">天空微風藍</div>
+                        <div class="palette-code">#A8D8F0 (遠山與晴空)</div>
+                    </div>
+                    <div class="palette-card">
+                        <div class="color-block" style="background: #FFCBA4;"></div>
+                        <div class="palette-name">蜜桃溫暖橘</div>
+                        <div class="palette-code">#FFCBA4 (角色與高光)</div>
                     </div>
                 </div>
             </section>
 
-            <!-- 成員提案檔案列表 -->
-            <section>
-                <div class="section-title-wrap">
-                    <h2 class="section-title">👥 每位成員專屬提案檔案 (HTML Workspaces)</h2>
-                    <a href="proposal_template.html" class="pill-btn" style="background: var(--butter);">📄 查看標準模板 (proposal_template.html)</a>
+            <!-- 當前系統專案檔案架構 -->
+            <section class="block-card">
+                <div class="section-header" style="margin-top: 0;">
+                    <h2 class="section-title">📂 當前期末專案檔案架構 (System Architecture)</h2>
+                    <span style="font-size: 14px; font-weight: 700; color: var(--ink-muted);">獨立 Git 倉庫路徑：Creative-Innovation-Final-Project</span>
                 </div>
 
-                <div class="roster-grid">
-                    <!-- 製作簡報 -->
-                    <div class="roster-card">
-                        <div>
-                            <span class="roster-role-badge" style="background: var(--butter);">製作簡報</span>
-                            <h3 class="roster-id">c113154206</h3>
-                            <p class="roster-desc">主導簡報框架、提案規格制定與互動簡報體驗整合。</p>
-                        </div>
-                        <a href="proposal_c113154206.html" class="roster-btn">👉 開啟個人提案 HTML</a>
+                <div class="tree-grid">
+                    <div class="tree-box">
+                        <h3>📁 簡報與決策專區</h3>
+                        <ul class="file-list">
+                            <li>
+                                <span class="file-badge">簡報</span>
+                                <div>
+                                    <strong>Presentation_簡報/index.html</strong><br>
+                                    <small style="color: var(--ink-muted);">8 頁手帳風期末提案簡報（含晝夜流轉與角色跳躍互動）</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="file-badge">決策主頁</span>
+                                <div>
+                                    <strong>01_Decisions_決策與討論區/index.html</strong><br>
+                                    <small style="color: var(--ink-muted);">本協作中心首頁（包裝美術提案、工作準則與架構導航）</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="file-badge">Markdown</span>
+                                <div>
+                                    <strong>01_Decisions_決策與討論區/00_Decision_Log...md</strong><br>
+                                    <small style="color: var(--ink-muted);">Obsidian 決策歷程紀錄與待決策事項清單</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="file-badge">範本</span>
+                                <div>
+                                    <strong>01_Decisions_決策與討論區/proposal_template.html</strong><br>
+                                    <small style="color: var(--ink-muted);">提案四大維度與互動展示之標準 HTML 模板</small>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
 
-                    <!-- 美術 -->
-                    <div class="roster-card">
-                        <div>
-                            <span class="roster-role-badge" style="background: var(--pink);">美術設計</span>
-                            <h3 class="roster-id">C111112111</h3>
-                            <p class="roster-desc">聚焦繪本視覺語言、角色表情差分、背景分層與色票設定。</p>
-                        </div>
-                        <a href="proposal_C111112111.html" class="roster-btn">👉 開啟個人提案 HTML</a>
-                    </div>
-
-                    <!-- 腳本 -->
-                    <div class="roster-card">
-                        <div>
-                            <span class="roster-role-badge" style="background: var(--sky);">腳本分鏡</span>
-                            <h3 class="roster-id">C114141163</h3>
-                            <p class="roster-desc">聚焦 5～7 分鐘四階段故事大綱、各幕旁白台詞與寓意傳達。</p>
-                        </div>
-                        <a href="proposal_C114141163.html" class="roster-btn">👉 開啟個人提案 HTML</a>
-                    </div>
-
-                    <!-- 程式 -->
-                    <div class="roster-card">
-                        <div>
-                            <span class="roster-role-badge" style="background: var(--mint);">前端程式</span>
-                            <h3 class="roster-id">C112181181</h3>
-                            <p class="roster-desc">評估前端 SVG 動畫、日夜光影切換、滑鼠視差與互動可行性。</p>
-                        </div>
-                        <a href="proposal_C112181181.html" class="roster-btn">👉 開啟個人提案 HTML</a>
+                    <div class="tree-box">
+                        <h3>📁 腳本、素材與最終成品區</h3>
+                        <ul class="file-list">
+                            <li>
+                                <span class="file-badge">腳本</span>
+                                <div>
+                                    <strong>02_Script_腳本與分鏡/00_Script_Outline...md</strong><br>
+                                    <small style="color: var(--ink-muted);">5～7 分鐘四階段分鏡規劃草稿（開場／發展／轉折／結尾）</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="file-badge">素材</span>
+                                <div>
+                                    <strong>03_Assets_美術與音訊素材/</strong><br>
+                                    <small style="color: var(--ink-muted);">存放 SVG 角色元件、場景分層圖檔、旁白與背景音樂</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="file-badge">成品區</span>
+                                <div>
+                                    <strong>Storybook_互動繪本/</strong><br>
+                                    <small style="color: var(--ink-muted);">最終互動繪本主程式與輸出之單一 HTML 檔案</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="file-badge">說明</span>
+                                <div>
+                                    <strong>README.md / 00_期末報告總覽.md</strong><br>
+                                    <small style="color: var(--ink-muted);">GitHub 專案首頁說明與 Obsidian 主地圖導航雙向鏈接</small>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- 操作指引 -->
-            <section class="step-strip">
-                <h3>🚀 如何填寫並提交您的提案？</h3>
-                <div class="step-list">
-                    <div class="step-item">
-                        <span class="step-num">1</span>
-                        <span>點擊上方屬於您的「個人提案 HTML」檔案（或使用瀏覽器直接開啟）。</span>
-                    </div>
-                    <div class="step-item">
-                        <span class="step-num">2</span>
-                        <span>點擊頁面上的虛線文字區即可<strong>直接在瀏覽器打字編輯</strong>；也可以在原始碼中替換「展示區」為您的圖片或 SVG。</span>
-                    </div>
-                    <div class="step-item">
-                        <span class="step-num">3</span>
-                        <span>編輯完成後，點擊右下角<strong>「💾 下載儲存更新後的 HTML」</strong>，並 commit 推送至 GitHub（或傳給簡報組長彙整）。</span>
-                    </div>
-                </div>
+            <!-- 專案決策現況彙整 -->
+            <section class="block-card">
+                <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 800;">
+                    ⚖️ 專案決策狀態總覽 (Decisions Status)
+                </h2>
+
+                <table class="decision-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 130px;">類別</th>
+                            <th style="width: 170px;">項目</th>
+                            <th>目前確認內容／待定決策方向</th>
+                            <th style="width: 100px;">狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>主題與成品</strong></td>
+                            <td>影片定位與片長</td>
+                            <td>「程式製作動畫繪本」，片長約 5～7 分鐘純動畫正片，時間完整保留給繪本互動故事，不剪輯中間寫程式的幕後過程。</td>
+                            <td><span style="background: #D3F9D8; color: #2B8A3E; font-weight: 700; padding: 2px 8px; border-radius: 6px;">已定案</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>美術與工程</strong></td>
+                            <td>視覺風格與技術</td>
+                            <td>2D 粗黑炭黑手繪貼紙風 ✕ 溫暖手帳米紙；100% 前端 SVG 向量手刻與 CSS 動畫，避免純生圖分裂。</td>
+                            <td><span style="background: #D3F9D8; color: #2B8A3E; font-weight: 700; padding: 2px 8px; border-radius: 6px;">已定案</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>提案簡報</strong></td>
+                            <td>提案展示形式</td>
+                            <td>8 頁單檔 HTML 互動簡報，已綁定 GitHub Pages 線上展示。</td>
+                            <td><span style="background: #D3F9D8; color: #2B8A3E; font-weight: 700; padding: 2px 8px; border-radius: 6px;">已定案</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>故事與立意</strong></td>
+                            <td>核心劇情與寓意</td>
+                            <td>待收斂：主角設定、起承轉合情節，以及「為什麼需要這段劇情（立意點）」之具體哲理。</td>
+                            <td><span style="background: #FFF3BF; color: #E67700; font-weight: 700; padding: 2px 8px; border-radius: 6px;">提案中</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>互動環節</strong></td>
+                            <td>三大互動機制</td>
+                            <td>已完成概念（物件跳躍、晨昏光影、滑鼠視差）；待結合具體劇情台詞進行逐幕細化。</td>
+                            <td><span style="background: #FFF3BF; color: #E67700; font-weight: 700; padding: 2px 8px; border-radius: 6px;">細化中</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
         </main>
     </div>
