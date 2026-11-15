@@ -328,32 +328,67 @@
                 </p>
             </header>
 
-            <!-- 提案週核心原則：拒絕未經整理的 AI 洗版 -->
+            <!-- 模組化彈性提案指引與 AI 協作 -->
             <section class="block-card">
-                <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 800;">
-                    💡 提案週工作準則：為什麼要模板化？
-                </h2>
-                <p style="font-size: 16px; margin-top: 8px; color: var(--ink-muted); font-weight: 600;">
-                    以往常有成員直接將與 AI 討論的冗長原始紀錄全盤丟上，既缺乏執行可行性，又難以凝聚共識。本次提案週採取<strong>共同架構規範</strong>：
-                </p>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 style="font-family: var(--font-display); font-size: 26px; font-weight: 800;">
+                            💡 提案不綁死！彈性拆開三大提案軌道（可使用 AI 協作）
+                        </h2>
+                        <p style="font-size: 16px; margin-top: 6px; color: var(--ink-muted); font-weight: 600;">
+                            大家不需一次填滿所有東西！你可以針對自己擅長或有靈感的面向單獨提案，也可以做故事與美術的兩兩連結探索：
+                        </p>
+                    </div>
+                    <a href="proposal_template.html" class="pill-btn" style="background: var(--butter);">📄 開啟彈性提案模板 (HTML)</a>
+                </div>
 
-                <div class="rule-grid">
-                    <div class="rule-box bad">
-                        <strong>❌ 避免的提案方式</strong>
-                        <ul style="margin-top: 8px; padding-left: 18px;">
-                            <li>直接複製貼上整串未經沉澱的 AI 聊天記錄</li>
-                            <li>提出過於天馬行空但前端無法編寫的抽象特效</li>
-                            <li>純依賴 AI 生圖，面臨畫風割裂與無法手刻互動的風險</li>
-                        </ul>
+                <div class="rule-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 22px;">
+                    <!-- 軌道 1 -->
+                    <div style="background: #E8F8F2; border: var(--border-thin); border-radius: 18px; padding: 20px 24px;">
+                        <span style="background: var(--mint); border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-family: var(--font-display); font-size: 13px; font-weight: 700;">軌道 1</span>
+                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 8px 0 6px;">📖 故事／劇情提案</h3>
+                        <p style="font-size: 14px; line-height: 1.6; font-weight: 500;">
+                            • 5～7 分鐘故事情節與主角設定<br>
+                            • <strong>為什麼需要這段劇情？（立意點是什麼）</strong><br>
+                            • 適合互動的故事轉折點
+                        </p>
                     </div>
-                    <div class="rule-box good">
-                        <strong>✅ 我們採用的落地提案標準</strong>
-                        <ul style="margin-top: 8px; padding-left: 18px;">
-                            <li>明確指出<strong>為什麼需要這個劇情（立意點）</strong></li>
-                            <li>評估<strong>美術風格如何用前端 SVG/CSS 穩定實現</strong></li>
-                            <li>在 HTML 展示區中提供具體的視覺圖或互動原型</li>
-                        </ul>
+
+                    <!-- 軌道 2 -->
+                    <div style="background: #FFFBEA; border: var(--border-thin); border-radius: 18px; padding: 20px 24px;">
+                        <span style="background: var(--butter); border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-family: var(--font-display); font-size: 13px; font-weight: 700;">軌道 2</span>
+                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 8px 0 6px;">🎨 美術／視覺提案</h3>
+                        <p style="font-size: 14px; line-height: 1.6; font-weight: 500;">
+                            • 視覺風格關鍵字與配色色票<br>
+                            • <strong>前端工程可執行性（SVG/CSS 能否手刻實現）</strong><br>
+                            • 避免純 AI 生圖造成分裂的對策
+                        </p>
                     </div>
+
+                    <!-- 軌道 3 -->
+                    <div style="background: #FEF0E7; border: var(--border-thin); border-radius: 18px; padding: 20px 24px;">
+                        <span style="background: var(--peach); border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-family: var(--font-display); font-size: 13px; font-weight: 700;">軌道 3</span>
+                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; margin: 8px 0 6px;">🤝 故事 ✕ 美術連結提案</h3>
+                        <p style="font-size: 14px; line-height: 1.6; font-weight: 500;">
+                            • 某段故事如果配上某套美術會產生什麼氛圍？<br>
+                            • 針對同一個故事，提出另一種畫風的可能性<br>
+                            • 探討不同風格詮釋對觀者情感的影響
+                        </p>
+                    </div>
+                </div>
+
+                <!-- AI 生成提示詞指引 -->
+                <div style="background: #FAFAFA; border: 1.5px dashed var(--ink); border-radius: 16px; padding: 18px 22px; margin-top: 22px;">
+                    <div style="font-family: var(--font-display); font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                        <span>🤖 隊友 AI 輔助協作咒語（複製給 ChatGPT / Claude / Gemini 直接生成）</span>
+                    </div>
+                    <code style="display: block; background: #FFFFFF; border: 1px solid rgba(45,42,38,0.25); border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-family: Consolas, monospace; font-size: 13px; color: #1E40AF; white-space: pre-wrap; user-select: all;">我想為大學期末專案《程式製作動畫繪本》（片長約5~7分鐘）提出一個構想。
+請根據我的點子：[貼上你的粗略點子]
+幫我產出精簡具體的提案：
+1. 【故事簡介與立意點】為什麼需要這段劇情？想傳達什麼哲理寓意？
+2. 【美術風格與可執行性】建議視覺風格色票，以及如何用前端SVG/CSS穩定手刻出來？
+3. 【故事與美術的搭配亮點】畫風如何襯托故事情緒？
+請直接條列重點，語氣精簡有條理，不要冗長開場白。</code>
                 </div>
             </section>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【提案範本】期末繪本專題提案表 — 創意與創新</title>
+    <title>【彈性提案模板】期末專題提案表（故事／美術／連結）— 創意與創新</title>
     <style>
         :root {
             --ink: #2D2A26;
@@ -45,7 +45,6 @@
             margin: 0 auto;
         }
 
-        /* 頂部導航與標籤 */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -72,7 +71,6 @@
         }
         .nav-link:hover { transform: translateY(-2px); }
 
-        /* 主筆記卡片 */
         .sheet {
             background: var(--paper-bg);
             border: var(--border-thick);
@@ -80,43 +78,46 @@
             box-shadow: var(--shadow-md);
             padding: 48px;
             position: relative;
-            overflow: hidden;
         }
 
-        .sheet::before {
-            content: '';
-            position: absolute;
-            left: 28px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: rgba(248, 99, 95, 0.25);
-            pointer-events: none;
-        }
-
-        /* 標頭區域 */
         .header {
             margin-bottom: 32px;
             padding-bottom: 24px;
             border-bottom: 3px dashed rgba(45, 42, 38, 0.2);
         }
 
-        .badge {
-            display: inline-block;
-            background: var(--butter);
+        .track-selector {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .track-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             border: var(--border-thin);
-            box-shadow: 3px 3px 0 var(--ink);
             border-radius: 999px;
-            padding: 4px 16px;
+            padding: 6px 18px;
             font-family: var(--font-display);
-            font-weight: 700;
             font-size: 15px;
-            margin-bottom: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 2px 2px 0 var(--ink);
+            user-select: none;
+            transition: all 0.15s ease;
+            background: var(--card-white);
+        }
+        .track-pill.active {
+            background: var(--butter);
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0 var(--ink);
         }
 
         .title {
             font-family: var(--font-display);
-            font-size: 38px;
+            font-size: 36px;
             font-weight: 900;
             line-height: 1.25;
             margin-bottom: 16px;
@@ -125,7 +126,7 @@
         .meta-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
+            gap: 14px;
             background: var(--card-white);
             border: var(--border-thin);
             border-radius: 18px;
@@ -134,22 +135,32 @@
         }
         .meta-item { display: flex; flex-direction: column; gap: 4px; }
         .meta-label { font-size: 13px; font-weight: 700; color: var(--ink-muted); }
-        .meta-value { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+        .meta-value { font-family: var(--font-display); font-size: 17px; font-weight: 700; }
 
-        /* 核心提醒 Banner */
-        .warning-box {
-            background: #FFF2DC;
+        .ai-prompt-box {
+            background: #E8F4FD;
             border: var(--border-thin);
-            border-left: 8px solid var(--coral);
+            border-left: 8px solid var(--sky);
             border-radius: 16px;
-            padding: 16px 22px;
-            margin-bottom: 36px;
+            padding: 18px 24px;
+            margin-bottom: 32px;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 500;
         }
-        .warning-box strong { color: #D9480F; }
+        .ai-prompt-box code {
+            display: block;
+            background: #FFFFFF;
+            border: 1.5px solid var(--ink);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-top: 10px;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            color: #1E40AF;
+            white-space: pre-wrap;
+            user-select: all;
+        }
 
-        /* 章節模組卡片 */
         .section-card {
             background: var(--card-white);
             border: var(--border-thick);
@@ -157,6 +168,7 @@
             box-shadow: var(--shadow-sm);
             margin-bottom: 32px;
             overflow: hidden;
+            transition: all 0.25s ease;
         }
 
         .section-header {
@@ -167,7 +179,7 @@
             font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: space-between;
         }
 
         .section-body {
@@ -216,7 +228,6 @@
             box-shadow: 0 0 0 3px rgba(253, 230, 138, 0.5);
         }
 
-        /* 顏色卡片展示 */
         .color-palette {
             display: flex;
             gap: 12px;
@@ -234,6 +245,7 @@
             align-items: center;
             gap: 8px;
             box-shadow: 2px 2px 0 var(--ink);
+            background: #FFF;
         }
         .color-dot {
             width: 20px;
@@ -242,12 +254,11 @@
             border: 2px solid var(--ink);
         }
 
-        /* 視覺／互動展示區 (Sandbox) */
         .sandbox-stage {
             border: var(--border-thin);
             border-radius: 16px;
             background: #FAFAFA;
-            min-height: 260px;
+            min-height: 200px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -257,30 +268,6 @@
             text-align: center;
         }
 
-        /* 檢核清單 */
-        .checklist {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 12px;
-        }
-        .checklist li {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-weight: 600;
-            font-size: 15px;
-        }
-        .checklist input[type="checkbox"] {
-            margin-top: 4px;
-            width: 20px;
-            height: 20px;
-            accent-color: var(--ink);
-            cursor: pointer;
-        }
-
-        /* 浮動儲存按鈕 */
         .floating-action {
             position: fixed;
             bottom: 24px;
@@ -311,221 +298,180 @@
 <body>
 
     <div class="container">
-        <!-- 頂部導航 -->
         <nav class="top-nav">
-            <a href="index.html" class="nav-link">← 回到提案週首頁 (Proposal Hub)</a>
-            <span style="font-weight: 700; color: var(--ink-muted);">💡 點擊下方文字區域可直接編輯內容，按右下角「下載 HTML」即可保存</span>
+            <a href="index.html" class="nav-link">← 回到提案與決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">💡 點擊標籤切換主題，不需全部填寫，選你想提的區塊即可！</span>
         </nav>
 
         <main class="sheet">
-            <!-- 標頭 -->
             <header class="header">
-                <span class="badge">🎨 提案週專用模板</span>
-                <h1 class="title" contenteditable="true">【提案標題】請在此填寫您的繪本風格與劇情構想</h1>
+                <!-- 提案分類標籤（自由選擇） -->
+                <div class="track-selector">
+                    <span style="font-weight: 800; font-family: var(--font-display); margin-right: 4px;">本頁提案類型：</span>
+                    <label class="track-pill active"><input type="checkbox" id="chkStory" checked onchange="toggleModule('modStory', this.checked)"> 📖 故事／劇情提案</label>
+                    <label class="track-pill active"><input type="checkbox" id="chkArt" checked onchange="toggleModule('modArt', this.checked)"> 🎨 美術／風格提案</label>
+                    <label class="track-pill active"><input type="checkbox" id="chkLink" checked onchange="toggleModule('modLink', this.checked)"> 🤝 故事 ✕ 美術連結提案</label>
+                </div>
+
+                <h1 class="title" contenteditable="true">【提案標題】在此填寫您的構想主題</h1>
                 
                 <div class="meta-grid">
                     <div class="meta-item">
-                        <span class="meta-label">提案成員學號</span>
-                        <span class="meta-value" contenteditable="true">請輸入學號（如 C114141163）</span>
+                        <span class="meta-label">提案人／代號</span>
+                        <span class="meta-value" contenteditable="true">您的學號或暱稱</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">團隊職責角色</span>
-                        <span class="meta-value" contenteditable="true">腳本／美術／程式／簡報</span>
+                        <span class="meta-label">提案性質</span>
+                        <span class="meta-value" contenteditable="true">故事發想／美術提案／連結搭配</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">提案階段</span>
-                        <span class="meta-value">W10-W11 提案週初稿</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">預計片長</span>
-                        <span class="meta-value">約 5～7 分鐘（純動畫正片）</span>
+                        <span class="meta-label">支援方式</span>
+                        <span class="meta-value">可利用 AI 輔助協作生成</span>
                     </div>
                 </div>
             </header>
 
-            <!-- 防踩雷原則提醒 -->
-            <div class="warning-box">
-                <strong>⚠️ 提案週嚴格守則：拒絕無效貼上！</strong><br>
-                請勿直接將未經整理的長篇 AI 對話紀錄全文貼上。本專案重視<strong>「具體落地性」</strong>，每項提案必須經過您的思考收斂，說明<strong>「為什麼選這個」</strong>以及<strong>「前端程式究竟要怎麼刻出來」</strong>。
+            <!-- AI 輔助咒語指引 -->
+            <div class="ai-prompt-box">
+                <strong>🤖 隊友 AI 輔助編輯小技巧：</strong><br>
+                你可以將自己的粗略想法複製給 ChatGPT、Claude 或 Gemini，並附上下方指令，讓 AI 幫你直接整理成簡潔、有立意點、具備前端可執行性的內容：
+                <code>我想提一個《程式製作動畫繪本》的構想。請根據以下我的點子，幫我提煉為「5~7分鐘故事大綱」、「為什麼需要這個故事的立意點」、「前端SVG手繪風如何實現的可執行性分析」。不要冗長廢話，重點條列化即可：[貼上你的粗略點子]</code>
             </div>
 
-            <!-- 第一維度：劇情與立意點 -->
-            <section class="section-card">
+            <!-- 模組 A：故事／劇情提案區 -->
+            <section class="section-card" id="modStory">
                 <div class="section-header" style="background: var(--mint);">
-                    <span>📖 01｜劇情故事與核心立意點 (Story & Rationale)</span>
+                    <span>📖 模組 A｜故事／劇情提案 (Story Proposal)</span>
+                    <span style="font-size: 14px; color: var(--ink-muted);">可單獨提出</span>
                 </div>
                 <div class="section-body">
                     <div class="guideline-tip">
-                        💡 思考方向：為什麼需要這個劇情？故事想傳達什麼哲理、寓意或情感？（拒絕為做而做）
+                        💡 思考核心：主角是誰？遇見什麼事？**為什麼需要這段劇情（立意點是什麼）？**
                     </div>
 
                     <div class="field-group">
-                        <div class="field-label">📌 故事簡介（約 100~200 字）</div>
+                        <div class="field-label">📌 故事概述（約 100～250 字，純動畫正片約 5～7 分鐘）</div>
                         <div class="editable-area" contenteditable="true">
-                            請概述本片 5～7 分鐘的故事脈絡：主角是誰？他在什麼情境下出發？途中遇見了什麼問題？最後如何化解並收尾？
+                            描述開場情境、發展與探索、高潮轉折、溫暖結尾。故事適合具備互動性。
                         </div>
                     </div>
 
                     <div class="field-group">
-                        <div class="field-label">💡 為什麼需要這段劇情？立意點是什麼？</div>
+                        <div class="field-label">💡 劇情的立意點與核心寓意（為什麼是這個故事？）</div>
                         <div class="editable-area" contenteditable="true">
-                            說明這段故事的意義（例如：探討成長與探索、科技與溫度的平衡、對日常微小事物的觀察等）。為什麼這段劇情適合用「互動繪本」的方式來呈現給觀眾？
+                            說明這段故事背後的情感、哲理或觀察（例如：對成長焦慮的釋懷、人與自然的對話、微小生活趣味的發現）。
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field-label">👆 預想的 1～3 個互動環節節點</div>
+                        <div class="editable-area" contenteditable="true">
+                            • 互動 1：例如主角遇到迷路小動物，觀眾點擊協助帶路<br>
+                            • 互動 2：例如拖曳滑桿讓天色由傍晚變成滿天繁星<br>
+                            • 互動 3：例如點擊燈火點亮整個結局小鎮
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 第二維度：美術風格設定 -->
-            <section class="section-card">
+            <!-- 模組 B：美術風格提案區 -->
+            <section class="section-card" id="modArt">
                 <div class="section-header" style="background: var(--butter);">
-                    <span>🎨 02｜美術風格設定 (Art Style Specification)</span>
+                    <span>🎨 模組 B｜美術風格提案 (Art Style Proposal)</span>
+                    <span style="font-size: 14px; color: var(--ink-muted);">可單獨提出</span>
                 </div>
                 <div class="section-body">
                     <div class="guideline-tip">
-                        💡 思考方向：視覺風格的關鍵字是什麼？線條、筆觸、幾何形狀如何規劃？
+                        💡 思考核心：視覺風格特徵是什麼？**前端 SVG/CSS 能不能穩定刻出來（可執行性）？**
                     </div>
 
                     <div class="field-group">
                         <div class="field-label">🖌️ 風格定位與視覺關鍵字</div>
                         <div class="editable-area" contenteditable="true">
-                            （範例：2D 手繪貼紙風、粗黑輪廓線 3.5px、童趣圓潤幾何、溫暖紙質底色、偏向幾何色塊堆疊而非複雜陰影渲染）
+                            （範例：手繪貼紙風、粗黑邊框 3.5px、馬卡龍粉彩色系、幾何色塊感、手帳質感）
                         </div>
                     </div>
 
                     <div class="field-group">
-                        <div class="field-label">🌈 建議主色調色票（點擊文字可自訂色碼與說明）</div>
+                        <div class="field-label">⚙️ 前端工程可執行性分析 (Feasibility)</div>
+                        <div class="editable-area" contenteditable="true">
+                            說明這套風格在前端如何落實（例如：角色用 SVG 簡單幾何疊加，眼睛用 CSS transform 追蹤滑鼠，避免純生圖造成畫風不可控與肢體分裂）。
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field-label">🌈 建議主色調配色方案</div>
                         <div class="color-palette">
-                            <div class="color-chip" style="background: #FFFBEA;"><div class="color-dot" style="background: #FDE68A;"></div><span contenteditable="true">#FDE68A 晨曦黃（溫暖希望）</span></div>
-                            <div class="color-chip" style="background: #E8F8F2;"><div class="color-dot" style="background: #A8E6CF;"></div><span contenteditable="true">#A8E6CF 薄荷綠（自然生機）</span></div>
-                            <div class="color-chip" style="background: #EBF5FB;"><div class="color-dot" style="background: #A8D8F0;"></div><span contenteditable="true">#A8D8F0 天空藍（遼闊遠景）</span></div>
-                            <div class="color-chip" style="background: #FEF0E7;"><div class="color-dot" style="background: #FFCBA4;"></div><span contenteditable="true">#FFCBA4 蜜桃橘（角色點綴）</span></div>
+                            <div class="color-chip"><div class="color-dot" style="background: #FDE68A;"></div><span contenteditable="true">主色 A：#FDE68A 暖黃</span></div>
+                            <div class="color-chip"><div class="color-dot" style="background: #A8E6CF;"></div><span contenteditable="true">主色 B：#A8E6CF 薄荷綠</span></div>
+                            <div class="color-chip"><div class="color-dot" style="background: #A8D8F0;"></div><span contenteditable="true">主色 C：#A8D8F0 晴空藍</span></div>
+                            <div class="color-chip"><div class="color-dot" style="background: #FFCBA4;"></div><span contenteditable="true">主色 D：#FFCBA4 蜜桃橘</span></div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 第三維度：美術風格的可執行性 -->
-            <section class="section-card">
-                <div class="section-header" style="background: var(--sky);">
-                    <span>⚙️ 03｜美術風格的可執行性評估 (Feasibility Analysis)</span>
-                </div>
-                <div class="section-body">
-                    <div class="guideline-tip">
-                        💡 思考方向：這套美術能不能用前端 SVG / CSS 手刻出來？有沒有過高的 AI 生圖不可控風險？工時大概多久？
-                    </div>
-
-                    <div class="field-group">
-                        <div class="field-label">💻 前端落實技術方式</div>
-                        <div class="editable-area" contenteditable="true">
-                            • <strong>角色與前景</strong>：採用純 SVG Path 向量繪製，便於用 CSS keyframes 製作呼吸、跳躍、視差等動畫。<br>
-                            • <strong>背景景深</strong>：採用多層次 SVG 遠山、中景、近景，搭配滑鼠視差位移。<br>
-                            • <strong>AI 輔助界線</strong>：純手刻為主，僅在複雜紋理或特定背景時嘗試生圖後轉向量，避免純生圖造成畫風分裂。
-                        </div>
-                    </div>
-
-                    <div class="field-group">
-                        <div class="field-label">⏱️ 工時與難度預估</div>
-                        <div class="editable-area" contenteditable="true">
-                            預估角色造型繪製需要 X 天；場景 3 幕背景分層需要 Y 天；前端 CSS 動畫綁定需要 Z 天。整體落在團隊可控範圍內。
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 第四維度：劇情與美術的搭配契合度 -->
-            <section class="section-card">
+            <!-- 模組 C：故事與美術的搭配連結提案 -->
+            <section class="section-card" id="modLink">
                 <div class="section-header" style="background: var(--peach);">
-                    <span>🤝 04｜劇情與美術的搭配 (Story & Art Harmony)</span>
+                    <span>🤝 模組 C｜故事 ✕ 美術連結提案 (Story & Art Harmony)</span>
+                    <span style="font-size: 14px; color: var(--ink-muted);">兩兩連結提案</span>
                 </div>
                 <div class="section-body">
                     <div class="guideline-tip">
-                        💡 思考方向：為什麼這個美術風格能襯托這個劇情？兩者如何互相加分？
+                        💡 思考核心：這個故事如果配這個畫風會產生什麼化學反應？或者針對某個故事，你想提出另一種美術風格來詮釋？
                     </div>
 
                     <div class="field-group">
-                        <div class="field-label">✨ 搭配邏輯與共鳴點</div>
+                        <div class="field-label">✨ 故事與視覺的搭配邏輯</div>
                         <div class="editable-area" contenteditable="true">
-                            說明當劇情進展到轉折或高潮時，美術光影、色調或動畫節奏要如何同步轉變。（例如：開場明亮清新，轉折時色系過渡到夜晚星空，配合主角心境的沉澱與突破。）
+                            說明為什麼你認為「某個故事設定」非常適合搭配「某套美術視覺」（例如：溫暖治癒的童話適合手帳蠟筆感；帶有科技哲理的故事適合冷暖對比強烈的幾何向量風）。
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field-label">🔄 替代方案或延伸可能性（隊友討論區）</div>
+                        <div class="editable-area" contenteditable="true">
+                            提出若採用其他美術風格（例如剪紙風 vs 貼紙風），對故事傳達會產生哪些不同感受？歡迎隊友在此處碰撞出新火花。
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 第五維度：視覺或互動概念展示區 (Sandbox) -->
+            <!-- 展示沙盒 -->
             <section class="section-card">
                 <div class="section-header" style="background: var(--lavender);">
-                    <span>🖼️ 05｜視覺或互動概念展示區 (Visual / Interactive Demo)</span>
+                    <span>🖼️ 視覺或原型展示區 (Visual & Interactive Sandbox)</span>
                 </div>
                 <div class="section-body">
-                    <div class="guideline-tip">
-                        💡 說明：組員可在此區域貼上自製的 SVG 圖樣、概念圖片（&lt;img&gt;）或是簡單的 HTML 互動按鈕。以下為預設展示示範：
-                    </div>
-
-                    <div class="sandbox-stage" id="demoSandbox">
-                        <!-- 組員可替換以下內容 -->
-                        <svg width="180" height="150" viewBox="0 0 180 150">
-                            <rect x="20" y="25" width="140" height="100" rx="24" fill="#A8E6CF" stroke="#2D2A26" stroke-width="4"/>
-                            <circle cx="65" cy="65" r="12" fill="#fff" stroke="#2D2A26" stroke-width="3"/>
-                            <circle cx="115" cy="65" r="12" fill="#fff" stroke="#2D2A26" stroke-width="3"/>
-                            <circle cx="68" cy="65" r="5" fill="#2D2A26"/>
-                            <circle cx="112" cy="65" r="5" fill="#2D2A26"/>
-                            <circle cx="48" cy="85" r="6" fill="#F7C8D4"/>
-                            <circle cx="132" cy="85" r="6" fill="#F7C8D4"/>
-                            <path d="M78 88 Q90 98 102 88" fill="none" stroke="#2D2A26" stroke-width="3.5" stroke-linecap="round"/>
-                        </svg>
-                        <p style="font-family: var(--font-display); font-weight: 700; margin-top: 10px; font-size: 16px;">
-                            👆 角色概念試繪：SVG 幾何手繪風小精靈
-                        </p>
-                        <p style="font-size: 13px; color: var(--ink-muted); margin-top: 4px;">
-                            （您也可以直接在原始碼中將此區塊換成您的圖片連結或自訂程式碼）
+                    <div class="sandbox-stage">
+                        <p style="font-family: var(--font-display); font-weight: 700; font-size: 16px;">
+                            💡 隊友可自由在此貼入一張圖片、SVG 代碼或簡單 HTML 按鈕展示！
                         </p>
                     </div>
-                </div>
-            </section>
-
-            <!-- 檢核清單 -->
-            <section class="section-card">
-                <div class="section-header" style="background: var(--pink);">
-                    <span>✅ 06｜提案品質自評檢核 (Submission Checklist)</span>
-                </div>
-                <div class="section-body">
-                    <ul class="checklist">
-                        <li>
-                            <input type="checkbox" id="c1" checked>
-                            <label for="c1">非純 AI 對話摘要：內容經過個人消化收斂，有具體的劇情與視覺主張。</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="c2" checked>
-                            <label for="c2">具備可執行性：美術風格可在前端以 SVG / CSS / 程式動畫穩定落實，無過度發散問題。</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="c3" checked>
-                            <label for="c3">劇情具立意點：清楚說明故事想表達的核心意義與為何適合繪本互動。</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="c4" checked>
-                            <label for="c4">劇情與美術有呼應：視覺與故事能相輔相成，而非各做各的。</label>
-                        </li>
-                    </ul>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- 浮動操作區 -->
+    <!-- 浮動儲存下載按鈕 -->
     <div class="floating-action">
         <button class="btn-action" onclick="saveFile()">💾 下載儲存更新後的 HTML</button>
     </div>
 
     <script>
+        function toggleModule(id, show) {
+            const el = document.getElementById(id);
+            if (el) el.style.display = show ? 'block' : 'none';
+        }
+
         function saveFile() {
             const clone = document.documentElement.cloneNode(true);
-            // 移除不需要保留的動態屬性（若有）
             const htmlContent = '<!DOCTYPE html>\n' + clone.outerHTML;
             const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = location.pathname.split('/').pop() || 'proposal.html';
+            a.download = location.pathname.split('/').pop() || 'my_proposal.html';
             a.click();
         }
     </script>
