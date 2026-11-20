@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【紙藝立體書原型】《完稿之前》— 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --paper-desk: #EFE7DA;
+            --paper-page: #FAF6ED;
+            --paper-crease: #DCD3C1;
+            --paper-shadow: rgba(45, 42, 38, 0.18);
+            --paper-shadow-deep: rgba(45, 42, 38, 0.32);
+            --mint: #A8E6CF;
+            --butter: #FDE68A;
+            --peach: #FFCBA4;
+            --gold-foil: linear-gradient(135deg, #FDE68A 0%, #D97706 50%, #F59E0B 100%);
+            --font-display: 'Comic Sans MS', 'Chalkboard SE', 'Balsamiq Sans', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body, html {
+            width: 100%; height: 100%;
+            background-color: #E5DAC7;
+            background-image: 
+                radial-gradient(var(--paper-shadow) 1px, transparent 1px),
+                linear-gradient(135deg, #EADFCE 0%, #DFD2BC 100%);
+            background-size: 24px 24px, 100% 100%;
+            font-family: var(--font-body);
+            color: var(--ink);
+            overflow: hidden;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            perspective: 1400px;
+        }
+
+        /* 頂部標題列 */
+        .header-bar {
+            position: absolute;
+            top: 20px;
+            left: 24px;
+            right: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            pointer-events: none;
+        }
+        .header-pill {
+            background: rgba(250, 246, 237, 0.92);
+            border: 2.5px solid var(--ink);
+            border-radius: 999px;
+            box-shadow: 4px 4px 0 var(--ink);
+            padding: 8px 22px;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-badge {
+            background: var(--butter);
+            border: 1.5px solid var(--ink);
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-family: var(--font-display);
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        /* 3D 舞台容器 (隨滑鼠視差旋轉) */
+        .stage-viewport {
+            width: 860px;
+            height: 540px;
+            max-width: 92vw;
+            max-height: 65vh;
+            perspective: 1600px;
+            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease-out;
+        }
+
+        /* 立體書雙開主體 */
+        .book-container {
+            width: 780px;
+            height: 480px;
+            max-width: 90vw;
+            max-height: 60vh;
+            transform-style: preserve-3d;
+            position: relative;
+            transform: rotateX(25deg) rotateY(0deg);
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* 書本底層桌面陰影 */
+        .book-shadow {
+            position: absolute;
+            top: 15%;
+            left: 5%;
+            width: 90%;
+            height: 80%;
+            background: rgba(45, 42, 38, 0.28);
+            border-radius: 24px;
+            filter: blur(28px);
+            transform: translateZ(-30px);
+            transition: all 0.6s ease;
+        }
+
+        /* 左頁 (代表平淡但規律的 2D 原點) */
+        .page-left {
+            position: absolute;
+            top: 0; left: 0;
+            width: 50%; height: 100%;
+            background: var(--paper-page);
+            background-image: linear-gradient(rgba(45, 42, 38, 0.05) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(45, 42, 38, 0.05) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            border: 3.5px solid var(--ink);
+            border-right: none;
+            border-radius: 20px 0 0 20px;
+            transform-origin: right center;
+            transform-style: preserve-3d;
+            padding: 32px;
+            box-shadow: inset 16px 0 30px rgba(45, 42, 38, 0.06);
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* 右頁 (代表立體冒險世界) */
+        .page-right {
+            position: absolute;
+            top: 0; right: 0;
+            width: 50%; height: 100%;
+            background: var(--paper-page);
+            border: 3.5px solid var(--ink);
+            border-left: none;
+            border-radius: 0 20px 20px 0;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            padding: 32px;
+            box-shadow: inset -16px 0 30px rgba(45, 42, 38, 0.06);
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* 書本中縫摺痕 (門縫裂隙) */
+        .page-spine {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 6px; height: 100%;
+            background: var(--paper-crease);
+            border-left: 2px dashed rgba(45, 42, 38, 0.35);
+            border-right: 2px dashed rgba(45, 42, 38, 0.35);
+            transform: translateX(-50%) translateZ(2px);
+            z-index: 50;
+            box-shadow: 0 0 12px rgba(45, 42, 38, 0.25);
+        }
+        .spine-glow {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 4px; height: 100%;
+            background: #F43F5E;
+            box-shadow: 0 0 16px #F43F5E, 0 0 30px #F59E0B;
+            transform: translateX(-50%);
+            opacity: 0.8;
+            animation: pulse-glow 2s infinite alternate;
+        }
+        @keyframes pulse-glow {
+            0% { opacity: 0.5; filter: blur(1px); }
+            100% { opacity: 1; filter: blur(3px); }
+        }
+
+        /* -------------------------------------------------------------
+           立體書紙雕彈起元件 (Pop-up Cutouts)
+        ------------------------------------------------------------- */
+        .popup-element {
+            position: absolute;
+            transform-style: preserve-3d;
+            transform-origin: bottom center;
+            transition: transform 0.8s cubic-bezier(0.34, 1.3, 0.64, 1), filter 0.4s ease;
+        }
+
+        /* 立體山丘背景層 */
+        .layer-hill-bg {
+            bottom: 60px; right: 40px;
+            width: 260px; height: 130px;
+            transform: translateZ(20px) rotateX(-50deg);
+        }
+
+        /* 立體童話小屋 (中景層) */
+        .layer-house {
+            bottom: 80px; right: 100px;
+            width: 150px; height: 160px;
+            transform: translateZ(55px) rotateX(-75deg);
+        }
+
+        /* 立體松樹與草叢 (近景層) */
+        .layer-trees {
+            bottom: 40px; right: 30px;
+            width: 180px; height: 120px;
+            transform: translateZ(85px) rotateX(-80deg);
+        }
+
+        /* 紙雕真實投影陰影 */
+        .paper-cast-shadow {
+            filter: drop-shadow(0 14px 12px rgba(45, 42, 38, 0.25));
+        }
+
+        /* -------------------------------------------------------------
+           主角小紙人 (可平躺 2D，也可立起 3D)
+        ------------------------------------------------------------- */
+        .hero-character {
+            position: absolute;
+            bottom: 120px;
+            left: 140px; /* 初始在左頁 */
+            width: 70px;
+            height: 95px;
+            transform-origin: bottom center;
+            transform-style: preserve-3d;
+            transform: translateZ(1px) rotateX(0deg); /* 初始完全平躺貼在紙上 */
+            transition: all 0.7s cubic-bezier(0.34, 1.25, 0.64, 1);
+            z-index: 60;
+        }
+
+        /* 主角身上的金項鍊/皇冠厚重飾品 (風琴摺疊厚度層) */
+        .accordion-layers {
+            position: absolute;
+            top: 25px; left: -10px;
+            width: 90px; height: 35px;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .gold-plate {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: var(--gold-foil);
+            border: 2.5px solid var(--ink);
+            border-radius: 12px;
+            box-shadow: 2px 2px 0 var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 900;
+            color: #78350F;
+        }
+
+        /* 穿過縫隙卡住的物理狀態 */
+        .hero-character.jammed {
+            left: 360px !important; /* 剛好卡在中央中縫 */
+            bottom: 120px !important;
+            animation: jam-wobble 0.12s infinite alternate;
+        }
+        @keyframes jam-wobble {
+            0% { transform: translateZ(45px) rotateX(-65deg) rotateY(-8deg) translateX(-3px); }
+            100% { transform: translateZ(45px) rotateX(-65deg) rotateY(8deg) translateX(3px); }
+        }
+
+        /* 撞擊張力波紋 */
+        .tension-wave {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 20px; height: 20px;
+            border: 3px solid #F43F5E;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 70;
+        }
+        .tension-wave.active {
+            animation: wave-expand 0.6s ease-out;
+        }
+        @keyframes wave-expand {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4.5); opacity: 0; }
+        }
+
+        /* -------------------------------------------------------------
+           底端控制 HUD (手帳便籤風)
+        ------------------------------------------------------------- */
+        .control-dock {
+            position: absolute;
+            bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 100;
+            background: rgba(250, 246, 237, 0.94);
+            border: 3px solid var(--ink);
+            box-shadow: 6px 6px 0 var(--ink);
+            border-radius: 20px;
+            padding: 14px 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 94vw;
+        }
+        .dock-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .dock-label {
+            font-family: var(--font-display);
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--ink);
+        }
+        .dock-slider {
+            width: 110px;
+            height: 6px;
+            background: var(--paper-crease);
+            border: 1.5px solid var(--ink);
+            border-radius: 999px;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        .dock-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px; height: 16px;
+            background: var(--butter);
+            border: 2px solid var(--ink);
+            border-radius: 50%;
+            box-shadow: 2px 2px 0 var(--ink);
+            cursor: pointer;
+        }
+        .dock-btn {
+            background: #FFF;
+            border: 2px solid var(--ink);
+            box-shadow: 3px 3px 0 var(--ink);
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-family: var(--font-display);
+            font-size: 13.5px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dock-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0 var(--ink);
+        }
+        .dock-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 var(--ink);
+        }
+        .dock-btn.primary {
+            background: var(--butter);
+        }
+        .dock-btn.danger {
+            background: #FEE2E2;
+            color: #991B1B;
+            border-color: #991B1B;
+        }
+
+        /* 狀態文字通知氣泡 */
+        .narrative-toast {
+            position: absolute;
+            top: 80px;
+            background: rgba(45, 42, 38, 0.9);
+            color: #FAF6ED;
+            padding: 8px 20px;
+            border-radius: 999px;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(-8px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+        }
+        .narrative-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="narrative-toast" id="toast">📖 點擊「翻開立體書」，感受紙雕在三維空間站立的景深！</div>
+
+    <!-- 頂部資訊 -->
+    <header class="header-bar">
+        <div class="header-pill">
+            <span class="header-badge">PAPERCRAFT 3D</span>
+            <span class="header-title">《完稿之前》紙藝立體書動態原型</span>
+        </div>
+        <div class="header-pill" style="font-size: 13px; font-weight: 700; color: #6B665F;">
+            <span>🖱️ 滑鼠在螢幕上滑動，感受紙張層次的物理視差 (Parallax)</span>
+        </div>
+    </header>
+
+    <!-- 3D 視差舞台 -->
+    <main class="stage-viewport" id="viewport">
+        <div class="book-container" id="book">
+            <div class="book-shadow"></div>
+
+            <!-- 左頁 (平淡規律的 2D 原點) -->
+            <div class="page-left" id="page-left">
+                <div style="font-family: var(--font-display); font-size: 14px; font-weight: 800; color: #9CA3AF; margin-bottom: 8px;">
+                    CHAPTER 01 ｜ 平面的日常
+                </div>
+                <div style="font-size: 13px; color: #6B665F; line-height: 1.7;">
+                    日子平整得像一張沒有皺摺的稿紙。<br>
+                    他不知道什麼是深度，<br>
+                    直到那道光穿透了中縫的裂隙……
+                </div>
+
+                <!-- 左頁平面的裝飾元素 -->
+                <svg width="120" height="90" viewBox="0 0 120 90" style="position: absolute; bottom: 30px; left: 30px; opacity: 0.4;">
+                    <rect x="10" y="20" width="40" height="40" fill="none" stroke="#2D2A26" stroke-width="2"/>
+                    <circle cx="85" cy="40" r="20" fill="none" stroke="#2D2A26" stroke-width="2"/>
+                    <line x1="10" y1="75" x2="110" y2="75" stroke="#2D2A26" stroke-width="2" stroke-dasharray="4,4"/>
+                </svg>
+            </div>
+
+            <!-- 中央中縫裂隙 (門縫通道) -->
+            <div class="page-spine">
+                <div class="spine-glow"></div>
+            </div>
+
+            <!-- 右頁 (立體冒險世界) -->
+            <div class="page-right" id="page-right">
+                <div style="font-family: var(--font-display); font-size: 14px; font-weight: 800; color: #B45309; margin-bottom: 8px;">
+                    CHAPTER 02 ｜ 立體的世界
+                </div>
+                <div style="font-size: 13px; color: #78350F; line-height: 1.7;">
+                    每一片風景都站了起來，<br>
+                    影子第一次落在了地面。<br>
+                    他學會了獲得，也穿戴上了重量。
+                </div>
+
+                <!-- 遠景山丘 (立體紙雕) -->
+                <div class="popup-element layer-hill-bg paper-cast-shadow" id="pop-hill">
+                    <svg viewBox="0 0 260 130" width="100%" height="100%">
+                        <polygon points="10,130 90,30 180,130" fill="#A8D8F0" stroke="#2D2A26" stroke-width="3"/>
+                        <polygon points="110,130 190,45 255,130" fill="#A8E6CF" stroke="#2D2A26" stroke-width="3"/>
+                        <circle cx="215" cy="35" r="18" fill="#FDE68A" stroke="#2D2A26" stroke-width="2.5"/>
+                    </svg>
+                </div>
+
+                <!-- 中景小屋 (立體紙雕) -->
+                <div class="popup-element layer-house paper-cast-shadow" id="pop-house">
+                    <svg viewBox="0 0 150 160" width="100%" height="100%">
+                        <!-- 屋頂 -->
+                        <polygon points="75,10 140,65 10,65" fill="#F87171" stroke="#2D2A26" stroke-width="3"/>
+                        <!-- 牆壁 -->
+                        <rect x="25" y="65" width="100" height="85" fill="#FFFBEB" stroke="#2D2A26" stroke-width="3"/>
+                        <!-- 窗戶 -->
+                        <rect x="40" y="80" width="28" height="28" fill="#A8D8F0" stroke="#2D2A26" stroke-width="2"/>
+                        <line x1="54" y1="80" x2="54" y2="108" stroke="#2D2A26" stroke-width="1.5"/>
+                        <line x1="40" y1="94" x2="68" y2="94" stroke="#2D2A26" stroke-width="1.5"/>
+                        <!-- 門 -->
+                        <rect x="80" y="95" width="28" height="55" fill="#FDE68A" stroke="#2D2A26" stroke-width="2"/>
+                        <circle cx="87" cy="122" r="2.5" fill="#2D2A26"/>
+                    </svg>
+                </div>
+
+                <!-- 近景松樹 (立體紙雕) -->
+                <div class="popup-element layer-trees paper-cast-shadow" id="pop-trees">
+                    <svg viewBox="0 0 180 120" width="100%" height="100%">
+                        <polygon points="45,10 15,60 35,60 10,95 80,95 55,60 75,60" fill="#10B981" stroke="#2D2A26" stroke-width="3"/>
+                        <rect x="40" y="95" width="10" height="20" fill="#78350F" stroke="#2D2A26" stroke-width="2"/>
+
+                        <polygon points="125,25 100,70 115,70 95,100 155,100 135,70 150,70" fill="#34D399" stroke="#2D2A26" stroke-width="3"/>
+                        <rect x="120" y="100" width="10" height="15" fill="#78350F" stroke="#2D2A26" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- 主角紙片人 (穿梭於兩頁之間) -->
+            <div class="hero-character paper-cast-shadow" id="hero">
+                <svg viewBox="0 0 70 95" width="100%" height="100%">
+                    <!-- 主角白色小紙人身軀 -->
+                    <rect x="12" y="25" width="46" height="58" rx="8" fill="#FFFFFF" stroke="#2D2A26" stroke-width="3.5"/>
+                    <!-- 可愛表情 -->
+                    <circle cx="27" cy="45" r="3.5" fill="#2D2A26"/>
+                    <circle cx="43" cy="45" r="3.5" fill="#2D2A26"/>
+                    <path d="M 32 55 Q 35 59 38 55" fill="none" stroke="#2D2A26" stroke-width="2.5" stroke-linecap="round"/>
+                    <!-- 小腳印 -->
+                    <ellipse cx="23" cy="85" rx="7" ry="4" fill="#FAF6ED" stroke="#2D2A26" stroke-width="2.5"/>
+                    <ellipse cx="47" cy="85" rx="7" ry="4" fill="#FAF6ED" stroke="#2D2A26" stroke-width="2.5"/>
+                </svg>
+
+                <!-- 風琴摺疊金色外袍/厚度項鍊 -->
+                <div class="accordion-layers" id="accordion">
+                    <div class="gold-plate" style="transform: translateZ(5px);">✨ 1層 華麗金飾</div>
+                    <div class="gold-plate" id="extra-plate-1" style="transform: translateZ(12px); display: none;">✨ 2層 沉重外袍</div>
+                    <div class="gold-plate" id="extra-plate-2" style="transform: translateZ(19px); display: none;">✨ 3層 體積皇冠</div>
+                </div>
+            </div>
+
+            <!-- 撞擊波紋 -->
+            <div class="tension-wave" id="tension-wave"></div>
+        </div>
+    </main>
+
+    <!-- 底端控制 HUD -->
+    <footer class="control-dock">
+        <!-- 步驟按鈕 -->
+        <button class="dock-btn primary" id="btn-popup" onclick="togglePopUp()">📖 翻開立體書 (Unfold 3D)</button>
+        <button class="dock-btn" onclick="heroStepInto3D()">🚶 走向立體世界</button>
+        <button class="dock-btn" onclick="addGoldThickness()">✨ 穿戴華麗厚度</button>
+        <button class="dock-btn danger" onclick="attemptReturnAndJam()">💥 試圖穿過縫隙 (卡住!)</button>
+        <button class="dock-btn" onclick="heroReset()">🔄 重置狀態</button>
+
+        <div style="width: 1px; height: 26px; background: #D1D5DB; margin: 0 4px;"></div>
+
+        <!-- 視角與開合微調 -->
+        <div class="dock-group">
+            <span class="dock-label">折起角度</span>
+            <input type="range" class="dock-slider" id="slider-fold" min="0" max="90" value="75" oninput="onFoldSlider(this.value)">
+        </div>
+        <div class="dock-group">
+            <span class="dock-label">金飾厚度</span>
+            <input type="range" class="dock-slider" id="slider-thick" min="0" max="3" value="0" oninput="onThickSlider(this.value)">
+        </div>
+    </footer>
+
+    <script>
+        const viewport = document.getElementById('viewport');
+        const book = document.getElementById('book');
+        const hero = document.getElementById('hero');
+        const accordion = document.getElementById('accordion');
+        const wave = document.getElementById('tension-wave');
+        const toast = document.getElementById('toast');
+
+        let isPopUpOpen = false;
+        let isHeroIn3D = false;
+        let thicknessLevel = 0;
+
+        // 滑鼠視差物理緩動 (Mouse Parallax)
+        let mouseX = 0, mouseY = 0;
+        let targetRotX = 25, targetRotY = 0;
+        let currentRotX = 25, currentRotY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            let xNorm = (e.clientX / window.innerWidth) - 0.5;
+            let yNorm = (e.clientY / window.innerHeight) - 0.5;
+            targetRotY = xNorm * 26; // 左右微轉
+            targetRotX = 25 - yNorm * 22; // 上下俯仰
+        });
+
+        function renderParallax() {
+            currentRotX += (targetRotX - currentRotX) * 0.08;
+            currentRotY += (targetRotY - currentRotY) * 0.08;
+            book.style.transform = `rotateX(${currentRotX}deg) rotateY(${currentRotY}deg)`;
+            requestAnimationFrame(renderParallax);
+        }
+        renderParallax();
+
+        function showToast(msg) {
+            toast.innerText = msg;
+            toast.classList.add('show');
+            clearTimeout(toast.timer);
+            toast.timer = setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        /* -------------------------------------------------------------
+           互動邏輯一：翻開立體書 (Pop-up Unfold)
+        ------------------------------------------------------------- */
+        function togglePopUp() {
+            isPopUpOpen = !isPopUpOpen;
+            const btn = document.getElementById('btn-popup');
+            const hill = document.getElementById('pop-hill');
+            const house = document.getElementById('pop-house');
+            const trees = document.getElementById('pop-trees');
+
+            if (isPopUpOpen) {
+                btn.innerText = '📕 合上紙頁 (Fold Flat)';
+                btn.style.background = '#FED7AA';
+
+                // 紙雕元件在 3D 空間中優雅站起
+                hill.style.transform = 'translateZ(30px) rotateX(-55deg)';
+                house.style.transform = 'translateZ(75px) rotateX(-75deg)';
+                trees.style.transform = 'translateZ(105px) rotateX(-80deg)';
+
+                showToast('✨ 翻開立體書：山丘、小屋與松樹從二維平面優雅站立！');
+            } else {
+                btn.innerText = '📖 翻開立體書 (Unfold 3D)';
+                btn.style.background = 'var(--butter)';
+
+                // 折回完全平躺狀態
+                hill.style.transform = 'translateZ(2px) rotateX(0deg)';
+                house.style.transform = 'translateZ(2px) rotateX(0deg)';
+                trees.style.transform = 'translateZ(2px) rotateX(0deg)';
+
+                showToast('📄 紙頁合平：所有風景重新收攏為一張平整稿紙。');
+            }
+        }
+
+        /* -------------------------------------------------------------
+           互動邏輯二：主角走向立體世界 (Step into 3D)
+        ------------------------------------------------------------- */
+        function heroStepInto3D() {
+            if (!isPopUpOpen) togglePopUp();
+
+            isHeroIn3D = true;
+            hero.classList.remove('jammed');
+
+            // 主角跨過中縫，站在右側立體花園中，並在 3D 空間中立起！
+            hero.style.left = '520px';
+            hero.style.bottom = '95px';
+            hero.style.transform = 'translateZ(65px) rotateX(-75deg)';
+
+            showToast('🚶 主角被光吸引跨入右頁，在三維空間中第一次「站立」了起來！');
+        }
+
+        /* -------------------------------------------------------------
+           互動邏輯三：穿戴華麗金飾 (Gain Thickness)
+        ------------------------------------------------------------- */
+        function addGoldThickness() {
+            if (!isHeroIn3D) heroStepInto3D();
+
+            thicknessLevel = Math.min(3, thicknessLevel + 1);
+            document.getElementById('slider-thick').value = thicknessLevel;
+            updateThicknessVisual();
+
+            showToast(`✨ 主角穿戴上了第 ${thicknessLevel} 層華貴金飾，身上開始有了實體厚度！`);
+        }
+
+        function onThickSlider(val) {
+            thicknessLevel = parseInt(val);
+            updateThicknessVisual();
+        }
+
+        function updateThicknessVisual() {
+            accordion.style.opacity = thicknessLevel > 0 ? '1' : '0';
+            document.getElementById('extra-plate-1').style.display = thicknessLevel >= 2 ? 'flex' : 'none';
+            document.getElementById('extra-plate-2').style.display = thicknessLevel >= 3 ? 'flex' : 'none';
+        }
+
+        /* -------------------------------------------------------------
+           互動邏輯四：試圖穿過縫隙 ➔ 物理卡住！(The Climax Jam)
+        ------------------------------------------------------------- */
+        function attemptReturnAndJam() {
+            if (thicknessLevel === 0) {
+                showToast('💡 請先點擊「穿戴華麗厚度」，沒有厚度他是可以輕鬆回家的！');
+                addGoldThickness();
+                setTimeout(runJam, 800);
+            } else {
+                runJam();
+            }
+        }
+
+        function runJam() {
+            hero.style.left = '365px'; // 衝向中央中縫
+            hero.style.bottom = '110px';
+
+            setTimeout(() => {
+                hero.classList.add('jammed');
+
+                // 觸發撞擊波紋
+                wave.style.left = '390px';
+                wave.style.top = '280px';
+                wave.classList.remove('active');
+                void wave.offsetWidth; // 重置動畫
+                wave.classList.add('active');
+
+                showToast('💥 喀！身上沉重的立體厚度卡在中縫摺痕外，再也擠不回二維世界了！');
+            }, 600);
+        }
+
+        /* -------------------------------------------------------------
+           重置與滑桿控制
+        ------------------------------------------------------------- */
+        function heroReset() {
+            hero.classList.remove('jammed');
+            isHeroIn3D = false;
+            thicknessLevel = 0;
+            updateThicknessVisual();
+            document.getElementById('slider-thick').value = 0;
+
+            hero.style.left = '140px';
+            hero.style.bottom = '120px';
+            hero.style.transform = 'translateZ(1px) rotateX(0deg)';
+
+            showToast('🔄 重置完成：主角回到左頁平躺的二維純真日常。');
+        }
+
+        function onFoldSlider(val) {
+            if (!isPopUpOpen) togglePopUp();
+            const house = document.getElementById('pop-house');
+            const trees = document.getElementById('pop-trees');
+            house.style.transform = `translateZ(75px) rotateX(-${val}deg)`;
+            trees.style.transform = `translateZ(105px) rotateX(-${Math.min(90, parseInt(val)+5)}deg)`;
+        }
+    </script>
+</body>
+</html>
