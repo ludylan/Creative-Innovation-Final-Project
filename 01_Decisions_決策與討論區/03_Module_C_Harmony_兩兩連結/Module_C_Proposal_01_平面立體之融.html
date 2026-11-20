@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 C 提案 01】平面故事 ✕ 3D 美術的化學反應 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --peach: #FFCBA4;
+            --coral: #F8635F;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--peach);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+        }
+        .synergy-box {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 16px;
+            align-items: center;
+            background: #FFF7ED;
+            border: 2px solid var(--peach);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">🤝 主案一：兩兩連結提案</span>
+        </nav>
+        <main class="sheet">
+            <span class="badge">🤝 主案一連結提案</span>
+            <h1 class="title">【主案一連結】形式即內容：當 Z 軸與厚度成為敘事的宿命</h1>
+
+            <div class="synergy-box">
+                <div style="background: #FFF; border: 1.5px solid var(--ink); border-radius: 12px; padding: 12px; text-align: center;">
+                    <div style="font-size: 12px; font-weight: 700; color: var(--ink-muted);">模組 A 故事</div>
+                    <div style="font-size: 16px; font-weight: 800; margin-top: 4px;">平面角色 ✕ 卡在門縫的抉擇</div>
+                </div>
+                <div style="font-size: 28px; font-weight: 900; color: var(--coral);">✕</div>
+                <div style="background: #FFF; border: 1.5px solid var(--ink); border-radius: 12px; padding: 12px; text-align: center;">
+                    <div style="font-size: 12px; font-weight: 700; color: var(--ink-muted);">模組 B 美術</div>
+                    <div style="font-size: 16px; font-weight: 800; margin-top: 4px;">極簡 2D 正交 ➔ 3D 透視光影</div>
+                </div>
+            </div>
+
+            <section class="card">
+                <div class="card-header">✨ 1. 為什麼這套美術與故事是「絕配」？</div>
+                <p>一般的動畫作品，往往需要大量對白或旁白來告訴觀眾「主角擁有了太多、被物質拖累了」；而在這個提案中，<strong>技術形式直接替劇本完成了演出</strong>：</p>
+                <p style="margin-top: 8px;">
+                    只要鏡頭從正前方旋轉 90 度切換到側面，觀眾一眼就能看到那道窄縫，以及主角身上立體物品卡在縫外的物理阻礙。<strong>「厚度」不是比喻，而是真實存在的幾何障礙</strong>。
+                </p>
+            </section>
+
+            <section class="card">
+                <div class="card-header">💻 2. 前端動態鏡頭語言設計</div>
+                <p>• <strong>前半段鏡頭</strong>：相機視角（Camera）固定在 Z 軸正上方，鎖定正交投影（Orthographic），角色移動只有 X、Y 軸，世界一片平靜。</p>
+                <p>• <strong>穿越光隙瞬間</strong>：相機開始圍繞角色緩慢傾斜旋轉 45 度，視角解鎖為透視投影（Perspective），Z 軸深度猛然展現在觀眾眼前，帶來極具衝擊感的「維度開闊」震撼。</p>
+                <p>• <strong>最高潮門縫特寫</strong>：切換為極窄的側面景深鏡頭，清脆的碰撞聲與阻力動態，精準傳達無力與猶豫感。</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

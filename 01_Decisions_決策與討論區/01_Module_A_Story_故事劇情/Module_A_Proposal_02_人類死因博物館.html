@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 A 提案 02】人類死因／實驗室博物館 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --mint: #A8E6CF;
+            --butter: #FDE68A;
+            --sky: #A8D8F0;
+            --coral: #F8635F;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--sky);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; line-height: 1.3; }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            background: var(--card-white);
+            border: var(--border-thin);
+            border-radius: 16px;
+            padding: 14px 20px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 28px;
+        }
+        .meta-label { font-size: 13px; font-weight: 700; color: var(--ink-muted); }
+        .meta-value { font-family: var(--font-display); font-size: 17px; font-weight: 700; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+        }
+        .content-box {
+            font-size: 15.5px;
+            line-height: 1.8;
+            color: var(--ink);
+        }
+        .decision-highlight {
+            background: #E0F2FE;
+            border-left: 4px solid #0284C7;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-top: 14px;
+            font-weight: 600;
+        }
+        .decision-highlight h4 {
+            color: #0369A1;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+        .concept-diagram {
+            background: #0F172A;
+            border: 2px solid var(--ink);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+            color: #F8FAFC;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">📖 主案二：故事提案（粗顆粒留白版）</span>
+        </nav>
+        <main class="sheet">
+            <span class="badge">📖 主案二故事提案</span>
+            <h1 class="title">【主案二故事】《人類死因／實驗室博物館》</h1>
+
+            <div class="meta-grid">
+                <div><div class="meta-label">提案編號</div><div class="meta-value">Module_A_Proposal_02</div></div>
+                <div><div class="meta-label">核心類型</div><div class="meta-value">科幻紀錄片／時空導覽／歷史反思</div></div>
+                <div><div class="meta-label">預計片長</div><div class="meta-value">約 5～7 分鐘</div></div>
+            </div>
+
+            <!-- 概念圖示意 -->
+            <div class="concept-diagram">
+                <svg viewBox="0 0 700 210" style="max-width: 100%; height: auto;">
+                    <!-- 博物館宏大背景空間 -->
+                    <rect x="10" y="10" width="680" height="190" rx="12" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5"/>
+                    <text x="350" y="40" font-family="sans-serif" font-weight="bold" font-size="14" fill="#38BDF8" text-anchor="middle">【時空展覽館核心展台：凍結與分支】</text>
+
+                    <!-- 導覽員與時間控制器 -->
+                    <g transform="translate(60, 60)">
+                        <circle cx="30" cy="40" r="22" fill="#38BDF8" opacity="0.3"/>
+                        <circle cx="30" cy="40" r="16" fill="#38BDF8"/>
+                        <!-- 光束線圈 -->
+                        <ellipse cx="30" cy="40" rx="26" ry="8" fill="none" stroke="#67E8F9" stroke-width="2"/>
+                        <text x="30" y="85" font-size="12" fill="#E2E8F0" font-weight="bold" text-anchor="middle">導覽者 (AI/數位體)</text>
+                        <text x="30" y="100" font-size="10" fill="#94A3B8" text-anchor="middle">掌控時間暫停與回放</text>
+                    </g>
+
+                    <!-- 歷史展櫃 A：災難分支 -->
+                    <g transform="translate(230, 65)">
+                        <rect x="0" y="0" width="180" height="110" rx="8" fill="#334155" stroke="#F87171" stroke-width="2"/>
+                        <text x="90" y="25" font-size="11" fill="#FCA5A5" font-weight="bold" text-anchor="middle">分支 A：代價無限延宕</text>
+                        <!-- 凍結的人物與煙囪 -->
+                        <line x1="40" y1="90" x2="40" y2="50" stroke="#F87171" stroke-width="6"/>
+                        <circle cx="100" cy="65" r="8" fill="#F87171"/>
+                        <line x1="100" y1="73" x2="100" y2="90" stroke="#F87171" stroke-width="2"/>
+                        <!-- 暫停圖標 -->
+                        <rect x="140" y="15" width="4" height="14" fill="#F87171"/>
+                        <rect x="148" y="15" width="4" height="14" fill="#F87171"/>
+                        <text x="90" y="102" font-size="9" fill="#94A3B8" text-anchor="middle">⏸️ 凍結瞬間：大家都知情</text>
+                    </g>
+
+                    <!-- 歷史展櫃 B：轉折分支 -->
+                    <g transform="translate(450, 65)">
+                        <rect x="0" y="0" width="180" height="110" rx="8" fill="#334155" stroke="#34D399" stroke-width="2"/>
+                        <text x="90" y="25" font-size="11" fill="#6EE7B7" font-weight="bold" text-anchor="middle">分支 B：及時承擔與協作</text>
+                        <!-- 綠意微光生長 -->
+                        <path d="M 60 90 Q 90 40 120 90" fill="none" stroke="#34D399" stroke-width="3"/>
+                        <circle cx="90" cy="50" r="5" fill="#34D399"/>
+                        <!-- 播放圖標 -->
+                        <polygon points="150,15 150,29 162,22" fill="#34D399"/>
+                        <text x="90" y="102" font-size="9" fill="#94A3B8" text-anchor="middle">▶️ 另一種可能：新平衡</text>
+                    </g>
+                </svg>
+                <div style="font-size: 13px; color: #94A3B8; margin-top: 6px;">▲ 核心敘事弧線概念圖：以未來導覽員的時空控制器，剖析歷史切片中的抉擇與平行後果</div>
+            </div>
+
+            <section class="card">
+                <div class="card-header">📌 1. 粗顆粒故事骨架（四階段推進）</div>
+                <div class="content-box">
+                    <p>• <strong>第一階段【歷史聖殿】(約 01:00)</strong>：生物人類早已消失的萬年後，數位後代走入宏偉的「人類死因博物館」。導覽員啟動時空控制器，展廳燈光熄滅，巨大全息星雲亮起。</p>
+                    <p>• <strong>第二階段【走入凍結的日常】(約 02:00)</strong>：導覽員帶著鏡頭穿梭在暫停的歷史瞬間（下雨天的十字路口、燈火通明的會議室、被廢棄的農田）。雨滴停在空中、行人神情凝固，導覽員向數位後代剖析：「他們當時不是不知道危機，但每個人都做出了合乎眼前利益的決定。」</p>
+                    <p>• <strong>第三階段【蝴蝶效應與代價延宕】(約 02:00)</strong>：時間快轉（Time-lapse），展示小小的逃避如何滾雪球般摧毀整個系統。導覽員接著切換至「平行歷史展台 B」——展示人類若在某個轉折點選擇了承擔代價，世界會是怎樣的姿態。</p>
+                    <p>• <strong>第四階段【回望與餘韻】(約 01:00)</strong>：導覽結束，展台隱沒於黑暗。導覽員留下最後一句引人深思的結語，鏡頭緩緩拉向浩瀚星空。</p>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-header">💡 2. 深層立意（為什麼需要這段劇情？）</div>
+                <div class="content-box">
+                    <p>這不是對人類的居高臨下嘲笑，而是一次<strong>深刻的自我審視</strong>。我們常把問題丟給「未來的科技一定有辦法解決」，但未來本身是由當下的每一次選擇所塑造成的。透過未來的視角，讓當下的觀眾重新看見日常選擇的重量。</p>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-header">🗳️ 3. 【留給組員決策與精修的留白題】</div>
+                <div class="content-box">
+                    <div class="decision-highlight">
+                        <h4>決策點 A：七分鐘要聚焦的「具體死因／危機」</h4>
+                        <p>組員可選：氣候臨界點的集體拖延、演算法與自動化過度託管導致的人性喪失，還是某種虛構的「文明疲憊症」？</p>
+                    </div>
+                    <div class="decision-highlight">
+                        <h4>決策點 B：導覽員的情緒基調</h4>
+                        <p>組員可選：冷靜無機質的科學分析官、帶著淡淡感傷與同情的歷史學者，還是帶點黑色幽默與諷刺的實習生？</p>
+                    </div>
+                    <div class="decision-highlight">
+                        <h4>決策點 C：平行世界分支的比重</h4>
+                        <p>全片是完全悲劇式的滅亡回顧？還是留有 30% 篇幅給予溫暖的「另一條生機之路」作為救贖與啟發？</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

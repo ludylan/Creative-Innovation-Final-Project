@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 B 提案 02】極簡 2D 轉 3D 視覺演進 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --butter: #FDE68A;
+            --sky: #A8D8F0;
+            --mint: #A8E6CF;
+            --lavender: #D4C5EC;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--butter);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+        }
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+        }
+        .style-item {
+            border: var(--border-thin);
+            border-radius: 16px;
+            padding: 16px;
+            background: #FAFAFA;
+        }
+        .style-tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--ink);
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">🎨 主案一：美術提案（極簡 ➔ 3D 視覺）</span>
+        </nav>
+        <main class="sheet">
+            <span class="badge">🎨 主案一美術提案</span>
+            <h1 class="title">【主案一美術】極簡純線條 ➔ 震撼 3D 體積光影演變</h1>
+
+            <!-- 視覺概念圖：2D 正交與 3D 透視對比 -->
+            <div style="background: #F8FAFC; border: 2.5px solid var(--ink); border-radius: 18px; padding: 22px; margin-bottom: 24px;">
+                <h3 style="font-family: var(--font-display); margin-bottom: 12px; font-size: 18px;">🖼️ 概念視覺對照：無厚度的二維 VS 實體厚度的三維</h3>
+                <svg viewBox="0 0 740 200" style="max-width: 100%; height: auto;">
+                    <!-- 左側：極簡 2D -->
+                    <g transform="translate(40, 20)">
+                        <rect x="0" y="0" width="280" height="150" fill="#FFFFFF" stroke="#2D2A26" stroke-width="2.5" rx="8"/>
+                        <line x1="20" y1="120" x2="260" y2="120" stroke="#2D2A26" stroke-width="2"/>
+                        <!-- 扁平小方形角色 -->
+                        <rect x="110" y="70" width="50" height="50" fill="#FFFFFF" stroke="#2D2A26" stroke-width="3"/>
+                        <circle cx="125" cy="85" r="3" fill="#2D2A26"/>
+                        <circle cx="145" cy="85" r="3" fill="#2D2A26"/>
+                        <line x1="130" y1="100" x2="140" y2="100" stroke="#2D2A26" stroke-width="2"/>
+                        <text x="140" y="145" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#6B665F">【起始】極簡黑白線條 (Orthographic)</text>
+                    </g>
+                    <!-- 中間箭頭 -->
+                    <path d="M 355 95 L 385 95" stroke="#2D2A26" stroke-width="4"/>
+                    <polygon points="385,95 375,90 375,100" fill="#2D2A26"/>
+                    <!-- 右側：3D 立體有厚度 -->
+                    <g transform="translate(420, 20)">
+                        <rect x="0" y="0" width="280" height="150" fill="#FFFDF5" stroke="#2D2A26" stroke-width="2.5" rx="8"/>
+                        <!-- 3D 棋盤地面透視 -->
+                        <path d="M 30 140 L 80 100 L 200 100 L 250 140 Z" fill="#F3E8FF" stroke="#A855F7" stroke-width="1.5" opacity="0.6"/>
+                        <!-- 立體立方體帶陰影與厚度 -->
+                        <polygon points="120,60 160,40 180,60 140,80" fill="#FDE68A" stroke="#2D2A26" stroke-width="2"/>
+                        <polygon points="120,60 140,80 140,120 120,100" fill="#F59E0B" stroke="#2D2A26" stroke-width="2"/>
+                        <polygon points="140,80 180,60 180,100 140,120" fill="#D97706" stroke="#2D2A26" stroke-width="2"/>
+                        <!-- 投影陰影 -->
+                        <ellipse cx="145" cy="125" rx="35" ry="10" fill="rgba(45,42,38,0.2)"/>
+                        <text x="140" y="145" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#B45309">【演進】Z軸深度、光影與體積 (Perspective)</text>
+                    </g>
+                </svg>
+            </div>
+
+            <section class="card">
+                <div class="card-header">🎨 1. 起始風格：極簡二維（Minimalist 2D）</div>
+                <p>• <strong>核心視覺</strong>：以最純淨的黑白線條、單色幾何色塊構圖。完全捨棄透視與景深，畫面如同乾淨的工程圖或幾何繪本。</p>
+                <p>• <strong>技術實現</strong>：純 DOM SVG 向量，極輕量、加載瞬間完成，完全不用外部素材。</p>
+            </section>
+
+            <section class="card">
+                <div class="card-header">🏛️ 2. 三種 3D 世界的美術候選方向（供組員挑選）</div>
+                <div class="style-grid">
+                    <div class="style-item" style="border-top: 5px solid #A855F7;">
+                        <span class="style-tag" style="background: #F3E8FF;">風格選項 A</span>
+                        <h3 style="font-size: 17px; margin-bottom: 6px;">🔷 低多邊形折紙風 (Low-Poly 3D)</h3>
+                        <p style="font-size: 14px; color: var(--ink-muted);">稜角分明的多面體世界，帶有水晶與幾何美感。前端 WebGL / Three.js 實踐門檻極低且效能極高。</p>
+                    </div>
+                    <div class="style-item" style="border-top: 5px solid #F59E0B;">
+                        <span class="style-tag" style="background: #FEF3C7;">風格選項 B</span>
+                        <h3 style="font-size: 17px; margin-bottom: 6px;">🧸 溫暖黏土體積感 (Claymation)</h3>
+                        <p style="font-size: 14px; color: var(--ink-muted);">帶有溫柔的環境光遮蔽與厚重邊緣，讓物體看起來像實體玩具。金屬項鍊呈現啞光金色，最能強調「沉重物理感」。</p>
+                    </div>
+                    <div class="style-item" style="border-top: 5px solid #10B981;">
+                        <span class="style-tag" style="background: #D1FAE5;">風格選項 C</span>
+                        <h3 style="font-size: 17px; margin-bottom: 6px;">📖 景深立體紙雕書 (Pop-up Layers)</h3>
+                        <p style="font-size: 14px; color: var(--ink-muted);">利用 CSS 3D 與分層紙板，像翻開一本立體童話書。雖然在 3D 空間，但材質依然保留紙張紋理，形成微妙交融。</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

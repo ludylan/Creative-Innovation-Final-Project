@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 A 提案 01】平面角色與立體世界 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --mint: #A8E6CF;
+            --butter: #FDE68A;
+            --sky: #A8D8F0;
+            --coral: #F8635F;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--mint);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; line-height: 1.3; }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            background: var(--card-white);
+            border: var(--border-thin);
+            border-radius: 16px;
+            padding: 14px 20px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 28px;
+        }
+        .meta-label { font-size: 13px; font-weight: 700; color: var(--ink-muted); }
+        .meta-value { font-family: var(--font-display); font-size: 17px; font-weight: 700; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .content-box {
+            font-size: 15.5px;
+            line-height: 1.8;
+            color: var(--ink);
+        }
+        .decision-highlight {
+            background: #FEF3C7;
+            border-left: 4px solid #D97706;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-top: 14px;
+            font-weight: 600;
+        }
+        .decision-highlight h4 {
+            color: #92400E;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+        /* 概念示意圖 */
+        .concept-diagram {
+            background: #F8FAFC;
+            border: 2px dashed var(--ink);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">📖 主案一：故事提案（粗顆粒留白版）</span>
+        </nav>
+        <main class="sheet">
+            <span class="badge">📖 主案一故事提案</span>
+            <h1 class="title">【主案一故事】《平面角色與立體世界》（暫名《完稿之前》）</h1>
+
+            <div class="meta-grid">
+                <div><div class="meta-label">提案編號</div><div class="meta-value">Module_A_Proposal_01</div></div>
+                <div><div class="meta-label">核心類型</div><div class="meta-value">視覺寓言／維度探索</div></div>
+                <div><div class="meta-label">預計片長</div><div class="meta-value">約 5～7 分鐘</div></div>
+            </div>
+
+            <!-- 概念圖示意 -->
+            <div class="concept-diagram">
+                <svg viewBox="0 0 700 220" style="max-width: 100%; height: auto;">
+                    <!-- 2D 平面世界 -->
+                    <rect x="20" y="20" width="280" height="180" rx="12" fill="#FFFFFF" stroke="#2D2A26" stroke-width="3"/>
+                    <text x="160" y="50" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle" fill="#6B665F">【起點：平面世界 2D】</text>
+                    <!-- 平面角色 -->
+                    <circle cx="160" cy="110" r="28" fill="#A8E6CF" stroke="#2D2A26" stroke-width="3"/>
+                    <text x="160" y="115" font-size="12" font-weight="bold" text-anchor="middle">平面小圓</text>
+                    <text x="160" y="165" font-size="12" fill="#6B665F" text-anchor="middle">平淡安穩、無透視、無厚度</text>
+
+                    <!-- 光之門縫通道 -->
+                    <path d="M 310 110 L 370 110" stroke="#F8635F" stroke-width="4" stroke-dasharray="6,4"/>
+                    <polygon points="370,110 360,105 360,115" fill="#F8635F"/>
+                    <text x="340" y="95" font-size="12" font-weight="bold" fill="#F8635F" text-anchor="middle">光隙入口</text>
+
+                    <!-- 3D 立體世界 -->
+                    <rect x="380" y="20" width="300" height="180" rx="12" fill="#FFFBEB" stroke="#2D2A26" stroke-width="3"/>
+                    <text x="530" y="50" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle" fill="#B45309">【轉折：立體世界 3D】</text>
+                    <!-- 立體球體帶厚度與金項鍊 -->
+                    <defs>
+                        <radialGradient id="sphereGrad" cx="35%" cy="35%" r="65%">
+                            <stop offset="0%" stop-color="#FDE68A"/>
+                            <stop offset="60%" stop-color="#F59E0B"/>
+                            <stop offset="100%" stop-color="#78350F"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="530" cy="105" r="30" fill="url(#sphereGrad)" stroke="#2D2A26" stroke-width="3"/>
+                    <!-- 金飾厚度環 -->
+                    <ellipse cx="530" cy="120" rx="36" ry="12" fill="none" stroke="#D97706" stroke-width="4"/>
+                    <text x="530" y="165" font-size="12" fill="#B45309" font-weight="bold" text-anchor="middle">累積厚重物件 ➔ 卡在門縫！</text>
+                </svg>
+                <div style="font-size: 13px; color: var(--ink-muted); margin-top: 6px;">▲ 核心敘事弧線概念圖：從二維扁平到三維實體，厚度成為無法跨回原世界的障礙</div>
+            </div>
+
+            <section class="card">
+                <div class="card-header">📌 1. 粗顆粒故事骨架（四階段推進）</div>
+                <div class="content-box">
+                    <p>• <strong>第一階段【安穩二維】(約 01:00)</strong>：主角生活在一個線條分明、平淡但自得其樂的純平面世界。日子很有規律，沒有高低起伏，但也缺乏深度。</p>
+                    <p>• <strong>第二階段【光隙誘惑與跨界】(約 01:30)</strong>：天空中或紙張邊緣忽然裂開一道光隙，主角被未知的光暈吸引，一步一步從平面滑入立體三維世界。</p>
+                    <p>• <strong>第三階段【體驗美好與累積穿戴】(約 02:00)</strong>：在外界體驗到前所未見的空間、光影與重力。他開始擁抱外面的世界，並穿戴上外界累積的華貴或沉重物件（例如金項鍊、華麗外殼）。</p>
+                    <p>• <strong>第四階段【回望與門縫衝突】(約 01:30)</strong>：他想回到原點時，卻發現帶著厚度的物品被卡在扁平的入口門縫。進不去、也捨不得丟，形成全片最高潮的物理抉擇困境。</p>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-header">💡 2. 深層立意（為什麼需要這段劇情？）</div>
+                <div class="content-box">
+                    <p>這不是簡單的「物質壞、樸素好」的二分教條，而是探討<strong>「擁有與經驗對個體的不可逆塑造」</strong>。當我們走出舒適圈學會了更多、獲得了更多，我們就再也無法假裝自己還是當初那張毫無重量的白紙。厚度是負擔，也是走過世界的證明。</p>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-header">🗳️ 3. 【留給組員決策與精修的留白題】</div>
+                <div class="content-box">
+                    <div class="decision-highlight">
+                        <h4>決策點 A：主角的原型設定</h4>
+                        <p>組員可選：極簡黑白線條小人、幾何多邊形（如《平面國》的小三角形/正方形），還是帶有一點手繪筆觸的紙片小精靈？</p>
+                    </div>
+                    <div class="decision-highlight">
+                        <h4>決策點 B：外界物品究竟是什麼？</h4>
+                        <p>主角帶上的物品，是物質象徵的金項鍊與王冠？還是探索世界的工具（如立體望遠鏡、水晶、厚重齒輪）？</p>
+                    </div>
+                    <div class="decision-highlight">
+                        <h4>決策點 C：最終結局的三選一</h4>
+                        <p>
+                            1. <strong>全部脫下，回到原本生活</strong>（偏向放下與返璞歸真）<br>
+                            2. <strong>留下少數最珍貴的經驗，畫成薄薄的畫帶回去</strong>（將經驗轉化昇華）<br>
+                            3. <strong>不願卸下，選擇留在廣闊但孤獨的 3D 世界</strong>（黑色冷冽寓言）
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

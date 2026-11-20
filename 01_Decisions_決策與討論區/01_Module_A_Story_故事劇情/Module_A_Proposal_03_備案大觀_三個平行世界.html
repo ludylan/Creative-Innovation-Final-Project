@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 A 提案 03】三大備案大觀 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --mint: #A8E6CF;
+            --butter: #FDE68A;
+            --sky: #A8D8F0;
+            --coral: #F8635F;
+            --lavender: #DDD6FE;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--lavender);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+        }
+        .backup-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .backup-card {
+            border: 2px solid var(--ink);
+            border-radius: 16px;
+            padding: 20px;
+            background: #FAFAFA;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">📖 三大備案故事大觀</span>
+        </nav>
+        <main class="sheet">
+            <span class="badge">📖 三大備案故事提案</span>
+            <h1 class="title">【三大備案故事】荒誕喜劇、深海遷徙與日常微觀</h1>
+
+            <div class="backup-grid">
+                <!-- 備案一 -->
+                <div class="backup-card" style="border-left: 8px solid #F59E0B;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h2 style="font-size: 20px; font-weight: 800;">🎭 備案一：《請勿離開畫面》</h2>
+                        <span style="background: #FEF3C7; font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">形式喜劇 ✕ 跨畫格冒險</span>
+                    </div>
+                    <p>• <strong>粗顆粒骨架</strong>：極簡線條人物上廁所時發現沒有衛生紙，急切之下他扒開畫布、掀開網頁邊界跳出畫格外，為了找紙闖進水墨、像素、3D 等不同網頁世界。歷盡千辛萬苦搶到紙跳回馬桶，才發現備用衛生紙原本就在鏡頭外一公分處。</p>
+                    <p style="margin-top: 6px; font-size: 14px; color: var(--ink-muted);">• <strong>深層立意</strong>：幽默諷刺現代人「眼睛只看著遠方的焦慮，卻忽略了身邊最唾手可得的平靜與答案」。</p>
+                    <p style="margin-top: 6px; font-size: 14px; color: #B45309;">• <strong>組員決策留白</strong>：主角要穿越哪 2～3 個最具反差的世界？最後是喜劇原諒還是被系統踢出？</p>
+                </div>
+
+                <!-- 備案二 -->
+                <div class="backup-card" style="border-left: 8px solid #0284C7;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h2 style="font-size: 20px; font-weight: 800;">🌊 備案二：《深海沒有夜晚》</h2>
+                        <span style="background: #E0F2FE; font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">虛構自然紀錄 ✕ 尺度揭露</span>
+                    </div>
+                    <p>• <strong>粗顆粒骨架</strong>：一隻本身沒有光源的微小浮游生物，跟隨一年一度的追光大遷徙穿越幽暗海溝。沿途以為是高聳海底山脈的地形，其實是沉睡古生物的背脊；以為是繁星的光點，其實是巨獸體內的微觀共生生態。最終它抵達深海核心，成為下一批遷徙者的領航光。</p>
+                    <p style="margin-top: 6px; font-size: 14px; color: var(--ink-muted);">• <strong>深層立意</strong>：探討「個體在宏大生命系統中的位置」——即使微小如塵埃，也能在龐大的網絡中找到自己的光譜與歸宿。</p>
+                    <p style="margin-top: 6px; font-size: 14px; color: #0369A1;">• <strong>組員決策留白</strong>：深海生物是純抽象發光粒子？還是帶有水母、烏賊等半具象形態？</p>
+                </div>
+
+                <!-- 備案三 -->
+                <div class="backup-card" style="border-left: 8px solid #10B981;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h2 style="font-size: 20px; font-weight: 800;">🌱 備案三：《今天不開花》</h2>
+                        <span style="background: #D1FAE5; font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">生活寓言 ✕ 內外尺度對照</span>
+                    </div>
+                    <p>• <strong>粗顆粒骨架</strong>：房間裡的主人焦急等待一盆植物開花，頻繁澆水、施肥、拿尺測量，感嘆「怎麼毫無進展」；鏡頭隨水滴潛入花盆土壤內部，發現表面看似靜止的日子裡，地底下無數根系如壯麗的跨海大橋與古老森林般飛速建造。主人最終停下拔掉重種的念頭，微笑為它換上大盆。</p>
+                    <p style="margin-top: 6px; font-size: 14px; color: var(--ink-muted);">• <strong>深層立意</strong>：<strong>「看不見，不代表沒有在累積」</strong>。溫柔撫慰現代社會對即時成果指標（KPI）的過度焦慮。</p>
+                    <p style="margin-top: 6px; font-size: 14px; color: #047857;">• <strong>組員決策留白</strong>：外景主人的焦慮動作如何與地下微觀世界的暴雨生長完美打節拍？</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

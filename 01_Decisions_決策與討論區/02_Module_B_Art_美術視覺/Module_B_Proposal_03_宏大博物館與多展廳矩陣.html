@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 B 提案 03】宏大博物館與多展廳美術矩陣 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --butter: #FDE68A;
+            --sky: #A8D8F0;
+            --mint: #A8E6CF;
+            --lavender: #D4C5EC;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--butter);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+        }
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin-top: 14px;
+        }
+        .matrix-card {
+            border: 2.5px solid var(--ink);
+            border-radius: 16px;
+            padding: 20px;
+            background: #FAFAFA;
+            box-shadow: 3px 3px 0 var(--ink);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">🎨 主案二：大格局美術矩陣</span>
+        </nav>
+        <main class="sheet">
+            <span class="badge">🎨 主案二美術提案</span>
+            <h1 class="title">【主案二美術】大格局宏大空間 ✕ 四大展廳風格矩陣</h1>
+
+            <!-- 視覺概念圖：宏大展廳與微縮歷史切片 -->
+            <div style="background: #0B0F19; border: 2.5px solid var(--ink); border-radius: 18px; padding: 22px; margin-bottom: 24px; color: #FFF;">
+                <h3 style="font-family: var(--font-display); margin-bottom: 12px; font-size: 18px; color: #38BDF8;">🏛️ 宏大空間感概念圖：天頂全息深空 ✕ 懸浮微縮歷史箱</h3>
+                <svg viewBox="0 0 740 220" style="max-width: 100%; height: auto;">
+                    <!-- 巨大殿堂柱廊 -->
+                    <rect x="20" y="20" width="30" height="180" fill="#1E293B" stroke="#334155"/>
+                    <rect x="690" y="20" width="30" height="180" fill="#1E293B" stroke="#334155"/>
+                    <!-- 天花板發光結構 -->
+                    <polygon points="20,20 370,5 690,20 600,40 370,30 140,40" fill="#0EA5E9" opacity="0.3"/>
+                    <line x1="140" y1="40" x2="140" y2="180" stroke="#0284C7" stroke-dasharray="4,4" opacity="0.4"/>
+                    <line x1="600" y1="40" x2="600" y2="180" stroke="#0284C7" stroke-dasharray="4,4" opacity="0.4"/>
+
+                    <!-- 懸浮展品 1：玻璃方塊中的城市微縮 -->
+                    <g transform="translate(180, 70)">
+                        <rect x="0" y="0" width="160" height="110" rx="8" fill="#1E293B" stroke="#38BDF8" stroke-width="2" opacity="0.85"/>
+                        <polygon points="20,95 40,55 60,95" fill="#38BDF8" opacity="0.5"/>
+                        <rect x="70" y="40" width="25" height="55" fill="#94A3B8"/>
+                        <rect x="105" y="60" width="30" height="35" fill="#64748B"/>
+                        <!-- 懸浮光束束縛 -->
+                        <line x1="80" y1="0" x2="80" y2="-40" stroke="#38BDF8" stroke-width="1.5" stroke-dasharray="3,3"/>
+                        <text x="80" y="103" font-size="10" fill="#38BDF8" text-anchor="middle">展品 01：繁華的凝固 (Diorama)</text>
+                    </g>
+
+                    <!-- 懸浮展品 2：點雲流動粒子 -->
+                    <g transform="translate(400, 70)">
+                        <rect x="0" y="0" width="160" height="110" rx="8" fill="#1E293B" stroke="#A855F7" stroke-width="2" opacity="0.85"/>
+                        <!-- 粒子群 -->
+                        <circle cx="50" cy="50" r="2" fill="#E879F9"/>
+                        <circle cx="70" cy="40" r="3" fill="#C084FC"/>
+                        <circle cx="90" cy="65" r="2.5" fill="#E879F9"/>
+                        <circle cx="110" cy="45" r="2" fill="#C084FC"/>
+                        <circle cx="80" cy="80" r="3" fill="#E879F9"/>
+                        <path d="M 40 70 Q 80 30 120 70" fill="none" stroke="#C084FC" stroke-width="1.5" opacity="0.6"/>
+                        <line x1="80" y1="0" x2="80" y2="-40" stroke="#A855F7" stroke-width="1.5" stroke-dasharray="3,3"/>
+                        <text x="80" y="103" font-size="10" fill="#E879F9" text-anchor="middle">展品 02：數據流坍縮 (Particles)</text>
+                    </g>
+
+                    <text x="370" y="205" font-size="11" fill="#64748B" text-anchor="middle">▲ 宏觀史詩透視：瀏覽器相機在懸浮的時空立方體間自由推進與繞行</text>
+                </svg>
+            </div>
+
+            <section class="card">
+                <div class="card-header">🏛️ 1. 打破小房間局限：為什麼需要「宏大空間感」？</div>
+                <p>人類的歷史是龐大而沉重的，如果只做成單一的小房間，會削弱紀錄片的史詩感。透過網頁 WebGL / Three.js 或 Canvas 的相機視角推拉，我們可以營造出<strong>數百米高、深不見底的「未來記憶穹頂」</strong>，讓每一個歷史事件像星辰一樣懸浮在虛空。</p>
+            </section>
+
+            <section class="card">
+                <div class="card-header">🎨 2. 四大多元美術風格矩陣（供組員挑選或分展廳混搭）</div>
+                <div class="matrix-grid">
+                    <div class="matrix-card" style="border-top: 6px solid #0284C7;">
+                        <span style="background: #E0F2FE; color: #0369A1; font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">風格 1</span>
+                        <h3 style="font-size: 18px; margin: 8px 0;">🏛️ 巨構數位神殿 (Monolithic Sci-Fi)</h3>
+                        <p style="font-size: 14px; color: var(--ink-muted);">黑曜石反光地面、高聳冷冽幾何石柱、深邃墨黑搭配極光藍光柱。營造極具儀式感與崇高感（Sublime）的歷史肅穆感。</p>
+                    </div>
+
+                    <div class="matrix-card" style="border-top: 6px solid #F59E0B;">
+                        <span style="background: #FEF3C7; color: #B45309; font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">風格 2</span>
+                        <h3 style="font-size: 18px; margin: 8px 0;">📦 懸浮微縮箱 (Diorama Box)</h3>
+                        <p style="font-size: 14px; color: var(--ink-muted);">每一個歷史事件是一個精緻透明的玻璃微縮景觀。下雨的街道、開會的辦公室被微縮定格在裡面，相機能穿透玻璃窺探細節。</p>
+                    </div>
+
+                    <div class="matrix-card" style="border-top: 6px solid #A855F7;">
+                        <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">風格 3</span>
+                        <h3 style="font-size: 18px; margin: 8px 0;">✨ 點雲數據流 (Point Cloud & Glitch)</h3>
+                        <p style="font-size: 14px; color: var(--ink-muted);">成千上萬的發光粒子凝聚成歷史人物與城市。當導覽員切換分支，粒子像星塵一樣散開並重新流動凝聚成新世界，視覺極為炫目。</p>
+                    </div>
+
+                    <div class="matrix-card" style="border-top: 6px solid #10B981;">
+                        <span style="background: #D1FAE5; color: #047857; font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 4px;">風格 4</span>
+                        <h3 style="font-size: 18px; margin: 8px 0;">🖼️ 超現實懸浮拼貼 (Surrealist Collage)</h3>
+                        <p style="font-size: 14px; color: var(--ink-muted);">將人類文明的代表物件（煙囪、時鐘、古老電視機、乾裂土地）以超現實雕塑形式懸浮並置，深具當代藝術雙年展的批判意味。</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

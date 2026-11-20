@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 C 提案 03】三大備案敘事與美術交融 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --peach: #FFCBA4;
+            --coral: #F8635F;
+            --lavender: #DDD6FE;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--lavender);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">🤝 三大備案：兩兩連結提案</span>
+        </nav>
+        <main class="sheet">
+            <span class="badge">🤝 備案連結提案</span>
+            <h1 class="title">【三大備案連結】形式突破、生態奇觀與尺度切換</h1>
+
+            <section class="card">
+                <div class="card-header">🎭 備案一：破畫框 ✕ 畫布穿梭的實體衝突</div>
+                <p>• <strong>敘事與技術咬合</strong>：一般動畫角色被困在鏡頭內，而本片直接將<strong>「瀏覽器畫布 (Canvas/SVG Box)」變成監獄</strong>。主角用手撕開網頁 DOM 邊界，跌入後方 CSS 代碼或不同渲染引擎的世界，讓「形式本身就是喜劇包袱」。</p>
+            </section>
+
+            <section class="card">
+                <div class="card-header">🌊 備案二：深海遷徙 ✕ 程序化暗光流體的生命連結</div>
+                <p>• <strong>敘事與技術咬合</strong>：深海的巨大與孤獨，完全透過純前端<strong>「暗場光照計算（Additive Blending 與 Bloom 光暈）」</strong>來體現。主角的每一次微小游動，帶動周遭流體粒子微微發光，將「渺小生命在宏大系統中的相互依賴」轉化為極致唯美的視覺詩篇。</p>
+            </section>
+
+            <section class="card">
+                <div class="card-header">🌱 備案三：今天不開花 ✕ 鏡頭潛入的微距對比</div>
+                <p>• <strong>敘事與技術咬合</strong>：利用<strong>相機推進（Camera Dolly Zoom）與遮罩轉場</strong>，只要一顆水滴滴入土壤，鏡頭瞬間無縫下潛至神秘的地下世界。外面的焦慮平淡與裡面的生機澎湃形成強烈節奏對比，工程難度收斂但情緒感染力極強。</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

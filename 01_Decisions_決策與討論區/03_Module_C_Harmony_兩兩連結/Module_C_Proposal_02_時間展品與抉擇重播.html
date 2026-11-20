@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【模組 C 提案 02】博物館故事 ✕ 宏大時空展品的化學反應 — 創意與創新</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --paper-grid: rgba(45, 42, 38, 0.05);
+            --card-white: #FFFFFF;
+            --peach: #FFCBA4;
+            --coral: #F8635F;
+            --sky: #A8D8F0;
+            --border-thick: 3.5px solid var(--ink);
+            --border-thin: 2.5px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Balsamiq Sans', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: linear-gradient(var(--paper-grid) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--paper-grid) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .nav-link {
+            background: var(--card-white);
+            border: var(--border-thin);
+            box-shadow: var(--shadow-sm);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+        }
+        .sheet {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            padding: 48px;
+        }
+        .badge {
+            background: var(--sky);
+            border: var(--border-thin);
+            box-shadow: 2px 2px 0 var(--ink);
+            border-radius: 999px;
+            padding: 4px 16px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; }
+        .card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed rgba(45,42,38,0.2);
+            padding-bottom: 10px;
+        }
+        .synergy-box {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 16px;
+            align-items: center;
+            background: #F0F9FF;
+            border: 2px solid var(--sky);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-link">← 回到決策中心主頁</a>
+            <span style="font-weight: 700; color: var(--ink-muted);">🤝 主案二：兩兩連結提案</span>
+        </nav>
+        <main class="sheet">
+            <span class="badge">🤝 主案二連結提案</span>
+            <h1 class="title">【主案二連結】時間作為實體：網頁時間軸與鏡頭即為博物館展台</h1>
+
+            <div class="synergy-box">
+                <div style="background: #FFF; border: 1.5px solid var(--ink); border-radius: 12px; padding: 12px; text-align: center;">
+                    <div style="font-size: 12px; font-weight: 700; color: var(--ink-muted);">模組 A 故事</div>
+                    <div style="font-size: 16px; font-weight: 800; margin-top: 4px;">歷史死因剖析 ✕ 平行分支對照</div>
+                </div>
+                <div style="font-size: 28px; font-weight: 900; color: var(--coral);">✕</div>
+                <div style="background: #FFF; border: 1.5px solid var(--ink); border-radius: 12px; padding: 12px; text-align: center;">
+                    <div style="font-size: 12px; font-weight: 700; color: var(--ink-muted);">模組 B 美術</div>
+                    <div style="font-size: 16px; font-weight: 800; margin-top: 4px;">宏大巨構神殿 ✕ 懸浮微縮凍結箱</div>
+                </div>
+            </div>
+
+            <section class="card">
+                <div class="card-header">✨ 1. 為什麼這套美術與故事是「絕配」？</div>
+                <p>一般的末日紀錄片，往往充滿轟炸爆炸與喧囂，容易讓觀眾麻木；而在這套結合方案中：</p>
+                <p style="margin-top: 8px;">
+                    <strong>「災難被完全靜音與凍結」</strong>。所有的歷史痛苦與抉擇，被裝進晶瑩剔透的懸浮玻璃展櫃中。導覽員就像在檢查一枚古生物化石，帶著後代以冷靜、透徹且帶有神聖感的視角，審視每一個看似微小的逃避如何演變為崩潰。這種<strong>「冷靜克制的宏大」</strong>反而帶來無與倫比的情緒張力。
+                </p>
+            </section>
+
+            <section class="card">
+                <div class="card-header">💻 2. 前端動態技術交融亮點</div>
+                <p>• <strong>時間軸與相機脫鉤（Bullet Time）</strong>：傳統影片暫停就無法移動畫面；純前端代碼可以做到<strong>「場景物理時間鎖定為 0，而相機相機仍以 60fps 圍繞雨滴自由旋轉」</strong>，創造極具未來科技感的導覽體驗。</p>
+                <p>• <strong>分支切換無縫重組</strong>：當導覽員切換分支，底層 WebGL 幾何體不需重新載入，直接利用 Vertex Shader（頂點著色器）產生粒子擴散與重新吸附，流暢展現「歷史因一個決定而變形」的視覺奇觀。</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
