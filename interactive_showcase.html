@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【震撼動態原型】期末專案核心視覺概念 3D 互動展示</title>
+    <style>
+        :root {
+            --bg-dark: #090B10;
+            --panel-bg: rgba(18, 22, 34, 0.75);
+            --panel-border: rgba(255, 255, 255, 0.12);
+            --accent-cyan: #38BDF8;
+            --accent-gold: #F59E0B;
+            --accent-emerald: #10B981;
+            --accent-rose: #F43F5E;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+            --font-code: 'JetBrains Mono', Consolas, monospace;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html {
+            width: 100%; height: 100%;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            overflow: hidden;
+            user-select: none;
+        }
+        /* 3D WebGL Canvas 滿版背景 */
+        #webgl-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            display: block;
+        }
+        /* 頂部 HUD 導覽列 */
+        .hud-header {
+            position: absolute;
+            top: 20px; left: 24px; right: 24px;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none;
+        }
+        .brand-title {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            backdrop-filter: blur(16px);
+            border-radius: 999px;
+            padding: 8px 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            pointer-events: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .brand-badge {
+            background: linear-gradient(135deg, #0EA5E9, #38BDF8);
+            color: #04101A;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 3px 10px;
+            border-radius: 999px;
+            letter-spacing: 0.5px;
+        }
+        .brand-text {
+            font-size: 14.5px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        /* 切換方案 Tab 膠囊按鈕 */
+        .tab-group {
+            display: flex;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            backdrop-filter: blur(16px);
+            border-radius: 999px;
+            padding: 4px;
+            pointer-events: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 20px;
+            border-radius: 999px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            color: #FFF;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+        /* 側邊互動控制台 */
+        .control-panel {
+            position: absolute;
+            bottom: 24px; left: 24px;
+            width: 360px;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 22px;
+            z-index: 10;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+        .panel-title {
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .panel-desc {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .control-row {
+            margin-bottom: 14px;
+        }
+        .control-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .range-slider {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px; height: 18px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            transition: transform 0.1s;
+        }
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        .action-btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .action-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #FFF;
+            padding: 9px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .action-btn:hover {
+            background: rgba(255,255,255,0.18);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+        .action-btn.primary {
+            background: linear-gradient(135deg, #0284C7, #38BDF8);
+            color: #031422;
+            border: none;
+            font-weight: 800;
+        }
+        .action-btn.primary:hover {
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        /* 右下角視角提示 */
+        .camera-tip {
+            position: absolute;
+            bottom: 24px; right: 24px;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            backdrop-filter: blur(16px);
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .indicator-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #10B981;
+            box-shadow: 0 0 8px #10B981;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; }
+        }
+    </style>
+    <!-- 引入 Three.js 與 OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- 頂部導航 -->
+    <div class="hud-header">
+        <div class="brand-title">
+            <span class="brand-badge">LIVE 3D</span>
+            <span class="brand-text">期末專案·頂級視覺動態原型 (Creative Prototype)</span>
+        </div>
+        <div class="tab-group">
+            <button class="tab-btn active" id="tab-primary-1" onclick="switchScene(1)">
+                <span>🔷</span> 主案一：維度撕裂 (2D➔3D)
+            </button>
+            <button class="tab-btn" id="tab-primary-2" onclick="switchScene(2)">
+                <span>🏛️</span> 主案二：時空博物館 (子彈時間)
+            </button>
+        </div>
+    </div>
+
+    <!-- 側邊動態控制台 -->
+    <div class="control-panel" id="control-panel">
+        <div id="controls-scene-1">
+            <div class="panel-title">
+                <span>🔷 主案一：維度形變操控</span>
+                <span style="font-size: 11px; color: var(--accent-gold); font-family: var(--font-code);">[Dolly-Zoom]</span>
+            </div>
+            <p class="panel-desc">拖動滑桿，體驗從極簡無厚度 2D 正交線條，連續過渡至三維立體景深與金屬折射光影！</p>
+            
+            <div class="control-row">
+                <div class="control-label">
+                    <span>維度深度 (Z-Dimension & FOV)</span>
+                    <span id="label-dimension" style="color: var(--accent-cyan); font-family: var(--font-code);">2D FLAT</span>
+                </div>
+                <input type="range" class="range-slider" id="slider-dimension" min="0" max="100" value="0" oninput="onDimensionChange(this.value)">
+            </div>
+
+            <div class="control-row">
+                <div class="control-label">
+                    <span>主角飾品物理厚度 (Gold Jewelry)</span>
+                    <span id="label-thickness" style="color: var(--accent-gold); font-family: var(--font-code);">0.0 mm</span>
+                </div>
+                <input type="range" class="range-slider" id="slider-thickness" min="0" max="100" value="20" oninput="onThicknessChange(this.value)">
+            </div>
+
+            <div class="action-btn-row">
+                <button class="action-btn primary" onclick="triggerDoorJam()">💥 觸發卡在門縫 (Door Jam)</button>
+                <button class="action-btn" onclick="resetDimension()">🔄 重置二維</button>
+            </div>
+        </div>
+
+        <div id="controls-scene-2" style="display: none;">
+            <div class="panel-title">
+                <span>🏛️ 主案二：時空展品矩陣</span>
+                <span style="font-size: 11px; color: var(--accent-cyan); font-family: var(--font-code);">[Bullet Time]</span>
+            </div>
+            <p class="panel-desc">黑曜石神殿 ✕ 懸浮時空微縮箱。點擊按鈕凍結時間，相機仍可 360 度穿透雨滴穿梭！</p>
+
+            <div class="action-btn-row">
+                <button class="action-btn primary" id="btn-freeze" onclick="toggleFreezeTime()">⏸️ 凍結世界 (Bullet Time)</button>
+                <button class="action-btn" onclick="triggerBranchExplode()">✨ 重構平行分支</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右下角操作提示 -->
+    <div class="camera-tip">
+        <span class="indicator-dot"></span>
+        <span>🖱️ 滑鼠左鍵拖曳 360° 繞行 ｜ 滾輪縮放景深</span>
+    </div>
+
+    <script>
+        // 全局 Three.js 核心變數
+        let scene, camera, renderer, controls;
+        let currentSceneId = 1;
+        let clock = new THREE.Clock();
+
+        // 場景一變數 (2D 轉 3D)
+        let groupScene1;
+        let flatGrid, charMesh, jewelryMesh, doorFrame, particleSystem1;
+        let dimProgress = 0; // 0 = 2D, 1 = 3D
+        let isJamming = false, jamTime = 0;
+
+        // 場景二變數 (博物館)
+        let groupScene2;
+        let dioramaA, dioramaB, rainParticles, swarmParticles, godRayLight;
+        let isTimeFrozen = false;
+
+        init();
+        animate();
+
+        function init() {
+            const canvas = document.getElementById('webgl-canvas');
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x090B10);
+            scene.fog = new THREE.FogExp2(0x090B10, 0.03);
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(0, 0, 15);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxDistance = 30;
+            controls.minDistance = 3;
+
+            // 建立兩大場景群組
+            groupScene1 = new THREE.Group();
+            groupScene2 = new THREE.Group();
+            scene.add(groupScene1);
+            scene.add(groupScene2);
+
+            buildScene1();
+            buildScene2();
+
+            // 預設顯示場景一
+            switchScene(1);
+
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        /* -------------------------------------------------------------
+           場景一：2D 轉 3D 維度撕裂
+        ------------------------------------------------------------- */
+        function buildScene1() {
+            // 環境光與主定向光
+            const ambLight = new THREE.AmbientLight(0xFFFFFF, 0.4);
+            groupScene1.add(ambLight);
+
+            const dirLight = new THREE.DirectionalLight(0xFDE68A, 1.2);
+            dirLight.position.set(5, 10, 7);
+            groupScene1.add(dirLight);
+
+            // 2D 網格背景
+            flatGrid = new THREE.GridHelper(16, 16, 0x38BDF8, 0x1E293B);
+            flatGrid.rotation.x = Math.PI / 2;
+            groupScene1.add(flatGrid);
+
+            // 角色幾何體 (立方體)
+            const charGeo = new THREE.BoxGeometry(1.4, 1.4, 1.4);
+            const charMat = new THREE.MeshStandardMaterial({
+                color: 0xFFFFFF,
+                roughness: 0.2,
+                metalness: 0.1
+            });
+            charMesh = new THREE.Mesh(charGeo, charMat);
+            charMesh.position.set(-1.5, 0, 0);
+            groupScene1.add(charMesh);
+
+            // 實體厚重金飾 (環狀金屬結)
+            const jewGeo = new THREE.TorusKnotGeometry(0.7, 0.22, 100, 16);
+            const jewMat = new THREE.MeshStandardMaterial({
+                color: 0xF59E0B,
+                metalness: 0.95,
+                roughness: 0.15,
+                emissive: 0x78350F,
+                emissiveIntensity: 0.2
+            });
+            jewelryMesh = new THREE.Mesh(jewGeo, jewMat);
+            jewelryMesh.position.set(-1.5, 0, 0);
+            groupScene1.add(jewelryMesh);
+
+            // 門縫結構 (極窄裂縫)
+            const doorMat = new THREE.MeshBasicMaterial({ color: 0xF43F5E });
+            const doorTop = new THREE.Mesh(new THREE.BoxGeometry(0.2, 5, 0.2), doorMat);
+            doorTop.position.set(2, 3, 0);
+            const doorBottom = new THREE.Mesh(new THREE.BoxGeometry(0.2, 5, 0.2), doorMat);
+            doorBottom.position.set(2, -3, 0);
+            doorFrame = new THREE.Group();
+            doorFrame.add(doorTop);
+            doorFrame.add(doorBottom);
+            groupScene1.add(doorFrame);
+
+            // 門縫碰撞粒子
+            const pCount = 200;
+            const pGeo = new THREE.BufferGeometry();
+            const pPos = new Float32Array(pCount * 3);
+            for(let i=0; i<pCount*3; i+=3) {
+                pPos[i] = 2 + (Math.random() - 0.5) * 0.4;
+                pPos[i+1] = (Math.random() - 0.5) * 1.5;
+                pPos[i+2] = (Math.random() - 0.5) * 0.8;
+            }
+            pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+            const pMat = new THREE.PointsMaterial({ color: 0xFDE68A, size: 0.08, transparent: true, opacity: 0 });
+            particleSystem1 = new THREE.Points(pGeo, pMat);
+            groupScene1.add(particleSystem1);
+        }
+
+        /* -------------------------------------------------------------
+           場景二：時空博物館 (神殿 ✕ 微縮箱 ✕ 粒子流)
+        ------------------------------------------------------------- */
+        function buildScene2() {
+            // 黑曜石鏡面地板
+            const floorGeo = new THREE.PlaneGeometry(30, 30);
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x050811, roughness: 0.1, metalness: 0.9 });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -3.5;
+            groupScene2.add(floor);
+
+            // 神殿巨大光柱
+            const colLight1 = new THREE.PointLight(0x38BDF8, 3, 18);
+            colLight1.position.set(-5, 6, 0);
+            groupScene2.add(colLight1);
+
+            const colLight2 = new THREE.PointLight(0x34D399, 3, 18);
+            colLight2.position.set(5, 6, 0);
+            groupScene2.add(colLight2);
+
+            // 懸浮時空微縮箱 A (災難凍結)
+            const boxGeo = new THREE.BoxGeometry(3.5, 3.5, 3.5);
+            const boxMatA = new THREE.MeshPhysicalMaterial({
+                color: 0x1E293B,
+                transmission: 0.85,
+                opacity: 1,
+                transparent: true,
+                roughness: 0.1,
+                ior: 1.5,
+                thickness: 1.2
+            });
+            dioramaA = new THREE.Mesh(boxGeo, boxMatA);
+            dioramaA.position.set(-4, 0, 0);
+            groupScene2.add(dioramaA);
+
+            // 箱內被凍結的建築剪影
+            const cityMesh = new THREE.Mesh(
+                new THREE.BoxGeometry(1.2, 2.2, 1.2),
+                new THREE.MeshStandardMaterial({ color: 0xF87171, metalness: 0.4 })
+            );
+            cityMesh.position.set(-4, -0.6, 0);
+            groupScene2.add(cityMesh);
+
+            // 懸浮時空微縮箱 B (生機分支)
+            const boxMatB = new THREE.MeshPhysicalMaterial({
+                color: 0x064E3B,
+                transmission: 0.85,
+                opacity: 1,
+                transparent: true,
+                roughness: 0.1,
+                ior: 1.5,
+                thickness: 1.2
+            });
+            dioramaB = new THREE.Mesh(boxGeo, boxMatB);
+            dioramaB.position.set(4, 0, 0);
+            groupScene2.add(dioramaB);
+
+            // 箱內生機雕塑 (金色多面體)
+            const treeMesh = new THREE.Mesh(
+                new THREE.DodecahedronGeometry(1.1),
+                new THREE.MeshStandardMaterial({ color: 0x34D399, wireframe: true })
+            );
+            treeMesh.position.set(4, 0, 0);
+            groupScene2.add(treeMesh);
+
+            // 凍結雨滴粒子 (子彈時間)
+            const rCount = 600;
+            const rGeo = new THREE.BufferGeometry();
+            const rPos = new Float32Array(rCount * 3);
+            for(let i=0; i<rCount*3; i+=3) {
+                rPos[i] = -4 + (Math.random() - 0.5) * 3;
+                rPos[i+1] = (Math.random() - 0.5) * 3;
+                rPos[i+2] = (Math.random() - 0.5) * 3;
+            }
+            rGeo.setAttribute('position', new THREE.BufferAttribute(rPos, 3));
+            const rMat = new THREE.PointsMaterial({ color: 0x93C5FD, size: 0.05, transparent: true, opacity: 0.85 });
+            rainParticles = new THREE.Points(rGeo, rMat);
+            groupScene2.add(rainParticles);
+
+            // 巨量星雲粒子流
+            const sCount = 2000;
+            const sGeo = new THREE.BufferGeometry();
+            const sPos = new Float32Array(sCount * 3);
+            for(let i=0; i<sCount*3; i+=3) {
+                const r = 6 + Math.random() * 8;
+                const theta = Math.random() * Math.PI * 2;
+                sPos[i] = Math.cos(theta) * r;
+                sPos[i+1] = (Math.random() - 0.5) * 8;
+                sPos[i+2] = Math.sin(theta) * r;
+            }
+            sGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
+            const sMat = new THREE.PointsMaterial({ color: 0x38BDF8, size: 0.04, transparent: true, opacity: 0.6 });
+            swarmParticles = new THREE.Points(sGeo, sMat);
+            groupScene2.add(swarmParticles);
+        }
+
+        /* -------------------------------------------------------------
+           互動邏輯與動畫幀迴圈
+        ------------------------------------------------------------- */
+        function switchScene(id) {
+            currentSceneId = id;
+            if(id === 1) {
+                groupScene1.visible = true;
+                groupScene2.visible = false;
+                document.getElementById('tab-primary-1').classList.add('active');
+                document.getElementById('tab-primary-2').classList.remove('active');
+                document.getElementById('controls-scene-1').style.display = 'block';
+                document.getElementById('controls-scene-2').style.display = 'none';
+                camera.position.set(0, 0, 14);
+                controls.target.set(0, 0, 0);
+            } else {
+                groupScene1.visible = false;
+                groupScene2.visible = true;
+                document.getElementById('tab-primary-1').classList.remove('active');
+                document.getElementById('tab-primary-2').classList.add('active');
+                document.getElementById('controls-scene-1').style.display = 'none';
+                document.getElementById('controls-scene-2').style.display = 'block';
+                camera.position.set(0, 2, 16);
+                controls.target.set(0, 0, 0);
+            }
+        }
+
+        function onDimensionChange(val) {
+            dimProgress = val / 100;
+            const label = document.getElementById('label-dimension');
+            if(dimProgress === 0) {
+                label.innerText = '2D FLAT (無透視)';
+                label.style.color = '#94A3B8';
+                camera.position.set(0, 0, 14);
+                controls.autoRotate = false;
+            } else if(dimProgress < 1) {
+                label.innerText = `MORPHING: ${(dimProgress*100).toFixed(0)}%`;
+                label.style.color = 'var(--accent-cyan)';
+            } else {
+                label.innerText = '3D FULL PERSPECTIVE';
+                label.style.color = 'var(--accent-gold)';
+            }
+
+            // 動態拉開 Z 軸深度與傾斜
+            flatGrid.rotation.x = Math.PI / 2 - (dimProgress * Math.PI / 3);
+            charMesh.rotation.y = dimProgress * Math.PI * 1.5;
+            jewelryMesh.rotation.y = dimProgress * Math.PI * 1.5;
+            charMesh.scale.z = 0.05 + dimProgress * 0.95;
+        }
+
+        function onThicknessChange(val) {
+            const scale = 0.5 + (val / 100) * 1.5;
+            jewelryMesh.scale.set(scale, scale, scale);
+            document.getElementById('label-thickness').innerText = `${(val * 0.1).toFixed(1)} mm`;
+        }
+
+        function triggerDoorJam() {
+            isJamming = true;
+            jamTime = 0;
+            charMesh.position.x = 1.3;
+            jewelryMesh.position.x = 1.3;
+            particleSystem1.material.opacity = 0.9;
+        }
+
+        function resetDimension() {
+            document.getElementById('slider-dimension').value = 0;
+            onDimensionChange(0);
+            charMesh.position.set(-1.5, 0, 0);
+            jewelryMesh.position.set(-1.5, 0, 0);
+            particleSystem1.material.opacity = 0;
+            isJamming = false;
+        }
+
+        function toggleFreezeTime() {
+            isTimeFrozen = !isTimeFrozen;
+            const btn = document.getElementById('btn-freeze');
+            if(isTimeFrozen) {
+                btn.innerText = '▶️ 恢復流動 (Resume)';
+                btn.style.background = '#10B981';
+            } else {
+                btn.innerText = '⏸️ 凍結世界 (Bullet Time)';
+                btn.style.background = 'linear-gradient(135deg, #0284C7, #38BDF8)';
+            }
+        }
+
+        function triggerBranchExplode() {
+            let scale = 1;
+            const interval = setInterval(() => {
+                scale += 0.08;
+                dioramaB.scale.set(scale, scale, scale);
+                dioramaB.material.opacity -= 0.08;
+                if(scale > 2) {
+                    clearInterval(interval);
+                    dioramaB.scale.set(1, 1, 1);
+                    dioramaB.material.opacity = 1;
+                }
+            }, 30);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+            const time = clock.getElapsedTime();
+
+            controls.update();
+
+            // 場景一卡門物理抖動
+            if(isJamming) {
+                jamTime += delta;
+                charMesh.position.x = 1.3 + (Math.sin(jamTime * 40) * 0.05);
+                jewelryMesh.position.x = 1.3 + (Math.sin(jamTime * 40) * 0.05);
+                particleSystem1.rotation.y += 0.05;
+                if(jamTime > 1.8) {
+                    isJamming = false;
+                }
+            } else {
+                jewelryMesh.rotation.x += 0.01;
+            }
+
+            // 場景二時間凍結邏輯
+            if(!isTimeFrozen) {
+                dioramaA.rotation.y = time * 0.2;
+                dioramaB.rotation.y = -time * 0.2;
+                swarmParticles.rotation.y = time * 0.05;
+            }
+
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>
