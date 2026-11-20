@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【視覺看板】期末專案三大方案概念圖與評析總覽</title>
+    <style>
+        :root {
+            --ink: #2D2A26;
+            --ink-muted: #6B665F;
+            --paper-bg: #FAF6EE;
+            --card-white: #FFFFFF;
+            --mint: #A8E6CF;
+            --butter: #FDE68A;
+            --sky: #A8D8F0;
+            --coral: #F8635F;
+            --border-thick: 3px solid var(--ink);
+            --border-thin: 2px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 7px 7px 0 var(--ink);
+            --font-display: 'Comic Sans MS', 'Chalkboard SE', '微軟正黑體', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #EFE9DB;
+            background-image: radial-gradient(rgba(45, 42, 38, 0.08) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            font-family: var(--font-body);
+            color: var(--ink);
+            padding: 30px 20px 80px;
+            line-height: 1.6;
+        }
+        .container { max-width: 980px; margin: 0 auto; }
+        .hero {
+            background: var(--paper-bg);
+            border: var(--border-thick);
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+            padding: 36px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .hero h1 { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 12px; }
+        .hero p { font-size: 16px; color: var(--ink-muted); font-weight: 600; }
+        .section-card {
+            background: var(--card-white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            padding: 28px;
+            margin-bottom: 30px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed rgba(45,42,38,0.25);
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .section-title { font-family: var(--font-display); font-size: 22px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+        .badge {
+            background: var(--butter);
+            border: var(--border-thin);
+            border-radius: 999px;
+            padding: 4px 14px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 13px;
+        }
+        .diagram-container {
+            background: #FAFAFA;
+            border: var(--border-thin);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .critique-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 14px;
+        }
+        @media (max-width: 768px) {
+            .critique-grid { grid-template-columns: 1fr; }
+        }
+        .critique-box {
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 14.5px;
+            line-height: 1.7;
+        }
+        .box-pro { background: #ECFDF5; border: 2px solid #10B981; }
+        .box-con { background: #FFFBEB; border: 2px solid #F59E0B; }
+        .box-pro h4 { color: #065F46; font-size: 15px; margin-bottom: 6px; font-weight: 800; }
+        .box-con h4 { color: #92400E; font-size: 15px; margin-bottom: 6px; font-weight: 800; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="hero">
+            <span class="badge" style="background: var(--mint);">🎨 視覺看板與評析總覽</span>
+            <h1>期末專案三大方案：視覺概念圖直讀畫廊</h1>
+            <p>點開本頁即可直接在瀏覽器以彩色圖形檢視三大方案概念圖，無需閱讀代碼！</p>
+        </header>
+
+        <!-- 圖一：主案一 -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-title">🌟 圖一：主案一《平面角色與立體世界》（暫名《完稿之前》）</div>
+                <span class="badge" style="background: var(--mint);">極簡 ➔ 3D 演進</span>
+            </div>
+            <div class="diagram-container">
+                <svg viewBox="0 0 740 190" style="width: 100%; max-width: 740px; height: auto;">
+                    <!-- 左側：極簡 2D -->
+                    <g transform="translate(30, 15)">
+                        <rect x="0" y="0" width="280" height="150" fill="#FFFFFF" stroke="#2D2A26" stroke-width="2.5" rx="8"/>
+                        <line x1="20" y1="120" x2="260" y2="120" stroke="#2D2A26" stroke-width="2"/>
+                        <rect x="110" y="70" width="50" height="50" fill="#FFFFFF" stroke="#2D2A26" stroke-width="3"/>
+                        <circle cx="125" cy="85" r="3" fill="#2D2A26"/>
+                        <circle cx="145" cy="85" r="3" fill="#2D2A26"/>
+                        <line x1="130" y1="100" x2="140" y2="100" stroke="#2D2A26" stroke-width="2"/>
+                        <text x="140" y="145" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#6B665F">【起點】極簡黑白線條 (無厚度)</text>
+                    </g>
+                    <!-- 中間轉化箭頭 -->
+                    <path d="M 345 90 L 375 90" stroke="#F8635F" stroke-width="4"/>
+                    <polygon points="375,90 365,85 365,95" fill="#F8635F"/>
+                    <!-- 右側：3D 立體有厚度 -->
+                    <g transform="translate(410, 15)">
+                        <rect x="0" y="0" width="290" height="150" fill="#FFFDF5" stroke="#2D2A26" stroke-width="2.5" rx="8"/>
+                        <path d="M 30 140 L 80 100 L 210 100 L 260 140 Z" fill="#F3E8FF" stroke="#A855F7" stroke-width="1.5" opacity="0.6"/>
+                        <polygon points="120,55 160,35 180,55 140,75" fill="#FDE68A" stroke="#2D2A26" stroke-width="2"/>
+                        <polygon points="120,55 140,75 140,115 120,95" fill="#F59E0B" stroke="#2D2A26" stroke-width="2"/>
+                        <polygon points="140,75 180,55 180,95 140,115" fill="#D97706" stroke="#2D2A26" stroke-width="2"/>
+                        <ellipse cx="145" cy="85" rx="38" ry="14" fill="none" stroke="#B45309" stroke-width="3"/>
+                        <ellipse cx="145" cy="120" rx="35" ry="10" fill="rgba(45,42,38,0.2)"/>
+                        <text x="145" y="145" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#B45309">【演進】Z軸深度、光影與厚度</text>
+                    </g>
+                </svg>
+            </div>
+            <div class="critique-grid">
+                <div class="critique-box box-pro">
+                    <h4>🌟 好的部分（優勢）</h4>
+                    <p>• <strong>核心衝突極度純粹直觀</strong>：左邊扁平無厚度，右邊立體帶金項鍊，任何人 3 秒內就能看懂「擁有厚度帶來負擔」的核心寓意。<br>• <strong>工程路徑清晰</strong>：正交投影（無景深）轉透視投影（有深度），相機代碼目標明確。</p>
+                </div>
+                <div class="critique-box box-con">
+                    <h4>⚠️ 較差／待加強（盲點與建議）</h4>
+                    <p>• <strong>缺少門縫卡住的物理特寫</strong>：目前左右分立，沒畫出主角卡在窄門縫時掙扎的側面剖面。<br>• <strong>建議調整</strong>：補強一張「極窄門縫，半個身體擠進去、項鍊撞擊出火花」的特寫概念圖。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 圖二：主案二 -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-title">🏛️ 圖二：主案二《人類死因／實驗室博物館》</div>
+                <span class="badge" style="background: var(--sky);">宏大時空展台</span>
+            </div>
+            <div class="diagram-container" style="background: #0B0F19;">
+                <svg viewBox="0 0 740 200" style="width: 100%; max-width: 740px; height: auto;">
+                    <rect x="15" y="15" width="25" height="165" fill="#1E293B" stroke="#334155"/>
+                    <rect x="700" y="15" width="25" height="165" fill="#1E293B" stroke="#334155"/>
+                    <polygon points="15,15 370,5 700,15 610,35 370,25 130,35" fill="#0EA5E9" opacity="0.3"/>
+                    <!-- 懸浮展品 1 -->
+                    <g transform="translate(160, 55)">
+                        <rect x="0" y="0" width="170" height="110" rx="8" fill="#1E293B" stroke="#F87171" stroke-width="2" opacity="0.9"/>
+                        <text x="85" y="24" font-size="11" fill="#FCA5A5" font-weight="bold" text-anchor="middle">展品 A：代價無限延宕 (停滯)</text>
+                        <rect x="40" y="45" width="25" height="45" fill="#94A3B8"/>
+                        <rect x="75" y="55" width="30" height="35" fill="#64748B"/>
+                        <line x1="120" y1="90" x2="120" y2="50" stroke="#F87171" stroke-width="5"/>
+                        <circle cx="120" cy="45" r="4" fill="#F87171"/>
+                        <rect x="145" y="12" width="3" height="12" fill="#F87171"/>
+                        <rect x="151" y="12" width="3" height="12" fill="#F87171"/>
+                        <line x1="85" y1="0" x2="85" y2="-25" stroke="#F87171" stroke-width="1.5" stroke-dasharray="3,3"/>
+                    </g>
+                    <!-- 懸浮展品 2 -->
+                    <g transform="translate(390, 55)">
+                        <rect x="0" y="0" width="170" height="110" rx="8" fill="#1E293B" stroke="#34D399" stroke-width="2" opacity="0.9"/>
+                        <text x="85" y="24" font-size="11" fill="#6EE7B7" font-weight="bold" text-anchor="middle">展品 B：及時承擔 (生機分支)</text>
+                        <path d="M 40 90 Q 85 45 130 90" fill="none" stroke="#34D399" stroke-width="3"/>
+                        <circle cx="85" cy="55" r="6" fill="#34D399"/>
+                        <polygon points="150,12 150,24 160,18" fill="#34D399"/>
+                        <line x1="85" y1="0" x2="85" y2="-25" stroke="#34D399" stroke-width="1.5" stroke-dasharray="3,3"/>
+                    </g>
+                    <text x="370" y="188" font-size="11" fill="#64748B" text-anchor="middle">▲ 宏觀史詩透視：未來數位後代在懸浮的時空立方體間凝視歷史抉擇</text>
+                </svg>
+            </div>
+            <div class="critique-grid">
+                <div class="critique-box box-pro">
+                    <h4>🌟 好的部分（優勢）</h4>
+                    <p>• <strong>格局大氣開闊</strong>：深色調暗場與懸浮時空立方體，徹底擺脫小房間局限，具備史詩紀錄片與數位藝術展架勢。<br>• <strong>時間被當成展品</strong>：播放/暫停標籤精確表達「歷史是一組可被暫停、倒帶檢視的切片」。</p>
+                </div>
+                <div class="critique-box box-con">
+                    <h4>⚠️ 較差／待加強（盲點與建議）</h4>
+                    <p>• <strong>微縮箱內部細節過於抽象</strong>：立方體內只有簡單幾何柱，組員難以直觀看出「到底是什麼具體歷史災難」。<br>• <strong>建議調整</strong>：在微縮箱內加入更具體的象徵符號（如停在酸雨中的小傘、冒黑煙的巨塔或乾涸龜裂的土地）。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 圖三：三大備案 -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-title">🎨 圖三：三大備案《破格漫畫／深海幽光／盆栽雙尺度》</div>
+                <span class="badge" style="background: #DDD6FE;">三大備案視覺對照</span>
+            </div>
+            <div class="diagram-container">
+                <svg viewBox="0 0 740 190" style="width: 100%; max-width: 740px; height: auto;">
+                    <!-- 備案一 -->
+                    <g transform="translate(10, 10)">
+                        <rect x="0" y="0" width="220" height="160" rx="8" fill="#FFFBEB" stroke="#2D2A26" stroke-width="2.5"/>
+                        <path d="M 170 30 L 210 70 L 160 90 L 215 130" fill="none" stroke="#F59E0B" stroke-width="3"/>
+                        <circle cx="80" cy="85" r="18" fill="#FFFFFF" stroke="#2D2A26" stroke-width="2.5"/>
+                        <line x1="98" y1="85" x2="180" y2="75" stroke="#2D2A26" stroke-width="4"/>
+                        <text x="110" y="145" font-size="11" font-weight="bold" fill="#B45309" text-anchor="middle">備案一：破畫框喜劇 (Meta UI)</text>
+                    </g>
+                    <!-- 備案二 -->
+                    <g transform="translate(255, 10)">
+                        <rect x="0" y="0" width="220" height="160" rx="8" fill="#0B132B" stroke="#2D2A26" stroke-width="2.5"/>
+                        <path d="M 20 130 Q 110 80 200 120" fill="none" stroke="#1C2541" stroke-width="24" opacity="0.6"/>
+                        <circle cx="110" cy="65" r="6" fill="#6FFFE9" opacity="0.9"/>
+                        <circle cx="95" cy="80" r="3" fill="#5BC0BE"/>
+                        <circle cx="125" cy="75" r="2.5" fill="#5BC0BE"/>
+                        <circle cx="140" cy="55" r="4" fill="#6FFFE9" opacity="0.7"/>
+                        <text x="110" y="145" font-size="11" font-weight="bold" fill="#6FFFE9" text-anchor="middle">備案二：深海程序發光 (Fluid Glow)</text>
+                    </g>
+                    <!-- 備案三 -->
+                    <g transform="translate(500, 10)">
+                        <rect x="0" y="0" width="220" height="160" rx="8" fill="#FAF5FF" stroke="#2D2A26" stroke-width="2.5"/>
+                        <line x1="10" y1="65" x2="210" y2="65" stroke="#10B981" stroke-width="3"/>
+                        <line x1="110" y1="65" x2="110" y2="40" stroke="#10B981" stroke-width="3"/>
+                        <circle cx="115" cy="37" r="5" fill="#34D399"/>
+                        <path d="M 110 65 L 60 115 M 110 65 L 160 120 M 60 115 L 30 140 M 60 115 L 90 135 M 160 120 L 140 145 M 160 120 L 190 140" stroke="#78350F" stroke-width="2.5"/>
+                        <text x="110" y="145" font-size="11" font-weight="bold" fill="#047857" text-anchor="middle">備案三：雙重尺度對照 (Macro/Micro)</text>
+                    </g>
+                </svg>
+            </div>
+            <div class="critique-grid">
+                <div class="critique-box box-pro">
+                    <h4>🌟 好的部分（優勢）</h4>
+                    <p>• <strong>風格光譜極其豐富</strong>：手繪荒誕破格、深海星雲暗場、溫柔生活繪本，給予組員極寬廣的審美挑選範圍。<br>• <strong>備案三（盆栽）的隱喻最精準</strong>：地上一截綠芽，地下盤根錯節，視覺隱喻滿分且工程最易收斂。</p>
+                </div>
+                <div class="critique-box box-con">
+                    <h4>⚠️ 較差／待加強（盲點與建議）</h4>
+                    <p>• <strong>備案一與備案二偏靜態</strong>：備案一沒畫出手伸出邊界後的「材質突變（如彩色3D手）」；備案二靜態粒子缺少流體光暈。<br>• <strong>建議調整</strong>：備案一加入跨媒材變形細節；備案二加入徑向光暈與巨獸剪影。</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
