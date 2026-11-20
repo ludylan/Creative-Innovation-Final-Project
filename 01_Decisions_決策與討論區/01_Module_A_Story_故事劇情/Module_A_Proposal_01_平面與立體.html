@@ -142,26 +142,38 @@
                 <div><div class="meta-label">預計片長</div><div class="meta-value">約 5～7 分鐘</div></div>
             </div>
 
+            <!-- 代表視覺概念圖 -->
+            <div style="background: #FFFFFF; border: var(--border-thick); border-radius: 20px; overflow: hidden; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+                <img src="../assets/art_styles/style_01_papercraft_popup.jpg" alt="紙藝立體折疊風格概念圖" style="width: 100%; height: auto; display: block; max-height: 420px; object-fit: cover;">
+                <div style="padding: 14px 20px; background: #FFFDF9; border-top: 2px dashed rgba(45,42,38,0.15); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <strong style="color: var(--ink);">🎨 代表風格：紙藝立體折疊 (Papercraft 3D)</strong>
+                        <div style="font-size: 13px; color: var(--ink-muted);">實體紙張切邊、多層視差投影，形式即內容（厚度阻礙）</div>
+                    </div>
+                    <a href="../../popup_book_prototype.html" target="_blank" style="background: var(--butter); border: var(--border-thin); padding: 6px 14px; border-radius: 8px; font-weight: 700; text-decoration: none; color: var(--ink); box-shadow: 2px 2px 0 var(--ink);">🌟 開啟動態原型體驗</a>
+                </div>
+            </div>
+
             <!-- 概念圖示意 -->
             <div class="concept-diagram">
                 <svg viewBox="0 0 700 220" style="max-width: 100%; height: auto;">
                     <!-- 2D 平面世界 -->
                     <rect x="20" y="20" width="280" height="180" rx="12" fill="#FFFFFF" stroke="#2D2A26" stroke-width="3"/>
-                    <text x="160" y="50" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle" fill="#6B665F">【起點：平面世界 2D】</text>
+                    <text x="160" y="50" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle" fill="#6B665F">【起點：純粹安穩的二維小窩】</text>
                     <!-- 平面角色 -->
                     <circle cx="160" cy="110" r="28" fill="#A8E6CF" stroke="#2D2A26" stroke-width="3"/>
-                    <text x="160" y="115" font-size="12" font-weight="bold" text-anchor="middle">平面小圓</text>
-                    <text x="160" y="165" font-size="12" fill="#6B665F" text-anchor="middle">平淡安穩、無透視、無厚度</text>
+                    <text x="160" y="115" font-size="12" font-weight="bold" text-anchor="middle">二維小人</text>
+                    <text x="160" y="165" font-size="12" fill="#6B665F" text-anchor="middle">無負擔、自由穿行於扁平縫隙</text>
 
                     <!-- 光之門縫通道 -->
                     <path d="M 310 110 L 370 110" stroke="#F8635F" stroke-width="4" stroke-dasharray="6,4"/>
                     <polygon points="370,110 360,105 360,115" fill="#F8635F"/>
-                    <text x="340" y="95" font-size="12" font-weight="bold" fill="#F8635F" text-anchor="middle">光隙入口</text>
+                    <text x="340" y="95" font-size="12" font-weight="bold" fill="#F8635F" text-anchor="middle">離家出走</text>
 
                     <!-- 3D 立體世界 -->
                     <rect x="380" y="20" width="300" height="180" rx="12" fill="#FFFBEB" stroke="#2D2A26" stroke-width="3"/>
-                    <text x="530" y="50" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle" fill="#B45309">【轉折：立體世界 3D】</text>
-                    <!-- 立體球體帶厚度與金項鍊 -->
+                    <text x="530" y="50" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle" fill="#B45309">【終局：背負厚重行頭的立體界】</text>
+                    <!-- 立體球體帶厚度與金飾 -->
                     <defs>
                         <radialGradient id="sphereGrad" cx="35%" cy="35%" r="65%">
                             <stop offset="0%" stop-color="#FDE68A"/>
@@ -172,25 +184,26 @@
                     <circle cx="530" cy="105" r="30" fill="url(#sphereGrad)" stroke="#2D2A26" stroke-width="3"/>
                     <!-- 金飾厚度環 -->
                     <ellipse cx="530" cy="120" rx="36" ry="12" fill="none" stroke="#D97706" stroke-width="4"/>
-                    <text x="530" y="165" font-size="12" fill="#B45309" font-weight="bold" text-anchor="middle">累積厚重物件 ➔ 卡在門縫！</text>
+                    <text x="530" y="165" font-size="12" fill="#B45309" font-weight="bold" text-anchor="middle">累積繁複行頭 ➔ 累贅卡在門縫想回回不去！</text>
                 </svg>
-                <div style="font-size: 13px; color: var(--ink-muted); margin-top: 6px;">▲ 核心敘事弧線概念圖：從二維扁平到三維實體，厚度成為無法跨回原世界的障礙</div>
+                <div style="font-size: 13px; color: var(--ink-muted); margin-top: 6px;">▲ 核心敘事弧線：並非空泛的維度探險，而是關於離家闖蕩、背負過多身外之物，最後再也擠不回純粹小窩的人生寓言</div>
             </div>
 
             <section class="card">
                 <div class="card-header">📌 1. 粗顆粒故事骨架（四階段推進）</div>
                 <div class="content-box">
-                    <p>• <strong>第一階段【安穩二維】(約 01:00)</strong>：主角生活在一個線條分明、平淡但自得其樂的純平面世界。日子很有規律，沒有高低起伏，但也缺乏深度。</p>
-                    <p>• <strong>第二階段【光隙誘惑與跨界】(約 01:30)</strong>：天空中或紙張邊緣忽然裂開一道光隙，主角被未知的光暈吸引，一步一步從平面滑入立體三維世界。</p>
-                    <p>• <strong>第三階段【體驗美好與累積穿戴】(約 02:00)</strong>：在外界體驗到前所未見的空間、光影與重力。他開始擁抱外面的世界，並穿戴上外界累積的華貴或沉重物件（例如金項鍊、華麗外殼）。</p>
-                    <p>• <strong>第四階段【回望與門縫衝突】(約 01:30)</strong>：他想回到原點時，卻發現帶著厚度的物品被卡在扁平的入口門縫。進不去、也捨不得丟，形成全片最高潮的物理抉擇困境。</p>
+                    <p>• <strong>第一階段【純粹小窩】(約 01:00)</strong>：主角生活在一個線條分明、無拘無束的二維平面小窩裡。日子單純安穩，可以輕巧滑過任何細微的紙頁縫隙。</p>
+                    <p>• <strong>第二階段【告別小窩，向外闖蕩】(約 01:30)</strong>：紙張邊緣裂開一道光隙，主角決定走出舒適圈，踏入廣袤光鮮的三維立體世界。</p>
+                    <p>• <strong>第三階段【繁華加身與累積累贅】(約 02:00)</strong>：在外界獲得了讚賞，穿戴上耀眼精緻的頭飾、金冠與厚重外殼。每多一件裝飾，他就更像三維世界的住民，卻也越來越沉重。</p>
+                    <p>• <strong>第四階段【疲憊返鄉，卡在門縫】(約 01:30)</strong>：繁華落盡、心生疲憊想回老家時，他才驚愕發現：身上的金飾與三維厚度，讓他硬生生卡在原本小窩的扁平窄門外！想回回不去，捨不捨得脫下？成為直擊靈魂的高潮衝突。</p>
                 </div>
             </section>
 
             <section class="card">
-                <div class="card-header">💡 2. 深層立意（為什麼需要這段劇情？）</div>
+                <div class="card-header">💡 2. 深層立意（為什麼需要這段劇情？真實共鳴在哪？）</div>
                 <div class="content-box">
-                    <p>這不是簡單的「物質壞、樸素好」的二分教條，而是探討<strong>「擁有與經驗對個體的不可逆塑造」</strong>。當我們走出舒適圈學會了更多、獲得了更多，我們就再也無法假裝自己還是當初那張毫無重量的白紙。厚度是負擔，也是走過世界的證明。</p>
+                    <p><strong>沒有人會有「被卷入高維度」的困擾，但每個人都有「長大後再也回不去老家」的無奈與悵惘。</strong></p>
+                    <p>這段故事是寫給每一個離開家鄉、在外追求成功與光鮮包裝的現代人。我們為了適應外部社會，拼命往身上穿戴名利、身份與防衛裝甲，等到筋疲力竭想要回到當初那個純樸安心的起點時，才發現我們早已累積了太多「厚度」與「累贅」。這種物理上的維度障礙，恰恰是精神層面最真實的鄉愁與代價。</p>
                 </div>
             </section>
 
