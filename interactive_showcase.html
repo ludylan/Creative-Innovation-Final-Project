@@ -6,9 +6,9 @@
     <title>【震撼動態原型】期末專案核心視覺概念 3D 互動展示</title>
     <style>
         :root {
-            --bg-dark: #090B10;
-            --panel-bg: rgba(18, 22, 34, 0.82);
-            --panel-border: rgba(255, 255, 255, 0.15);
+            --bg-dark: #080A10;
+            --panel-bg: rgba(15, 20, 32, 0.88);
+            --panel-border: rgba(255, 255, 255, 0.16);
             --accent-cyan: #38BDF8;
             --accent-gold: #F59E0B;
             --accent-emerald: #10B981;
@@ -27,7 +27,7 @@
             overflow: hidden;
             user-select: none;
         }
-        #webgl-canvas {
+        #viewport-canvas {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
@@ -35,7 +35,7 @@
             display: block;
             cursor: grab;
         }
-        #webgl-canvas:active {
+        #viewport-canvas:active {
             cursor: grabbing;
         }
         /* 頂部 HUD 導覽列 */
@@ -60,7 +60,7 @@
             align-items: center;
             gap: 12px;
             pointer-events: auto;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
         }
         .brand-badge {
             background: linear-gradient(135deg, #0EA5E9, #38BDF8);
@@ -85,7 +85,7 @@
             border-radius: 999px;
             padding: 4px;
             pointer-events: auto;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
         }
         .tab-btn {
             background: transparent;
@@ -102,10 +102,10 @@
             gap: 8px;
         }
         .tab-btn.active {
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.08));
+            background: linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08));
             color: #FFF;
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.35);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
         }
         /* 側邊互動控制台 */
         .control-panel {
@@ -119,7 +119,7 @@
             border-radius: 20px;
             padding: 22px;
             z-index: 10;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.7);
         }
         .panel-title {
             font-size: 15px;
@@ -149,7 +149,7 @@
         .range-slider {
             width: 100%;
             height: 6px;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.18);
             border-radius: 999px;
             outline: none;
             -webkit-appearance: none;
@@ -196,7 +196,7 @@
             font-weight: 800;
         }
         .action-btn.primary:hover {
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
         }
         /* 右下角視角提示 */
         .camera-tip {
@@ -225,33 +225,15 @@
         @keyframes pulse {
             0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; }
         }
-        #loading-overlay {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 5;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--accent-cyan);
-            background: rgba(9, 11, 16, 0.85);
-            padding: 12px 24px;
-            border-radius: 999px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            pointer-events: none;
-            transition: opacity 0.4s;
-        }
     </style>
-    <!-- 單一依賴源：Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <div id="loading-overlay">⚡ 3D 渲染核心初始化中...</div>
-    <canvas id="webgl-canvas"></canvas>
+    <canvas id="viewport-canvas"></canvas>
 
     <!-- 頂部 HUD -->
     <div class="hud-header">
         <div class="brand-title">
-            <span class="brand-badge">LIVE 3D</span>
+            <span class="brand-badge">ZERO-DEP 3D</span>
             <span class="brand-text">期末專案·頂級視覺動態原型 (Creative Prototype)</span>
         </div>
         <div class="tab-group">
@@ -315,351 +297,499 @@
         <span>🖱️ 滑鼠拖曳 360° 繞行 ｜ 滾輪縮放景深</span>
     </div>
 
+    <!-- 100% 純原生零依賴 3D 渲染引擎（無需任何外部 CDN，永不白屏、永不卡死） -->
     <script>
-        // 核心渲染器與場景變數
-        let scene, camera, renderer;
+        const canvas = document.getElementById('viewport-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = 0, height = 0;
         let currentSceneId = 1;
-        let clock;
-        let isThreeReady = false;
 
-        // 自製純零依賴相機軌道控制器 (完全免去 OrbitControls.js 跨域載入失敗問題)
+        // 相機視角狀態
+        let camRotX = 0, camRotY = 0;
+        let camDist = 650;
         let isDragging = false;
-        let previousMousePosition = { x: 0, y: 0 };
-        let spherical = { radius: 14, theta: 0, phi: Math.PI / 2 };
+        let lastMouseX = 0, lastMouseY = 0;
 
-        // 場景一物件 (2D 轉 3D)
-        let groupScene1;
-        let flatGrid, charMesh, jewelryMesh, doorFrame, particleSystem1;
-        let dimProgress = 0;
+        // 場景一變數 (2D 轉 3D)
+        let dimProgress = 0; // 0 = 2D, 1 = 3D
+        let thicknessVal = 0.2;
         let isJamming = false, jamTime = 0;
+        let charPosX = -120;
+        let sparks = [];
 
-        // 場景二物件 (時空博物館)
-        let groupScene2;
-        let dioramaA, dioramaB, rainParticles, swarmParticles;
+        // 場景二變數 (時空博物館)
         let isTimeFrozen = false;
+        let cubeRotation = 0;
+        let rainParticles = [];
+        let stars = [];
+        let explodeScale = 1;
 
-        function bootstrap() {
-            if (typeof THREE === 'undefined') {
-                setTimeout(bootstrap, 100);
-                return;
-            }
-            isThreeReady = true;
-            document.getElementById('loading-overlay').style.opacity = '0';
-            setTimeout(() => {
-                const overlay = document.getElementById('loading-overlay');
-                if (overlay) overlay.style.display = 'none';
-            }, 400);
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
 
-            initThreeScene();
-            animate();
+        // 初始化背景粒子與星群
+        for (let i = 0; i < 400; i++) {
+            stars.push({
+                x: (Math.random() - 0.5) * 1600,
+                y: (Math.random() - 0.5) * 1200,
+                z: (Math.random() - 0.5) * 1600,
+                size: Math.random() * 2 + 0.8,
+                color: Math.random() > 0.4 ? '#38BDF8' : '#F59E0B'
+            });
+        }
+        // 初始化凍結雨滴 (場景二)
+        for (let i = 0; i < 200; i++) {
+            rainParticles.push({
+                x: -180 + (Math.random() - 0.5) * 180,
+                y: (Math.random() - 0.5) * 180,
+                z: (Math.random() - 0.5) * 180,
+                speed: Math.random() * 4 + 2
+            });
         }
 
-        function initThreeScene() {
-            clock = new THREE.Clock();
-            const canvas = document.getElementById('webgl-canvas');
-            
-            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        // 滑鼠與觸控相機監聽
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const dx = e.clientX - lastMouseX;
+            const dy = e.clientY - lastMouseY;
+            camRotY += dx * 0.007;
+            camRotX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, camRotX + dy * 0.007));
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+        canvas.addEventListener('wheel', (e) => {
+            camDist = Math.max(300, Math.min(1400, camDist + e.deltaY * 0.6));
+        }, { passive: true });
 
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x090B10);
-            scene.fog = new THREE.FogExp2(0x090B10, 0.035);
-
-            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-            updateCameraPosition();
-
-            groupScene1 = new THREE.Group();
-            groupScene2 = new THREE.Group();
-            scene.add(groupScene1);
-            scene.add(groupScene2);
-
-            buildScene1();
-            buildScene2();
-            switchScene(1);
-
-            // 綁定原生滑鼠相機控制
-            canvas.addEventListener('mousedown', (e) => {
+        // 觸控支援
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
                 isDragging = true;
-                previousMousePosition = { x: e.clientX, y: e.clientY };
-            });
-            window.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                const deltaX = e.clientX - previousMousePosition.x;
-                const deltaY = e.clientY - previousMousePosition.y;
-                spherical.theta -= deltaX * 0.007;
-                spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi - deltaY * 0.007));
-                updateCameraPosition();
-                previousMousePosition = { x: e.clientX, y: e.clientY };
-            });
-            window.addEventListener('mouseup', () => { isDragging = false; });
-            canvas.addEventListener('wheel', (e) => {
-                spherical.radius = Math.max(5, Math.min(28, spherical.radius + e.deltaY * 0.015));
-                updateCameraPosition();
-            }, { passive: true });
+                lastMouseX = e.touches[0].clientX;
+                lastMouseY = e.touches[0].clientY;
+            }
+        });
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging || e.touches.length !== 1) return;
+            const dx = e.touches[0].clientX - lastMouseX;
+            const dy = e.touches[0].clientY - lastMouseY;
+            camRotY += dx * 0.008;
+            camRotX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, camRotX + dy * 0.008));
+            lastMouseX = e.touches[0].clientX;
+            lastMouseY = e.touches[0].clientY;
+        });
+        window.addEventListener('touchend', () => { isDragging = false; });
 
-            // 觸控支援
-            canvas.addEventListener('touchstart', (e) => {
-                if (e.touches.length === 1) {
-                    isDragging = true;
-                    previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        // 3D 投影核心數學公式
+        function project3D(x, y, z) {
+            // Y 軸旋轉
+            let cosY = Math.cos(camRotY), sinY = Math.sin(camRotY);
+            let x1 = x * cosY - z * sinY;
+            let z1 = z * cosY + x * sinY;
+
+            // X 軸旋轉
+            let cosX = Math.cos(camRotX), sinX = Math.sin(camRotX);
+            let y2 = y * cosX - z1 * sinX;
+            let z2 = z1 * cosX + y * sinX;
+
+            let z_cam = z2 + camDist;
+            if (z_cam <= 10) return null; // 裁切面後
+
+            let scale = 600 / z_cam;
+            return {
+                x: width / 2 + x1 * scale,
+                y: height / 2 + y2 * scale,
+                scale: scale,
+                depth: z_cam
+            };
+        }
+
+        /* -------------------------------------------------------------
+           繪製場景一：2D 轉 3D 維度撕裂
+        ------------------------------------------------------------- */
+        function renderScene1(delta) {
+            // 背景漸層
+            let bgGrad = ctx.createRadialGradient(width/2, height/2, 50, width/2, height/2, width*0.8);
+            bgGrad.addColorStop(0, '#101626');
+            bgGrad.addColorStop(1, '#080A10');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, width, height);
+
+            // 繪製地平網格 (隨維度拉開傾斜)
+            ctx.strokeStyle = `rgba(56, 189, 248, ${0.15 + dimProgress * 0.25})`;
+            ctx.lineWidth = 1;
+            let gridY = 80;
+            let gridAngle = (1 - dimProgress) * (Math.PI / 2); // 0 = 平放, PI/2 = 正交貼平
+
+            for (let i = -6; i <= 6; i++) {
+                let p1 = project3D(i * 45, gridY * Math.cos(gridAngle), i * 45 * Math.sin(gridAngle) - 200);
+                let p2 = project3D(i * 45, gridY * Math.cos(gridAngle), i * 45 * Math.sin(gridAngle) + 200);
+                if (p1 && p2) {
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            }
+            for (let j = -5; j <= 5; j++) {
+                let p1 = project3D(-270, gridY * Math.cos(gridAngle), j * 40 * dimProgress);
+                let p2 = project3D(270, gridY * Math.cos(gridAngle), j * 40 * dimProgress);
+                if (p1 && p2) {
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            }
+
+            // 門縫紅光裂隙
+            let doorP1 = project3D(140, -180, 0);
+            let doorP2 = project3D(140, 180, 0);
+            if (doorP1 && doorP2) {
+                ctx.save();
+                ctx.strokeStyle = '#F43F5E';
+                ctx.lineWidth = 4;
+                ctx.shadowColor = '#F43F5E';
+                ctx.shadowBlur = 18;
+                ctx.beginPath();
+                ctx.moveTo(doorP1.x, doorP1.y);
+                ctx.lineTo(doorP2.x, doorP2.y);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // 主角位置計算 (處理卡門抖動)
+            let curCharX = charPosX;
+            if (isJamming) {
+                jamTime += delta;
+                curCharX = 115 + Math.sin(jamTime * 50) * 8;
+                // 生成碰撞粒子火花
+                if (Math.random() > 0.3) {
+                    sparks.push({
+                        x: 135,
+                        y: (Math.random() - 0.5) * 60,
+                        z: (Math.random() - 0.5) * 40,
+                        vx: -(Math.random() * 4 + 2),
+                        vy: (Math.random() - 0.5) * 6,
+                        vz: (Math.random() - 0.5) * 6,
+                        life: 1.0
+                    });
+                }
+                if (jamTime > 2.5) isJamming = false;
+            }
+
+            // 繪製主角立方體 (帶有 3D 深度與光照)
+            let boxSize = 55;
+            let boxDepth = 5 + dimProgress * 50; // 2D 時厚度為 5，3D 時拉開到 55
+            drawShadedBox(curCharX, 0, 0, boxSize, boxSize, boxDepth, '#FFFFFF');
+
+            // 繪製金色厚重飾品 (旋轉環)
+            let jewRadius = 45 * (0.8 + thicknessVal * 1.2);
+            let jewThick = 8 + thicknessVal * 28 * dimProgress;
+            drawGoldRing(curCharX, 0, 0, jewRadius, jewThick, delta);
+
+            // 繪製火花粒子
+            for (let i = sparks.length - 1; i >= 0; i--) {
+                let sp = sparks[i];
+                sp.x += sp.vx; sp.y += sp.vy; sp.z += sp.vz;
+                sp.life -= delta * 1.5;
+                if (sp.life <= 0) {
+                    sparks.splice(i, 1);
+                    continue;
+                }
+                let pt = project3D(sp.x, sp.y, sp.z);
+                if (pt) {
+                    ctx.fillStyle = `rgba(253, 230, 138, ${sp.life})`;
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 2.5 * pt.scale, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        // 繪製帶有光照與深度的 3D 方塊
+        function drawShadedBox(cx, cy, cz, sx, sy, sz, baseColor) {
+            let hx = sx / 2, hy = sy / 2, hz = sz / 2;
+            let vertices = [
+                {x: cx - hx, y: cy - hy, z: cz - hz},
+                {x: cx + hx, y: cy - hy, z: cz - hz},
+                {x: cx + hx, y: cy + hy, z: cz - hz},
+                {x: cx - hx, y: cy + hy, z: cz - hz},
+                {x: cx - hx, y: cy - hy, z: cz + hz},
+                {x: cx + hx, y: cy - hy, z: cz + hz},
+                {x: cx + hx, y: cy + hy, z: cz + hz},
+                {x: cx - hx, y: cy + hy, z: cz + hz}
+            ];
+
+            let faces = [
+                {v: [0, 1, 2, 3], norm: {x: 0, y: 0, z: -1}}, // 前
+                {v: [5, 4, 7, 6], norm: {x: 0, y: 0, z: 1}},  // 後
+                {v: [4, 0, 3, 7], norm: {x: -1, y: 0, z: 0}}, // 左
+                {v: [1, 5, 6, 2], norm: {x: 1, y: 0, z: 0}},  // 右
+                {v: [4, 5, 1, 0], norm: {x: 0, y: -1, z: 0}}, // 上
+                {v: [3, 2, 6, 7], norm: {x: 0, y: 1, z: 0}}   // 下
+            ];
+
+            // 投影頂點
+            let projVerts = vertices.map(v => project3D(v.x, v.y, v.z));
+
+            // 計算面中心深度並由深到淺排序
+            faces.forEach(f => {
+                let p0 = projVerts[f.v[0]], p1 = projVerts[f.v[1]], p2 = projVerts[f.v[2]], p3 = projVerts[f.v[3]];
+                f.depth = (p0 && p1 && p2 && p3) ? (p0.depth + p1.depth + p2.depth + p3.depth) / 4 : 0;
+            });
+            faces.sort((a, b) => b.depth - a.depth);
+
+            // 光源方向 (固定在斜上方)
+            let lx = 0.5, ly = -0.7, lz = 0.5;
+
+            faces.forEach(f => {
+                let pts = [projVerts[f.v[0]], projVerts[f.v[1]], projVerts[f.v[2]], projVerts[f.v[3]]];
+                if (pts.some(p => p === null)) return;
+
+                // 背面剔除 (Backface Culling)
+                let cross = (pts[1].x - pts[0].x) * (pts[2].y - pts[0].y) - (pts[1].y - pts[0].y) * (pts[2].x - pts[0].x);
+                if (cross <= 0) return;
+
+                // 光照強度
+                let dot = Math.max(0.15, (f.norm.x * lx + f.norm.y * ly + f.norm.z * lz));
+                let shade = Math.floor(200 + dot * 55);
+
+                ctx.fillStyle = `rgb(${shade}, ${shade}, ${shade})`;
+                ctx.strokeStyle = '#2D2A26';
+                ctx.lineWidth = 2.5;
+
+                ctx.beginPath();
+                ctx.moveTo(pts[0].x, pts[0].y);
+                ctx.lineTo(pts[1].x, pts[1].y);
+                ctx.lineTo(pts[2].x, pts[2].y);
+                ctx.lineTo(pts[3].x, pts[3].y);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            });
+        }
+
+        // 繪製金色立體飾品
+        let ringRot = 0;
+        function drawGoldRing(cx, cy, cz, radius, thick, delta) {
+            ringRot += delta * 1.2;
+            let segments = 24;
+            ctx.save();
+            ctx.strokeStyle = '#F59E0B';
+            ctx.shadowColor = '#F59E0B';
+            ctx.shadowBlur = 14 * dimProgress;
+            ctx.lineWidth = thick * (dimProgress * 0.8 + 0.2);
+
+            let firstPt = null;
+            ctx.beginPath();
+            for (let i = 0; i <= segments; i++) {
+                let theta = (i / segments) * Math.PI * 2;
+                let rx = Math.cos(theta) * radius;
+                let rz = Math.sin(theta) * radius * dimProgress;
+                let ry = Math.sin(theta + ringRot) * (18 * dimProgress);
+
+                let pt = project3D(cx + rx, cy + ry, cz + rz);
+                if (pt) {
+                    if (i === 0) {
+                        ctx.moveTo(pt.x, pt.y);
+                        firstPt = pt;
+                    } else {
+                        ctx.lineTo(pt.x, pt.y);
+                    }
+                }
+            }
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        /* -------------------------------------------------------------
+           繪製場景二：時空博物館 (神殿 ✕ 微縮箱 ✕ 子彈時間)
+        ------------------------------------------------------------- */
+        function renderScene2(delta) {
+            // 黑曜石神殿深空
+            ctx.fillStyle = '#07090E';
+            ctx.fillRect(0, 0, width, height);
+
+            if (!isTimeFrozen) {
+                cubeRotation += delta * 0.6;
+            }
+
+            // 繪製背景星雲粒子
+            stars.forEach(s => {
+                let pt = project3D(s.x, s.y, s.z);
+                if (pt) {
+                    ctx.fillStyle = s.color;
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, s.size * pt.scale, 0, Math.PI * 2);
+                    ctx.fill();
                 }
             });
-            window.addEventListener('touchmove', (e) => {
-                if (!isDragging || e.touches.length !== 1) return;
-                const deltaX = e.touches[0].clientX - previousMousePosition.x;
-                const deltaY = e.touches[0].clientY - previousMousePosition.y;
-                spherical.theta -= deltaX * 0.008;
-                spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi - deltaY * 0.008));
-                updateCameraPosition();
-                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-            });
-            window.addEventListener('touchend', () => { isDragging = false; });
 
-            window.addEventListener('resize', onWindowResize);
+            // 兩座光柱地面光暈
+            let floorP1 = project3D(-180, 140, 0);
+            let floorP2 = project3D(180, 140, 0);
+            if (floorP1) {
+                let g1 = ctx.createRadialGradient(floorP1.x, floorP1.y, 10, floorP1.x, floorP1.y, 120);
+                g1.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
+                g1.addColorStop(1, 'transparent');
+                ctx.fillStyle = g1;
+                ctx.fillRect(floorP1.x - 120, floorP1.y - 120, 240, 240);
+            }
+            if (floorP2) {
+                let g2 = ctx.createRadialGradient(floorP2.x, floorP2.y, 10, floorP2.x, floorP2.y, 120);
+                g2.addColorStop(0, 'rgba(52, 211, 153, 0.35)');
+                g2.addColorStop(1, 'transparent');
+                ctx.fillStyle = g2;
+                ctx.fillRect(floorP2.x - 120, floorP2.y - 120, 240, 240);
+            }
+
+            // 繪製懸浮微縮箱 A (紅色災難停滯)
+            drawWireframeDiorama(-180, 0, 0, 140, cubeRotation, '#F87171', '【展品 A：代價延宕】');
+
+            // 繪製懸浮微縮箱 B (綠色生機分支)
+            drawWireframeDiorama(180, 0, 0, 140 * explodeScale, -cubeRotation, '#34D399', '【展品 B：及時承擔】');
+
+            // 繪製凍結雨滴 (子彈時間)
+            rainParticles.forEach(r => {
+                if (!isTimeFrozen) {
+                    r.y += r.speed;
+                    if (r.y > 90) r.y = -90;
+                }
+                let pt = project3D(r.x, r.y, r.z);
+                if (pt) {
+                    ctx.fillStyle = isTimeFrozen ? '#60A5FA' : '#93C5FD';
+                    ctx.fillRect(pt.x, pt.y, 2 * pt.scale, 7 * pt.scale);
+                }
+            });
         }
 
-        function updateCameraPosition() {
-            camera.position.x = spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
-            camera.position.y = spherical.radius * Math.cos(spherical.phi);
-            camera.position.z = spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
-            camera.lookAt(0, 0, 0);
+        // 繪製透明時空微縮箱
+        function drawWireframeDiorama(cx, cy, cz, size, rot, color, title) {
+            let hs = size / 2;
+            let rawVerts = [
+                {x: -hs, y: -hs, z: -hs}, {x: hs, y: -hs, z: -hs},
+                {x: hs, y: hs, z: -hs},   {x: -hs, y: hs, z: -hs},
+                {x: -hs, y: -hs, z: hs},  {x: hs, y: -hs, z: hs},
+                {x: hs, y: hs, z: hs},    {x: -hs, y: hs, z: hs}
+            ];
+
+            let cos = Math.cos(rot), sin = Math.sin(rot);
+            let rotatedVerts = rawVerts.map(v => {
+                return {
+                    x: cx + (v.x * cos - v.z * sin),
+                    y: cy + v.y,
+                    z: cz + (v.z * cos + v.x * sin)
+                };
+            });
+
+            let pts = rotatedVerts.map(v => project3D(v.x, v.y, v.z));
+            let edges = [
+                [0,1],[1,2],[2,3],[3,0],
+                [4,5],[5,6],[6,7],[7,4],
+                [0,4],[1,5],[2,6],[3,7]
+            ];
+
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 10;
+
+            edges.forEach(([i, j]) => {
+                if (pts[i] && pts[j]) {
+                    ctx.beginPath();
+                    ctx.moveTo(pts[i].x, pts[i].y);
+                    ctx.lineTo(pts[j].x, pts[j].y);
+                    ctx.stroke();
+                }
+            });
+
+            // 繪製箱內幾何核心
+            let centerPt = project3D(cx, cy, cz);
+            if (centerPt) {
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(centerPt.x, centerPt.y, 8 * centerPt.scale, 0, Math.PI * 2);
+                ctx.fill();
+
+                // 標題文字
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillStyle = color;
+                ctx.textAlign = 'center';
+                ctx.fillText(title, centerPt.x, centerPt.y + 90 * centerPt.scale);
+            }
+            ctx.restore();
         }
 
         /* -------------------------------------------------------------
-           場景一：2D 轉 3D 維度撕裂
-        ------------------------------------------------------------- */
-        function buildScene1() {
-            const ambLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
-            groupScene1.add(ambLight);
-
-            const dirLight = new THREE.DirectionalLight(0xFDE68A, 1.4);
-            dirLight.position.set(6, 10, 8);
-            groupScene1.add(dirLight);
-
-            // 2D 網格背景
-            flatGrid = new THREE.GridHelper(18, 18, 0x38BDF8, 0x1E293B);
-            flatGrid.rotation.x = Math.PI / 2;
-            groupScene1.add(flatGrid);
-
-            // 主角白塊幾何
-            const charGeo = new THREE.BoxGeometry(1.6, 1.6, 1.6);
-            const charMat = new THREE.MeshStandardMaterial({
-                color: 0xFFFFFF,
-                roughness: 0.15,
-                metalness: 0.2
-            });
-            charMesh = new THREE.Mesh(charGeo, charMat);
-            charMesh.position.set(-2, 0, 0);
-            charMesh.scale.z = 0.05; // 初始完全扁平 2D
-            groupScene1.add(charMesh);
-
-            // 穿戴之厚重立體金飾
-            const jewGeo = new THREE.TorusKnotGeometry(0.75, 0.24, 80, 16);
-            const jewMat = new THREE.MeshStandardMaterial({
-                color: 0xF59E0B,
-                metalness: 0.9,
-                roughness: 0.2,
-                emissive: 0x78350F,
-                emissiveIntensity: 0.25
-            });
-            jewelryMesh = new THREE.Mesh(jewGeo, jewMat);
-            jewelryMesh.position.set(-2, 0, 0);
-            jewelryMesh.scale.set(0.7, 0.7, 0.1); // 初始扁平
-            groupScene1.add(jewelryMesh);
-
-            // 門縫結構
-            const doorMat = new THREE.MeshBasicMaterial({ color: 0xF43F5E });
-            const doorTop = new THREE.Mesh(new THREE.BoxGeometry(0.25, 5, 0.25), doorMat);
-            doorTop.position.set(2.2, 3.2, 0);
-            const doorBottom = new THREE.Mesh(new THREE.BoxGeometry(0.25, 5, 0.25), doorMat);
-            doorBottom.position.set(2.2, -3.2, 0);
-            doorFrame = new THREE.Group();
-            doorFrame.add(doorTop);
-            doorFrame.add(doorBottom);
-            groupScene1.add(doorFrame);
-
-            // 碰撞火花粒子
-            const pCount = 300;
-            const pGeo = new THREE.BufferGeometry();
-            const pPos = new Float32Array(pCount * 3);
-            for(let i=0; i<pCount*3; i+=3) {
-                pPos[i] = 2.2 + (Math.random() - 0.5) * 0.6;
-                pPos[i+1] = (Math.random() - 0.5) * 2;
-                pPos[i+2] = (Math.random() - 0.5) * 1.5;
-            }
-            pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-            const pMat = new THREE.PointsMaterial({ color: 0xFDE68A, size: 0.1, transparent: true, opacity: 0 });
-            particleSystem1 = new THREE.Points(pGeo, pMat);
-            groupScene1.add(particleSystem1);
-        }
-
-        /* -------------------------------------------------------------
-           場景二：時空博物館
-        ------------------------------------------------------------- */
-        function buildScene2() {
-            // 黑曜石鏡面地板
-            const floorGeo = new THREE.PlaneGeometry(36, 36);
-            const floorMat = new THREE.MeshStandardMaterial({ color: 0x050811, roughness: 0.15, metalness: 0.85 });
-            const floor = new THREE.Mesh(floorGeo, floorMat);
-            floor.rotation.x = -Math.PI / 2;
-            floor.position.y = -3.8;
-            groupScene2.add(floor);
-
-            // 兩座全息光柱
-            const pLight1 = new THREE.PointLight(0x38BDF8, 3, 20);
-            pLight1.position.set(-4.5, 6, 0);
-            groupScene2.add(pLight1);
-
-            const pLight2 = new THREE.PointLight(0x34D399, 3, 20);
-            pLight2.position.set(4.5, 6, 0);
-            groupScene2.add(pLight2);
-
-            // 懸浮時空微縮箱 A
-            const boxGeo = new THREE.BoxGeometry(3.6, 3.6, 3.6);
-            const boxMatA = new THREE.MeshStandardMaterial({
-                color: 0x1E293B,
-                roughness: 0.2,
-                metalness: 0.5,
-                wireframe: true
-            });
-            dioramaA = new THREE.Mesh(boxGeo, boxMatA);
-            dioramaA.position.set(-4.5, 0, 0);
-            groupScene2.add(dioramaA);
-
-            const cityMesh = new THREE.Mesh(
-                new THREE.BoxGeometry(1.4, 2.4, 1.4),
-                new THREE.MeshStandardMaterial({ color: 0xF87171, metalness: 0.4 })
-            );
-            cityMesh.position.set(-4.5, -0.6, 0);
-            groupScene2.add(cityMesh);
-
-            // 懸浮時空微縮箱 B
-            const boxMatB = new THREE.MeshStandardMaterial({
-                color: 0x064E3B,
-                roughness: 0.2,
-                metalness: 0.5,
-                wireframe: true
-            });
-            dioramaB = new THREE.Mesh(boxGeo, boxMatB);
-            dioramaB.position.set(4.5, 0, 0);
-            groupScene2.add(dioramaB);
-
-            const treeMesh = new THREE.Mesh(
-                new THREE.DodecahedronGeometry(1.2),
-                new THREE.MeshStandardMaterial({ color: 0x34D399, wireframe: false, roughness: 0.3 })
-            );
-            treeMesh.position.set(4.5, 0, 0);
-            groupScene2.add(treeMesh);
-
-            // 雨滴粒子 (子彈時間)
-            const rCount = 800;
-            const rGeo = new THREE.BufferGeometry();
-            const rPos = new Float32Array(rCount * 3);
-            for(let i=0; i<rCount*3; i+=3) {
-                rPos[i] = -4.5 + (Math.random() - 0.5) * 3.4;
-                rPos[i+1] = (Math.random() - 0.5) * 3.4;
-                rPos[i+2] = (Math.random() - 0.5) * 3.4;
-            }
-            rGeo.setAttribute('position', new THREE.BufferAttribute(rPos, 3));
-            const rMat = new THREE.PointsMaterial({ color: 0x93C5FD, size: 0.06, transparent: true, opacity: 0.9 });
-            rainParticles = new THREE.Points(rGeo, rMat);
-            groupScene2.add(rainParticles);
-
-            // 星雲粒子流
-            const sCount = 2000;
-            const sGeo = new THREE.BufferGeometry();
-            const sPos = new Float32Array(sCount * 3);
-            for(let i=0; i<sCount*3; i+=3) {
-                const r = 5 + Math.random() * 9;
-                const theta = Math.random() * Math.PI * 2;
-                sPos[i] = Math.cos(theta) * r;
-                sPos[i+1] = (Math.random() - 0.5) * 8;
-                sPos[i+2] = Math.sin(theta) * r;
-            }
-            sGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
-            const sMat = new THREE.PointsMaterial({ color: 0x38BDF8, size: 0.045, transparent: true, opacity: 0.6 });
-            swarmParticles = new THREE.Points(sGeo, sMat);
-            groupScene2.add(swarmParticles);
-        }
-
-        /* -------------------------------------------------------------
-           控制面板與互動事件
+           控制台互動事件
         ------------------------------------------------------------- */
         function switchScene(id) {
             currentSceneId = id;
-            if(id === 1) {
-                groupScene1.visible = true;
-                groupScene2.visible = false;
+            if (id === 1) {
                 document.getElementById('tab-primary-1').classList.add('active');
                 document.getElementById('tab-primary-2').classList.remove('active');
                 document.getElementById('controls-scene-1').style.display = 'block';
                 document.getElementById('controls-scene-2').style.display = 'none';
-                spherical.radius = 14; spherical.theta = 0; spherical.phi = Math.PI / 2;
-                updateCameraPosition();
+                camRotX = 0; camRotY = 0; camDist = 650;
             } else {
-                groupScene1.visible = false;
-                groupScene2.visible = true;
                 document.getElementById('tab-primary-1').classList.remove('active');
                 document.getElementById('tab-primary-2').classList.add('active');
                 document.getElementById('controls-scene-1').style.display = 'none';
                 document.getElementById('controls-scene-2').style.display = 'block';
-                spherical.radius = 16; spherical.theta = 0.3; spherical.phi = 1.3;
-                updateCameraPosition();
+                camRotX = 0.2; camRotY = 0.35; camDist = 720;
             }
         }
 
         function onDimensionChange(val) {
             dimProgress = val / 100;
             const label = document.getElementById('label-dimension');
-            if(dimProgress === 0) {
+            if (dimProgress === 0) {
                 label.innerText = '2D FLAT (無透視)';
                 label.style.color = '#94A3B8';
-                spherical.theta = 0; spherical.phi = Math.PI / 2;
-                updateCameraPosition();
-            } else if(dimProgress < 1) {
-                label.innerText = `MORPHING: ${(dimProgress*100).toFixed(0)}%`;
+                camRotX = 0; camRotY = 0;
+            } else if (dimProgress < 1) {
+                label.innerText = `MORPHING: ${(dimProgress * 100).toFixed(0)}%`;
                 label.style.color = 'var(--accent-cyan)';
             } else {
                 label.innerText = '3D FULL PERSPECTIVE';
                 label.style.color = 'var(--accent-gold)';
             }
-
-            flatGrid.rotation.x = Math.PI / 2 - (dimProgress * Math.PI / 3.2);
-            charMesh.rotation.y = dimProgress * Math.PI * 1.5;
-            jewelryMesh.rotation.y = dimProgress * Math.PI * 1.5;
-            charMesh.scale.z = 0.05 + dimProgress * 0.95;
-            jewelryMesh.scale.z = 0.1 + dimProgress * 0.9;
         }
 
         function onThicknessChange(val) {
-            const scale = 0.5 + (val / 100) * 1.5;
-            jewelryMesh.scale.x = scale;
-            jewelryMesh.scale.y = scale;
+            thicknessVal = val / 100;
             document.getElementById('label-thickness').innerText = `${(val * 0.1).toFixed(1)} mm`;
         }
 
         function triggerDoorJam() {
             isJamming = true;
             jamTime = 0;
-            charMesh.position.x = 1.4;
-            jewelryMesh.position.x = 1.4;
-            particleSystem1.material.opacity = 0.95;
         }
 
         function resetDimension() {
             document.getElementById('slider-dimension').value = 0;
             onDimensionChange(0);
-            charMesh.position.set(-2, 0, 0);
-            jewelryMesh.position.set(-2, 0, 0);
-            particleSystem1.material.opacity = 0;
+            charPosX = -120;
             isJamming = false;
         }
 
         function toggleFreezeTime() {
             isTimeFrozen = !isTimeFrozen;
             const btn = document.getElementById('btn-freeze');
-            if(isTimeFrozen) {
+            if (isTimeFrozen) {
                 btn.innerText = '▶️ 恢復流動 (Resume)';
                 btn.style.background = '#10B981';
             } else {
@@ -669,54 +799,31 @@
         }
 
         function triggerBranchExplode() {
-            let scale = 1;
-            const interval = setInterval(() => {
-                scale += 0.06;
-                dioramaB.scale.set(scale, scale, scale);
-                if(scale > 1.6) {
-                    clearInterval(interval);
-                    dioramaB.scale.set(1, 1, 1);
+            explodeScale = 1.8;
+            let timer = setInterval(() => {
+                explodeScale -= 0.05;
+                if (explodeScale <= 1.0) {
+                    explodeScale = 1.0;
+                    clearInterval(timer);
                 }
             }, 30);
         }
 
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
+        // 60FPS 動畫主迴圈
+        let lastTime = performance.now();
+        function loop(now) {
+            let delta = Math.min(0.1, (now - lastTime) / 1000);
+            lastTime = now;
 
-        function animate() {
-            requestAnimationFrame(animate);
-            if (!isThreeReady) return;
-
-            const delta = clock.getDelta();
-            const time = clock.getElapsedTime();
-
-            if(isJamming) {
-                jamTime += delta;
-                charMesh.position.x = 1.4 + (Math.sin(jamTime * 45) * 0.06);
-                jewelryMesh.position.x = 1.4 + (Math.sin(jamTime * 45) * 0.06);
-                particleSystem1.rotation.y += 0.08;
-                if(jamTime > 2) {
-                    isJamming = false;
-                    particleSystem1.material.opacity = 0;
-                }
+            if (currentSceneId === 1) {
+                renderScene1(delta);
             } else {
-                jewelryMesh.rotation.x += 0.015;
+                renderScene2(delta);
             }
 
-            if(!isTimeFrozen) {
-                dioramaA.rotation.y = time * 0.25;
-                dioramaB.rotation.y = -time * 0.25;
-                swarmParticles.rotation.y = time * 0.06;
-            }
-
-            renderer.render(scene, camera);
+            requestAnimationFrame(loop);
         }
-
-        // 啟動檢測
-        bootstrap();
+        requestAnimationFrame(loop);
     </script>
 </body>
 </html>
